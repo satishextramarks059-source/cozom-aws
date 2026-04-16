@@ -1,14 +1,17 @@
 import os
 from pathlib import Path
+from dotenv import load_dotenv
 
+# Build paths
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# 🔐 SECURITY
-SECRET_KEY = "django-insecure-temp-key-123"
+# Load environment variables from .env file
+load_dotenv()
 
-DEBUG = True
-
-ALLOWED_HOSTS = ["*"]
+# SECURITY
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-temp-key-123')
+DEBUG = os.getenv('DEBUG', 'True') == 'True'
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(',')
 
 # APPLICATIONS
 INSTALLED_APPS = [
@@ -58,15 +61,15 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'cozom.wsgi.application'
 
-# ---------- DATABASE (PostgreSQL) ----------
+# DATABASE (PostgreSQL – environment variables)
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'cozom_db',
-        'USER': 'postgres',
-        'PASSWORD': 'deepak@33',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'ENGINE': os.getenv('DB_ENGINE', 'django.db.backends.postgresql'),
+        'NAME': os.getenv('DB_NAME', 'cozom_db'),
+        'USER': os.getenv('DB_USER', 'postgres'),
+        'PASSWORD': os.getenv('DB_PASSWORD', 'deepak@33'),
+        'HOST': os.getenv('DB_HOST', 'localhost'),
+        'PORT': os.getenv('DB_PORT', '5432'),
     }
 }
 
@@ -105,15 +108,13 @@ REST_FRAMEWORK = {
     ]
 }
 
-# EMAIL (Gmail SMTP)
+# EMAIL (Gmail SMTP – environment variables)
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-
-EMAIL_HOST_USER = "satishextramarks059@gmail.com"
-EMAIL_HOST_PASSWORD = "yzln zvfw eawl cprz"
-
+EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.gmail.com')
+EMAIL_PORT = int(os.getenv('EMAIL_PORT', 587))
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', 'satishextramarks059@gmail.com')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', 'yzln zvfw eawl cprz')
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 SERVER_EMAIL = EMAIL_HOST_USER
 
