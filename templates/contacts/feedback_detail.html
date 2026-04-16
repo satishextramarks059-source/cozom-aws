@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-light d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Feedback Details</h5>
+            <a href="{% url 'feedback-list' %}" class="btn btn-outline-primary btn-sm">
+                <i class="fas fa-arrow-left me-2"></i>Back to List
+            </a>
+        </div>
+        <div class="card-body">
+            <div class="row mb-3">
+                <div class="col-md-6"><strong>Email:</strong> {{ feedback.email }}</div>
+                <div class="col-md-6"><strong>Phone:</strong> {{ feedback.phone|default:"-" }}</div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6"><strong>Role:</strong> {{ feedback.get_user_role_display }}</div>
+                <div class="col-md-6"><strong>Rating:</strong> {{ feedback.get_rate_us_display }}</div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6"><strong>Symptoms Understanding:</strong> {{ feedback.get_symptoms_understanding_display }}</div>
+                <div class="col-md-6"><strong>Illness Suggestion:</strong> {{ feedback.get_illness_suggestion_display }}</div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6"><strong>Helpful Doctor Suggestion:</strong> {{ feedback.get_helpful_doctor_suggestion_display }}</div>
+                <div class="col-md-6"><strong>Appointment Feature:</strong> {{ feedback.get_want_appointment_feature_display }}</div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <strong>Improvement Suggestions:</strong>
+                    <p class="mt-2">{{ feedback.improvement_suggestion|default:"No suggestions provided." }}</p>
+                </div>
+            </div>
+            <div class="text-muted">
+                <small>Submitted on {{ feedback.created_at|date:"M d, Y H:i" }}</small>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

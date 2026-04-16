@@ -1,0 +1,1108 @@
+{% extends 'base.html' %}
+{% block title %}Symptom Checker{% endblock title %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid py-5 wow fadeIn" data-wow-delay="0.1s">
+    <div class="container">
+        <!-- Header -->
+        <div class="text-center mx-auto mb-5" style="max-width: 600px;">
+            <h1 class="display-5 mb-4">AI Symptom Checker</h1>
+            <p class="text-muted">Get instant health insights and find the right specialist in seconds.</p>
+            <p class="mb-4">Select your symptoms and rate their severity to get potential condition matches.</p>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="row justify-content-center mb-5">
+            <div class="col-md-8">
+                <div class="progress" style="height: 10px;">
+                    <div class="progress-bar" id="progress-bar" role="progressbar" style="width: 33%;"
+                        aria-valuenow="33" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <div class="d-flex justify-content-between mt-2">
+                    <span class="step-indicator active">1. Body Parts</span>
+                    <span class="step-indicator">2. Symptoms & Severity</span>
+                    <span class="step-indicator">3. Results</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 1: Body Parts -->
+        <div id="step-1" class="step-content">
+            <div class="row justify-content-center">
+                <div class="col-md-10">
+                    <h3 class="text-center mb-3">Where are you experiencing symptoms?</h3>
+                    <div style="max-width:720px; margin:0 auto 18px auto; padding:10px 14px; font-size:13px; line-height:1.6; background:#f0fbf9; border:1px solid #c7ebe5; color:#0f5132; border-radius:6px; text-align:center;">
+                        <strong>Note:</strong> COZOM provides AI-based informational guidance and does not offer medical diagnosis or treatment. 
+                        Please consult a qualified healthcare professional for medical advice.
+                    </div>
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        Select one or more body parts where you're experiencing symptoms.
+                    </div>
+                    <!-- Search Bar -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="input-group input-group-lg">
+                                        <span class="input-group-text bg-primary text-white"><i class="fas fa-search"></i></span>
+                                        <input type="text" class="form-control" id="body-part-search" placeholder="Search body parts e.g. Head, Chest, Arm...">
+                                        <button class="btn btn-outline-warning" type="button" id="clear-search"><i class="fas fa-times"></i></button>
+                                    </div>
+                                    <div class="form-text mt-2">Type to filter body parts. Click on body parts to select them.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Search Results Counter -->
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-muted" id="search-results-count">Showing all body parts</span>
+                                <span class="badge bg-primary" id="selected-count">0 selected</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Body Parts Grid -->
+                    <div class="row" id="body-parts-container"></div>
+                    <!-- No Results Message -->
+                    <div class="row d-none" id="no-results-message">
+                        <div class="col-12">
+                            <div class="alert alert-warning text-center">No body parts found matching your search.</div>
+                        </div>
+                    </div>
+                    <div class="text-center mt-4">
+                        <button class="btn btn-primary btn-lg" id="next-to-symptoms" disabled>Next <i class="fas fa-arrow-right ms-2"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 2: Symptoms & Severity -->
+        <div id="step-2" class="step-content d-none">
+            <div class="row justify-content-center">
+                <div class="col-md-10">
+                    <h3 class="text-center mb-4">Select Symptoms & Rate Severity</h3>
+                    <div class="alert alert-warning">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <strong>Required:</strong> For each symptom you select, you must choose a severity level (Low, Medium, or High).
+                    </div>
+                    <!-- Symptoms Search Bar -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="input-group input-group-lg">
+                                        <span class="input-group-text bg-primary text-white"><i class="fas fa-search"></i></span>
+                                        <input type="text" class="form-control" id="symptom-search" placeholder="Search symptoms e.g. Headache, Fever, Cough...">
+                                        <button class="btn btn-outline-warning" type="button" id="clear-symptom-search"><i class="fas fa-times"></i></button>
+                                    </div>
+                                    <div class="form-text mt-2">Type to filter symptoms. Select symptoms and choose severity levels.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Symptoms Search Results Counter -->
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-muted" id="symptom-search-results-count">Showing all symptoms</span>
+                                <span class="badge bg-primary" id="symptoms-selected-count">0 selected</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Symptoms Container -->
+                    <div class="row" id="symptoms-container"></div>
+                    <!-- No Symptoms Results Message -->
+                    <div class="row d-none" id="no-symptoms-results-message">
+                        <div class="col-12">
+                            <div class="alert alert-warning text-center">No symptoms found matching your search.</div>
+                        </div>
+                    </div>
+                    <div class="text-center mt-4">
+                        <button class="btn btn-secondary me-2" id="back-to-body-parts"><i class="fas fa-arrow-left me-2"></i>Back</button>
+                        <button class="btn btn-primary me-2" id="get-results" disabled>Get Results</button>
+                        <button class="btn btn-outline-primary" id="get-ai-results" disabled><i class="fas fa-robot me-2"></i>AI Analysis</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 3: Results -->
+        <div id="step-3" class="step-content d-none">
+            <div class="row justify-content-center">
+                <div class="col-md-10">
+                    <h3 class="text-center mb-4">Possible Conditions</h3>
+                    <div style="max-width:800px; margin:0 auto 20px auto; padding:12px 16px; font-size:13.5px; line-height:1.6; background:#f0fbf9; border:1px solid #c7ebe5; color:#0f5132; border-radius:6px; text-align:center;">
+                        <strong>Important:</strong> These results are AI-based estimates, not a medical diagnosis. 
+                        Conditions shown are possible matches based on your symptoms. 
+                        Please consult a qualified doctor for accurate diagnosis and treatment.
+                    </div>
+                    <!-- Results Tabs -->
+                    <ul class="nav nav-pills justify-content-center mb-4" id="results-tab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="normal-results-tab" data-bs-toggle="pill" data-bs-target="#normal-results" type="button" role="tab">
+                                <i class="fas fa-stethoscope me-2"></i>Standard Results
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="ai-results-tab" data-bs-toggle="pill" data-bs-target="#ai-results" type="button" role="tab">
+                                <i class="fas fa-robot me-2"></i>AI Analysis
+                            </button>
+                        </li>
+                    </ul>
+                    <!-- Results Content -->
+                    <div class="tab-content" id="results-tab-content">
+                        <div class="tab-pane fade show active" id="normal-results" role="tabpanel">
+                            <div id="normal-results-container"></div>
+                        </div>
+                        <div class="tab-pane fade" id="ai-results" role="tabpanel">
+                            <div id="ai-results-container"></div>
+                        </div>
+                    </div>
+                    <div class="text-center mt-4">
+                        <button class="btn btn-secondary me-2" id="back-to-symptoms"><i class="fas fa-arrow-left me-2"></i>Back to Symptoms</button>
+                        <button class="btn btn-primary" id="start-over"><i class="fas fa-redo me-2"></i>Start Over</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for Illness Details -->
+<div class="modal fade" id="illnessDetailsModal" tabindex="-1" aria-labelledby="illnessDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="illnessDetailsModalLabel">Illness Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6 text-center">
+                        <canvas id="symptomDonutChart" width="250" height="250" style="max-width: 100%; height: auto;"></canvas>
+                        <div class="mt-2"><strong>Matched Symptoms:</strong> <span id="modalMatchedCount">0</span> of <span id="modalTotalCount">0</span></div>
+                        <div class="mt-1">
+                            <small>
+                                <span style="background:#4CAF50; display:inline-block; width:12px; height:12px; border-radius:2px;"></span> Matched &nbsp;&nbsp;
+                                <span style="background:#E0E0E0; display:inline-block; width:12px; height:12px; border-radius:2px;"></span> Not matched
+                            </small>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h4 id="modalIllnessName"></h4>
+                        <p id="modalIllnessDescription"></p>
+                        <div id="modalBodyParts"></div>
+                        <div id="modalSymptomsList"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block scripts %}
+{% csrf_token %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+    class SymptomChecker {
+        constructor() {
+            this.currentStep = 1;
+            this.selectedBodyParts = new Set();
+            this.selectedSymptoms = new Map(); // Map of symptom_id -> severity
+            this.allBodyParts = [];
+            this.allSymptoms = [];
+            this.csrfToken = this.getCSRFToken();
+            this.illnessesData = [];
+            this.currentChart = null;
+            // Pagination for body parts
+            this.bodyPartsLimit = 10;
+            this.allBodyPartsList = []; // full list
+            // Pagination for symptoms
+            this.allSymptomsForCurrentBodyParts = [];
+            this.symptomsLimit = 200;
+            this.init();
+        }
+
+        init() {
+            this.loadBodyParts();
+            this.bindEvents();
+        }
+
+        async loadBodyParts() {
+            try {
+                const response = await fetch('/api/symptom-check/');
+                const data = await response.json();
+                if (data.status === 'success') {
+                    this.allBodyPartsList = data.body_parts;
+                    this.renderBodyPartsPaginated();
+                    this.updateSearchResultsCount(this.allBodyPartsList.length);
+                } else {
+                    throw new Error(data.error || 'Failed to load body parts');
+                }
+            } catch (error) {
+                console.error(error);
+                this.showError('Failed to load body parts. Please refresh the page.');
+            }
+        }
+
+        renderBodyPartsPaginated() {
+            const toShow = this.allBodyPartsList.slice(0, this.bodyPartsLimit);
+            this.renderBodyParts(toShow);
+            // Remove existing "More" button
+            const existingBtn = document.getElementById('more-body-parts-btn');
+            if (existingBtn) existingBtn.remove();
+            // Add "More" button if needed
+            if (this.allBodyPartsList.length > this.bodyPartsLimit) {
+                const container = document.getElementById('body-parts-container');
+                const btnDiv = document.createElement('div');
+                btnDiv.className = 'text-center mt-3';
+                btnDiv.innerHTML = `<button id="more-body-parts-btn" class="btn btn-outline-primary">Show More Body Parts (${this.allBodyPartsList.length - this.bodyPartsLimit} left)</button>`;
+                container.parentNode.insertBefore(btnDiv, container.nextSibling);
+                document.getElementById('more-body-parts-btn').addEventListener('click', () => this.loadAllBodyParts());
+            }
+        }
+
+        loadAllBodyParts() {
+            this.renderBodyParts(this.allBodyPartsList);
+            const btn = document.getElementById('more-body-parts-btn');
+            if (btn) btn.remove();
+        }
+
+        renderBodyParts(bodyParts) {
+            const container = document.getElementById('body-parts-container');
+            if (!container) return;
+            container.innerHTML = '';
+            if (!bodyParts || bodyParts.length === 0) {
+                this.showNoResultsMessage(true);
+                return;
+            }
+            this.showNoResultsMessage(false);
+            bodyParts.forEach(part => {
+                const col = document.createElement('div');
+                col.className = 'col-md-3 mb-4';
+                let iconHtml;
+                if (part.icon) {
+                    iconHtml = `<img src="${part.icon}" alt="${part.name}" class="img-fluid mb-3 body-part-icon" style="height: 80px; width: 80px; object-fit: contain;" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <i class="${this.getFallbackIcon(part.name)} fa-3x text-primary mb-3" style="display: none;"></i>`;
+                } else {
+                    const iconClass = this.getFallbackIcon(part.name);
+                    iconHtml = `<i class="${iconClass} fa-3x text-primary mb-3"></i>`;
+                }
+                const isSelected = this.selectedBodyParts.has(part.id.toString());
+                const selectedClass = isSelected ? 'border-primary bg-light' : '';
+                col.innerHTML = `<div class="card body-part-card h-100 ${selectedClass}" data-id="${part.id}" data-name="${part.name.toLowerCase()}">
+                    <div class="card-body text-center d-flex flex-column">
+                        <div class="icon-container mb-2" style="min-height: 100px; display: flex; align-items: center; justify-content: center;">${iconHtml}</div>
+                        <h6 class="card-title mb-1">${part.name}</h6>
+                        ${part.description ? `<small class="text-muted mt-auto">${part.description}</small>` : ''}
+                    </div>
+                </div>`;
+                container.appendChild(col);
+            });
+            document.querySelectorAll('.body-part-card').forEach(card => {
+                card.addEventListener('click', () => this.toggleBodyPart(card));
+            });
+        }
+
+        setupBodyPartsSearch() {
+            const searchInput = document.getElementById('body-part-search');
+            const clearSearch = document.getElementById('clear-search');
+            if (searchInput) {
+                searchInput.addEventListener('input', (e) => this.filterBodyParts(e.target.value));
+            }
+            if (clearSearch) {
+                clearSearch.addEventListener('click', () => {
+                    searchInput.value = '';
+                    this.filterBodyParts('');
+                    searchInput.focus();
+                });
+            }
+        }
+
+        filterBodyParts(query) {
+            if (!query.trim()) {
+                this.renderBodyPartsPaginated();
+                return;
+            }
+            const searchTerm = query.toLowerCase().trim();
+            const filtered = this.allBodyPartsList.filter(part =>
+                part.name.toLowerCase().includes(searchTerm) ||
+                (part.description && part.description.toLowerCase().includes(searchTerm))
+            );
+            this.renderBodyParts(filtered);
+            // Remove "More" button during search
+            const moreBtn = document.getElementById('more-body-parts-btn');
+            if (moreBtn) moreBtn.remove();
+            this.updateSearchResultsCount(filtered.length, this.allBodyPartsList.length, searchTerm);
+        }
+
+        updateSearchResultsCount(shown, total = null, searchTerm = '') {
+            const resultsCount = document.getElementById('search-results-count');
+            if (!resultsCount) return;
+            if (!searchTerm) resultsCount.textContent = `Showing all body parts`;
+            else resultsCount.textContent = `Showing ${shown} of ${total || this.allBodyPartsList.length} body parts for "${searchTerm}"`;
+        }
+
+        updateSelectedCount() {
+            const selectedCount = document.getElementById('selected-count');
+            if (selectedCount) {
+                const count = this.selectedBodyParts.size;
+                selectedCount.textContent = `${count} selected`;
+                selectedCount.className = `badge ${count > 0 ? 'bg-primary' : 'bg-secondary'}`;
+            }
+        }
+
+        showNoResultsMessage(show) {
+            const noResults = document.getElementById('no-results-message');
+            if (noResults) noResults.classList.toggle('d-none', !show);
+        }
+
+      
+getFallbackIcon(name) {
+    const iconMap = {
+        'Head': 'fas fa-brain',
+        'Chest': 'fas fa-heartbeat',
+        'Abdomen': 'fas fa-stethoscope',
+        'Arms': 'fas fa-hand-peace',
+        'Legs': 'fas fa-walking',
+        'Back': 'fas fa-bone',
+        'Throat': 'fas fa-notes-medical',
+        'Eyes': 'fas fa-eye',
+        'Ears': 'fas fa-volume-up',
+        'Skin': 'fas fa-allergies',
+        'Neck': 'fas fa-user',
+        'Hands': 'fas fa-hand-peace',
+        'Feet': 'fas fa-shoe-prints',
+        'Joints': 'fas fa-bone',
+        'Muscles': 'fas fa-dumbbell',
+        'Axilla/Underarm': 'fas fa-tshirt',
+        'Breast': 'fas fa-female',
+        'Buttocks': 'fas fa-chair',
+        'Elbow': 'fas fa-hand-peace',
+        'Face': 'fas fa-smile',
+        'Fingers': 'fas fa-hand-peace',
+        'Flank': 'fas fa-user',
+        'Foot': 'fas fa-shoe-prints',
+        'General': 'fas fa-stethoscope',
+        'Genitals': 'fas fa-venus-mars',
+        'Groin': 'fas fa-walking',
+        'Hamstrings': 'fas fa-walking',
+        'Hip': 'fas fa-bone',
+        'Jaw': 'fas fa-grin',
+        'Knee': 'fas fa-walking',
+        'Mouth': 'fas fa-smile',
+        'Nose': 'fas fa-allergies',   // Fixed: free icon instead of fa-nose
+        'Pelvic': 'fas fa-female',
+        'Rectum': 'fas fa-toilet',
+        'Scalp': 'fas fa-head-side',
+        'Shin': 'fas fa-walking',
+        'Shoulder': 'fas fa-hand-peace',
+        'Sternum': 'fas fa-heart',
+        'Suprapubic': 'fas fa-female',
+        'Tailbone': 'fas fa-bone',
+        'Thigh': 'fas fa-walking',
+        'Toes': 'fas fa-shoe-prints',
+        'Wrist': 'fas fa-hand-peace',
+        'Mental illness': 'fas fa-brain',
+        'Internal Organ Systems - Brain (Neurological System)': 'fas fa-brain',
+        'Internal Organ Systems - Heart (Cardiovascular System)': 'fas fa-heartbeat',
+        'Internal Organ Systems - Lungs (Respiratory System)': 'fas fa-lungs',
+        'Internal Organ Systems - Endocrine System (Hormonal)': 'fas fa-hormone',
+        'Internal Organ Systems - Skeletal System (Bones)': 'fas fa-bone',
+        'Internal Organ Systems - Muscular System': 'fas fa-dumbbell',
+        'Internal Organ Systems - Liver (Digestive & Metabolic Organ)': 'fas fa-liver',
+        'Mouth': 'fas fa-lips',
+        'Blood': 'fas fa-tint',
+        'Children': 'fas fa-child',
+    };
+    return iconMap[name] || 'fas fa-question-circle';
+} 
+        toggleBodyPart(card) {
+            const id = card.getAttribute('data-id');
+            if (this.selectedBodyParts.has(id)) {
+                this.selectedBodyParts.delete(id);
+                card.classList.remove('border-primary', 'bg-light');
+            } else {
+                this.selectedBodyParts.add(id);
+                card.classList.add('border-primary', 'bg-light');
+            }
+            this.updateSelectedCount();
+            const nextButton = document.getElementById('next-to-symptoms');
+            if (nextButton) nextButton.disabled = this.selectedBodyParts.size === 0;
+        }
+
+        async loadSymptoms() {
+            if (this.selectedBodyParts.size === 0) {
+                this.showError('Please select at least one body part.');
+                return;
+            }
+            try {
+                const response = await fetch('/api/symptom-check/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'X-CSRFToken': this.csrfToken },
+                    body: JSON.stringify({ step: 'get_symptoms', body_part_ids: Array.from(this.selectedBodyParts) })
+                });
+                const data = await response.json();
+                if (data.status === 'success') {
+                    this.allSymptomsForCurrentBodyParts = data.symptoms;
+                    this.renderSymptomsPaginated();
+                    this.updateSymptomSearchResultsCount(this.allSymptomsForCurrentBodyParts.length);
+                } else {
+                    throw new Error(data.error || 'Failed to load symptoms');
+                }
+            } catch (error) {
+                console.error(error);
+                this.showError('Failed to load symptoms. Please try again.');
+            }
+        }
+
+        renderSymptomsPaginated() {
+            const toShow = this.allSymptomsForCurrentBodyParts.slice(0, this.symptomsLimit);
+            this.renderSymptoms(toShow);
+            const existingBtn = document.getElementById('more-symptoms-btn');
+            if (existingBtn) existingBtn.remove();
+            if (this.allSymptomsForCurrentBodyParts.length > this.symptomsLimit) {
+                const container = document.getElementById('symptoms-container');
+                const btnDiv = document.createElement('div');
+                btnDiv.className = 'text-center mt-3';
+                btnDiv.innerHTML = `<button id="more-symptoms-btn" class="btn btn-outline-primary">Show More Symptoms (${this.allSymptomsForCurrentBodyParts.length - this.symptomsLimit} left)</button>`;
+                container.parentNode.insertBefore(btnDiv, container.nextSibling);
+                document.getElementById('more-symptoms-btn').addEventListener('click', () => this.loadAllSymptoms());
+            }
+        }
+
+        loadAllSymptoms() {
+            this.renderSymptoms(this.allSymptomsForCurrentBodyParts);
+            const btn = document.getElementById('more-symptoms-btn');
+            if (btn) btn.remove();
+        }
+
+        setupSymptomsSearch() {
+            const searchInput = document.getElementById('symptom-search');
+            const clearSearch = document.getElementById('clear-symptom-search');
+            if (searchInput) {
+                searchInput.addEventListener('input', (e) => this.filterSymptoms(e.target.value));
+            }
+            if (clearSearch) {
+                clearSearch.addEventListener('click', () => {
+                    searchInput.value = '';
+                    this.filterSymptoms('');
+                    searchInput.focus();
+                });
+            }
+        }
+
+        filterSymptoms(query) {
+            if (!query.trim()) {
+                this.renderSymptomsPaginated();
+                return;
+            }
+            const searchTerm = query.toLowerCase().trim();
+            const filtered = this.allSymptomsForCurrentBodyParts.filter(s =>
+                s.name.toLowerCase().includes(searchTerm) ||
+                (s.description && s.description.toLowerCase().includes(searchTerm))
+            );
+            this.renderSymptoms(filtered);
+            const moreBtn = document.getElementById('more-symptoms-btn');
+            if (moreBtn) moreBtn.remove();
+            this.updateSymptomSearchResultsCount(filtered.length, this.allSymptomsForCurrentBodyParts.length, searchTerm);
+        }
+
+        updateSymptomSearchResultsCount(shown, total = null, searchTerm = '') {
+            const resultsCount = document.getElementById('symptom-search-results-count');
+            if (!resultsCount) return;
+            if (!searchTerm) resultsCount.textContent = `Showing all symptoms`;
+            else resultsCount.textContent = `Showing ${shown} of ${total || this.allSymptomsForCurrentBodyParts.length} symptoms for "${searchTerm}"`;
+        }
+
+        updateSymptomsSelectedCount() {
+            const selectedCount = document.getElementById('symptoms-selected-count');
+            if (selectedCount) {
+                const count = this.selectedSymptoms.size;
+                selectedCount.textContent = `${count} selected`;
+                selectedCount.className = `badge ${count > 0 ? 'bg-primary' : 'bg-secondary'}`;
+            }
+        }
+
+        showNoSymptomsResultsMessage(show) {
+            const noResults = document.getElementById('no-symptoms-results-message');
+            if (noResults) noResults.classList.toggle('d-none', !show);
+        }
+
+        createSymptomCard(symptom) {
+            const symptomId = symptom.id.toString();
+            const isSelected = this.selectedSymptoms.has(symptomId);
+            const selectedClass = isSelected ? 'border-primary bg-light' : '';
+            const currentSeverity = isSelected ? this.selectedSymptoms.get(symptomId) : '';
+            return `
+            <div class="card symptom-card h-100 ${selectedClass}" data-id="${symptomId}" data-name="${symptom.name.toLowerCase()}">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <h5 class="card-title">${symptom.name}</h5>
+                        ${isSelected ? `<button type="button" class="btn-close btn-sm remove-symptom-btn" aria-label="Remove"></button>` : ''}
+                    </div>
+                    ${symptom.description ? `<p class="card-text text-muted mb-3">${symptom.description}</p>` : ''}
+                    <div class="symptom-severity-selector mt-3">
+                        <label class="form-label fw-bold">Severity Level:</label>
+                        <div class="btn-group w-100" role="group">
+                            <input type="radio" class="btn-check" name="severity-${symptomId}" id="low-${symptomId}" value="low" ${currentSeverity === 'low' ? 'checked' : ''}>
+                            <label class="btn btn-outline-success" for="low-${symptomId}">Low</label>
+                            <input type="radio" class="btn-check" name="severity-${symptomId}" id="mid-${symptomId}" value="mid" ${currentSeverity === 'mid' ? 'checked' : ''}>
+                            <label class="btn btn-outline-warning" for="mid-${symptomId}">Medium</label>
+                            <input type="radio" class="btn-check" name="severity-${symptomId}" id="high-${symptomId}" value="high" ${currentSeverity === 'high' ? 'checked' : ''}>
+                            <label class="btn btn-outline-danger" for="high-${symptomId}">High</label>
+                        </div>
+                        <div class="form-text text-center">Select severity level</div>
+                    </div>
+                </div>
+            </div>`;
+        }
+
+        renderSymptoms(symptoms) {
+            const container = document.getElementById('symptoms-container');
+            if (!container) return;
+            container.innerHTML = '';
+            if (!symptoms || symptoms.length === 0) {
+                this.showNoSymptomsResultsMessage(true);
+                return;
+            }
+            this.showNoSymptomsResultsMessage(false);
+            for (let i = 0; i < symptoms.length; i += 2) {
+                const row = document.createElement('div');
+                row.className = 'row mb-4';
+                if (symptoms[i]) {
+                    const col1 = document.createElement('div');
+                    col1.className = 'col-md-6 mb-3';
+                    col1.innerHTML = this.createSymptomCard(symptoms[i]);
+                    row.appendChild(col1);
+                }
+                if (symptoms[i+1]) {
+                    const col2 = document.createElement('div');
+                    col2.className = 'col-md-6 mb-3';
+                    col2.innerHTML = this.createSymptomCard(symptoms[i+1]);
+                    row.appendChild(col2);
+                }
+                container.appendChild(row);
+            }
+            if (symptoms.length === 1) {
+                const singleRow = container.querySelector('.row');
+                if (singleRow) {
+                    const singleCol = singleRow.querySelector('.col-md-6');
+                    if (singleCol) singleCol.className = 'col-12';
+                }
+            }
+            this.bindSeverityEventListeners();
+        }
+
+        bindSeverityEventListeners() {
+            document.querySelectorAll('.symptom-card').forEach(card => {
+                const symptomId = card.getAttribute('data-id');
+                // Severity radio buttons
+                const severityInputs = card.querySelectorAll(`input[name="severity-${symptomId}"]`);
+                severityInputs.forEach(input => {
+                    input.addEventListener('change', () => {
+                        this.toggleSymptom(symptomId, input.value);
+                    });
+                });
+                // Remove button
+                const removeBtn = card.querySelector('.remove-symptom-btn');
+                if (removeBtn) {
+                    removeBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        this.removeSymptom(symptomId);
+                    });
+                }
+                // Click on card (but not on radio or remove button) to deselect
+                card.addEventListener('click', (e) => {
+                    if (e.target.type === 'radio' || e.target.classList.contains('remove-symptom-btn')) return;
+                    if (this.selectedSymptoms.has(symptomId)) {
+                        this.removeSymptom(symptomId);
+                    }
+                });
+            });
+        }
+
+        removeSymptom(symptomId) {
+            if (this.selectedSymptoms.has(symptomId)) {
+                this.selectedSymptoms.delete(symptomId);
+                // Re-render the current symptom view (preserve pagination state)
+                const isPaginated = document.getElementById('more-symptoms-btn') !== null;
+                if (isPaginated) {
+                    this.renderSymptomsPaginated();
+                } else {
+                    this.renderSymptoms(this.allSymptomsForCurrentBodyParts);
+                }
+                this.updateSymptomsSelectedCount();
+                const enabled = this.selectedSymptoms.size > 0;
+                const resultsBtn = document.getElementById('get-results');
+                const aiBtn = document.getElementById('get-ai-results');
+                if (resultsBtn) resultsBtn.disabled = !enabled;
+                if (aiBtn) aiBtn.disabled = !enabled;
+            }
+        }
+
+        toggleSymptom(symptomId, severity) {
+            if (severity) {
+                this.selectedSymptoms.set(symptomId, severity);
+                // Re-render to show remove button
+                const isPaginated = document.getElementById('more-symptoms-btn') !== null;
+                if (isPaginated) {
+                    this.renderSymptomsPaginated();
+                } else {
+                    this.renderSymptoms(this.allSymptomsForCurrentBodyParts);
+                }
+                this.updateSymptomsSelectedCount();
+                const enabled = this.selectedSymptoms.size > 0;
+                const resultsBtn = document.getElementById('get-results');
+                const aiBtn = document.getElementById('get-ai-results');
+                if (resultsBtn) resultsBtn.disabled = !enabled;
+                if (aiBtn) aiBtn.disabled = !enabled;
+            }
+        }
+
+        validateSymptomSelections() {
+            for (let [id, severity] of this.selectedSymptoms) {
+                if (!severity) {
+                    this.showError('Please select severity level for all chosen symptoms.');
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        async calculateResults(useAI = false) {
+            if (this.selectedSymptoms.size === 0) {
+                this.showError('Please select at least one symptom.');
+                return;
+            }
+            if (!this.validateSymptomSelections()) return;
+            this.showLoading(useAI ? 'AI is analyzing your symptoms...' : 'Calculating results...');
+            try {
+                // Ensure symptom_id are integers
+                const symptomsWithSeverity = Array.from(this.selectedSymptoms).map(([symptom_id, severity]) => ({ 
+                    symptom_id: parseInt(symptom_id), 
+                    severity: severity 
+                }));
+                const response = await fetch('/api/symptom-check/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'X-CSRFToken': this.csrfToken },
+                    body: JSON.stringify({ step: useAI ? 'ai_results' : 'calculate_results', symptoms_with_severity: symptomsWithSeverity })
+                });
+                const data = await response.json();
+                if (data.status === 'success') {
+                    if (useAI) {
+                        this.renderAIResults(data.results);
+                        const aiTab = document.getElementById('ai-results-tab');
+                        if (aiTab) new bootstrap.Tab(aiTab).show();
+                    } else {
+                        this.renderNormalResults(data.results);
+                    }
+                    this.goToStep(3);
+                } else {
+                    console.error('API error:', data);
+                    this.showError(data.error || 'Failed to calculate results');
+                }
+            } catch (error) {
+                console.error('Error calculating results:', error);
+                this.showError('Error calculating results. Please try again.');
+            } finally {
+                this.hideLoading();
+            }
+        }
+renderNormalResults(results) {
+    const container = document.getElementById('normal-results-container');
+    if (!container) return;
+
+    // Keep all results (no probability filter), only remove Generalized Pain Syndrome
+    let filteredResults = (results || []).filter(r => 
+        r.illness.name !== 'Generalized Pain Syndrome'
+    );
+
+    if (!filteredResults || filteredResults.length === 0) {
+        container.innerHTML = `
+            <div class="alert alert-warning text-center">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                <strong>No matching conditions found based on your symptoms.</strong><br>
+                Please choose more symptoms or try different ones.
+            </div>`;
+        return;
+    }
+
+    this.illnessesData = filteredResults;
+    let html = '';
+    filteredResults.forEach((result, idx) => {
+        const percentage = result.probability_percentage;
+        let probBadge = '';
+        let probClass = '';
+        let progressBarClass = '';
+
+        if (percentage < 40) {
+            probBadge = '<span class="badge bg-info ms-2">LOW PROBABILITY</span>';
+            probClass = 'text-info';
+            progressBarClass = 'bg-info';
+        } else if (percentage >= 40 && percentage <= 60) {
+            probBadge = '<span class="badge bg-warning text-dark ms-2">MODERATE PROBABILITY</span>';
+            probClass = 'text-warning';
+            progressBarClass = 'bg-warning';
+        } else {
+            probBadge = '<span class="badge bg-danger ms-2">HIGH PROBABILITY</span>';
+            probClass = 'text-danger';
+            progressBarClass = 'bg-danger';
+        }
+
+        const severityClass = this.getSeverityClass(result.illness.severity);
+        const specialists = result.recommended_specialists.map(s => s.name).join(', ');
+
+        html += `
+        <div class="card mb-4 illness-result-card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">${result.illness.name}</h5>
+                <div>
+                    <span class="badge ${severityClass} me-2">${result.illness.severity.toUpperCase()} SEVERITY</span>
+                    ${probBadge}
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <p class="card-text">${result.illness.description}</p>
+                        <div class="row mt-3">
+                            <div class="col-sm-6">
+                                <strong>Probability:</strong>
+                                <div class="progress mt-1" style="height: 20px;">
+                                    <div class="progress-bar ${progressBarClass}" role="progressbar" style="width: ${percentage}%" aria-valuenow="${percentage}" aria-valuemin="0" aria-valuemax="100">${percentage}%</div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <strong>Matched Symptoms:</strong>
+                                <div class="mt-1">${result.matched_symptoms} of ${result.total_symptoms}</div>
+                            </div>
+                        </div>
+                        ${specialists ? `<div class="mt-3"><strong><i class="fas fa-stethoscope me-2"></i>Recommended Specialist:</strong> <span class="text-primary">${result.primary_specialist}</span></div>` : ''}
+                        ${result.illness.treatment_advice ? `<div class="mt-3"><h6><i class="fas fa-first-aid me-2"></i>Treatment Advice</h6><p class="text-muted">${result.illness.treatment_advice}</p></div>` : ''}
+                        ${result.illness.when_to_see_doctor ? `<div class="mt-2"><h6><i class="fas fa-user-md me-2"></i>When to See a Doctor</h6><p class="text-muted">${result.illness.when_to_see_doctor}</p></div>` : ''}
+                    </div>
+                    <div class="col-md-4 text-center border-start">
+                        <div class="display-4 fw-bold ${probClass}">${percentage}%</div>
+                        <div class="text-muted">Match Probability</div>
+                        <div class="mt-3">
+                            <button class="btn btn-outline-primary btn-sm view-details-btn" data-index="${idx}">
+                                <i class="fas fa-info-circle me-1"></i>View Details
+                            </button>
+                        </div>
+                        <button class="btn btn-warning btn-sm mt-4 find-book-btn" data-specialist="${result.primary_specialist}" data-specialist-id="${result.primary_specialist_id}" data-illness-name="${result.illness.name}">
+                            <i class="fas fa-search me-1"></i>Find & Book Appointment
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>`;
+    });
+    container.innerHTML = html;
+
+    container.querySelectorAll('.view-details-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const idx = parseInt(btn.getAttribute('data-index'));
+            this.viewIllnessDetails(this.illnessesData[idx]);
+        });
+    });
+    container.querySelectorAll('.find-book-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const specialist = btn.getAttribute('data-specialist');
+            const specialistId = btn.getAttribute('data-specialist-id');
+            const illnessName = btn.getAttribute('data-illness-name');
+            this.goToBookingPage(specialist, specialistId, illnessName);
+        });
+    });
+}
+       
+        renderAIResults(results) {
+            const container = document.getElementById('ai-results-container');
+            if (!container) return;
+            if (!results || results.length === 0) {
+                container.innerHTML = `<div class="alert alert-info text-center">AI analysis did not return any results.</div>`;
+                return;
+            }
+            let html = '';
+            results.forEach(result => {
+                const percentage = result.probability_percentage;
+                const severityClass = this.getSeverityClass(result.illness.severity);
+                const confidenceClass = result.confidence === 'high' ? 'text-success' : result.confidence === 'medium' ? 'text-warning' : 'text-danger';
+                html += `
+                <div class="card mb-4 illness-result-card border-primary">
+                    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                        <div><i class="fas fa-robot me-2"></i><strong>AI Analysis</strong></div>
+                        <span class="badge bg-light text-dark"><i class="fas fa-brain me-1"></i>AI Powered</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h5 class="card-title">${result.illness.name}</h5>
+                                <p class="card-text">${result.illness.description}</p>
+                                ${result.ai_notes ? `<div class="alert alert-info mt-3"><h6><i class="fas fa-lightbulb me-2"></i>AI Insights</h6><p class="mb-0">${result.ai_notes}</p></div>` : ''}
+                                <div class="row mt-3">
+                                    <div class="col-sm-6">
+                                        <strong>Confidence Level:</strong>
+                                        <div class="mt-1 ${confidenceClass}"><i class="fas fa-${result.confidence === 'high' ? 'check-circle' : result.confidence === 'medium' ? 'exclamation-circle' : 'question-circle'} me-1"></i>${result.confidence.charAt(0).toUpperCase() + result.confidence.slice(1)} Confidence</div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <strong>Severity:</strong>
+                                        <span class="badge ${severityClass} ms-2">${result.illness.severity.toUpperCase()}</span>
+                                    </div>
+                                </div>
+                                ${result.illness.treatment_advice ? `<div class="mt-3"><h6><i class="fas fa-first-aid me-2"></i>Recommended Care</h6><p class="text-muted">${result.illness.treatment_advice}</p></div>` : ''}
+                                ${result.illness.when_to_see_doctor ? `<div class="mt-2"><h6><i class="fas fa-user-md me-2"></i>Medical Attention</h6><p class="text-muted">${result.illness.when_to_see_doctor}</p></div>` : ''}
+                            </div>
+                            <div class="col-md-4 text-center border-start">
+                                <div class="display-4 fw-bold text-primary">${percentage}%</div>
+                                <div class="text-muted">AI Confidence</div>
+                                <div class="mt-3"><small class="text-muted"><i class="fas fa-shield-alt me-1"></i>AI analysis for informational purposes only</small></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+            });
+            container.innerHTML = html;
+        }
+
+        getSeverityClass(severity) {
+            const map = { 'low': 'bg-success', 'medium': 'bg-warning', 'high': 'bg-danger', 'critical': 'bg-dark' };
+            return map[severity] || 'bg-secondary';
+        }
+
+viewIllnessDetails(illnessData) {
+    const illness = illnessData.illness;
+    const matchedCount = illnessData.matched_symptoms;
+    const totalCount = illnessData.total_symptoms;
+    const percentage = illnessData.probability_percentage;
+
+    document.getElementById('modalIllnessName').innerText = illness.name;
+    document.getElementById('modalIllnessDescription').innerText = illness.description;
+    document.getElementById('modalMatchedCount').innerText = matchedCount;
+    document.getElementById('modalTotalCount').innerText = totalCount;
+
+    // Show body parts
+    let bodyPartsHtml = '';
+    if (this.selectedBodyParts.size > 0) {
+        const selectedBodyPartNames = [];
+        for (let id of this.selectedBodyParts) {
+            const part = this.allBodyPartsList.find(p => p.id.toString() === id);
+            if (part) selectedBodyPartNames.push(part.name);
+        }
+        bodyPartsHtml = `<p><strong>Affected Body Parts:</strong> ${selectedBodyPartNames.join(', ') || 'Not specified'}</p>`;
+    } else {
+        bodyPartsHtml = '<p><strong>Affected Body Parts:</strong> Not specified</p>';
+    }
+    document.getElementById('modalBodyParts').innerHTML = bodyPartsHtml;
+
+    // Sort symptoms: matched first
+    const allSymptoms = illness.symptoms || [];
+    const matchedSymptoms = [];
+    const unmatchedSymptoms = [];
+    allSymptoms.forEach(s => {
+        const isMatched = (s.matched === true || s.matched === "true");
+        if (isMatched) matchedSymptoms.push(s);
+        else unmatchedSymptoms.push(s);
+    });
+
+    // Limit to max 7 symptoms total (show matched first, then fill with unmatched)
+    const maxDisplay = 20;
+    let displayedSymptoms = [...matchedSymptoms];
+    if (displayedSymptoms.length < maxDisplay) {
+        const remaining = maxDisplay - displayedSymptoms.length;
+        displayedSymptoms.push(...unmatchedSymptoms.slice(0, remaining));
+    }
+
+    // Build HTML list (only displayed symptoms)
+    let symptomsHtml = '<h6>Symptoms:</h6><ul class="list-group">';
+    displayedSymptoms.forEach(symptom => {
+        const isMatched = (symptom.matched === true || symptom.matched === "true");
+        const icon = isMatched ? '<i class="fas fa-check-circle text-success me-2"></i>' : '<i class="fas fa-times-circle text-secondary me-2"></i>';
+        const badge = isMatched ? '<span class="badge bg-success float-end">Matched</span>' : '<span class="badge bg-secondary float-end">Not matched</span>';
+        const style = isMatched ? 'background-color: #d1e7dd !important; color: #0a3622 !important;' : '';
+        symptomsHtml += `<li class="list-group-item" style="${style}">${icon} ${symptom.name} ${badge}</li>`;
+    });
+    // If there are more symptoms not shown, add a note
+    if (allSymptoms.length > maxDisplay) {
+        symptomsHtml += `<li class="list-group-item text-muted text-center"><i class="fas fa-ellipsis-h me-1"></i> ${allSymptoms.length - maxDisplay} more symptoms not shown</li>`;
+    }
+    symptomsHtml += '</ul>';
+    document.getElementById('modalSymptomsList').innerHTML = symptomsHtml;
+
+    // Draw donut chart (still uses all symptoms)
+    setTimeout(() => this.drawDonutChart(allSymptoms), 100);
+
+    const modal = new bootstrap.Modal(document.getElementById('illnessDetailsModal'));
+    modal.show();
+}
+       drawDonutChart(symptoms) {
+    const canvas = document.getElementById('symptomDonutChart');
+    if (!canvas) return;
+    if (this.currentChart) {
+        this.currentChart.destroy();
+        this.currentChart = null;
+    }
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const labels = symptoms.map(s => s.name);
+    const data = symptoms.map(() => 1);
+    const colors = symptoms.map(s => {
+        let isMatched = false;
+        if (s.matched === true || s.matched === "true" || s.matched === "True" || s.matched === 1 || s.matched === "1") {
+            isMatched = true;
+        }
+        return isMatched ? '#4CAF50' : '#E0E0E0';
+    });
+    this.currentChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: data,
+                backgroundColor: colors,
+                borderWidth: 2,          // <-- partition ke liye border
+                borderColor: '#ffffff',  // white border
+                hoverOffset: 5
+            }]
+        },
+        options: {
+            cutout: '70%',
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: (context) => {
+                            const idx = context.dataIndex;
+                            let isMatched = false;
+                            const sym = symptoms[idx];
+                            if (sym.matched === true || sym.matched === "true" || sym.matched === "True" || sym.matched === 1 || sym.matched === "1") {
+                                isMatched = true;
+                            }
+                            return `${sym.name} - ${isMatched ? 'Matched' : 'Not matched'}`;
+                        }
+                    }
+                },
+                legend: { display: false }
+            }
+        }
+    });
+}
+        goToBookingPage(specialist, specialistId, illnessName) {
+            window.location.href = `/recommended-doctors/?specialist_id=${specialistId}&illness_name=${encodeURIComponent(illnessName)}`;
+        }
+
+        goToStep(step) {
+            document.querySelectorAll('.step-content').forEach(el => el.classList.add('d-none'));
+            const currentStep = document.getElementById(`step-${step}`);
+            if (currentStep) currentStep.classList.remove('d-none');
+            const progressBar = document.getElementById('progress-bar');
+            if (progressBar) progressBar.style.width = `${(step / 3) * 100}%`;
+            document.querySelectorAll('.step-indicator').forEach((ind, i) => {
+                if (i + 1 <= step) ind.classList.add('active');
+                else ind.classList.remove('active');
+            });
+            this.currentStep = step;
+        }
+
+        bindEvents() {
+            this.setupBodyPartsSearch();
+            this.setupSymptomsSearch();
+            document.getElementById('next-to-symptoms')?.addEventListener('click', () => { this.loadSymptoms(); this.goToStep(2); });
+            document.getElementById('back-to-body-parts')?.addEventListener('click', () => this.goToStep(1));
+            document.getElementById('back-to-symptoms')?.addEventListener('click', () => this.goToStep(2));
+            document.getElementById('get-results')?.addEventListener('click', () => this.calculateResults(false));
+            document.getElementById('get-ai-results')?.addEventListener('click', () => this.calculateResults(true));
+            document.getElementById('start-over')?.addEventListener('click', () => {
+                this.selectedBodyParts.clear();
+                this.selectedSymptoms.clear();
+                this.goToStep(1);
+                this.loadBodyParts();
+                const next = document.getElementById('next-to-symptoms');
+                if (next) next.disabled = true;
+                const getResults = document.getElementById('get-results');
+                const getAI = document.getElementById('get-ai-results');
+                if (getResults) getResults.disabled = true;
+                if (getAI) getAI.disabled = true;
+                document.getElementById('body-part-search').value = '';
+                document.getElementById('symptom-search').value = '';
+                this.updateSelectedCount();
+                this.updateSearchResultsCount(this.allBodyPartsList.length);
+                this.updateSymptomsSelectedCount();
+                this.updateSymptomSearchResultsCount(0);
+                document.querySelectorAll('.body-part-card, .symptom-card').forEach(c => c.classList.remove('border-primary', 'bg-light'));
+                document.querySelectorAll('.btn-check:checked').forEach(c => c.checked = false);
+            });
+        }
+
+        showLoading(message) {
+            console.log(message);
+        }
+        hideLoading() {}
+        showError(message) {
+            alert(message);
+        }
+        getCSRFToken() {
+            let csrfToken = document.querySelector('[name=csrfmiddlewaretoken]');
+            if (csrfToken) return csrfToken.value;
+            const name = 'csrftoken';
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => new SymptomChecker());
+</script>
+
+<style>
+    .body-part-card, .symptom-card { cursor: pointer; transition: all 0.3s ease; }
+    .body-part-card:hover, .symptom-card:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+    .step-indicator { font-weight: 500; color: #6c757d; }
+    .step-indicator.active { color: #0d6efd; font-weight: 600; }
+    .progress-bar { transition: width 0.5s ease; }
+    .symptom-severity-selector .btn-group .btn { padding: 0.5rem 0.75rem; }
+    .illness-result-card { transition: all 0.3s ease; }
+    .illness-result-card:hover { box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+    .body-part-card.border-primary, .symptom-card.border-primary { border-width: 2px !important; }
+    .btn-outline-success:hover, .btn-check:checked+.btn-outline-success { background-color: #198754; border-color: #198754; color: white; }
+    .btn-outline-warning:hover, .btn-check:checked+.btn-outline-warning { background-color: #ffc107; border-color: #ffc107; color: black; }
+    .btn-outline-danger:hover, .btn-check:checked+.btn-outline-danger { background-color: #dc3545; border-color: #dc3545; color: white; }
+    #body-part-search, #symptom-search { border-left: none; }
+    #body-part-search:focus, #symptom-search:focus { box-shadow: none; border-color: #ced4da; }
+    .input-group-text { border-right: none; }
+    .symptom-card { height: 100%; }
+    .symptom-card .card-body { display: flex; flex-direction: column; }
+    .symptom-severity-selector { margin-top: auto; }
+    #search-results-count, #symptom-search-results-count { font-size: 0.9rem; }
+    #selected-count, #symptoms-selected-count { font-size: 0.8rem; }
+    .remove-symptom-btn {
+        opacity: 0.6;
+        transition: opacity 0.2s;
+    }
+    .remove-symptom-btn:hover {
+        opacity: 1;
+    }
+    .symptom-card .card-title {
+        margin-bottom: 0;
+    }
+    .list-group-item i {
+        width: 20px;
+    }
+</style>
+{% endblock scripts %}

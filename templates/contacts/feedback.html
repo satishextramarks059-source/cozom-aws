@@ -1,0 +1,411 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- Feedback Section Start -->
+<div class="container-fluid py-5">
+  <div class="container">
+    <div class="row g-5">
+      <!-- Feedback Form -->
+      <div class="col-lg-12 wow fadeIn" data-wow-delay="0.1s">
+        <div class="p-5">
+          <div class="row">
+            <div class="col-12 text-center">
+              <h2 class="display-6 mb-4">Share Your Feedback</h2>
+              <p class="lead text-muted mb-4">
+                Your feedback is incredibly valuable to us.
+                It helps COZOM enhance the quality of our healthcare services and patient experience.
+                Every suggestion, rating, and comment you share guides us toward better care for everyone.
+                Thank you for taking a moment to help us improve.
+              </p>
+            </div>
+          </div>
+          
+          <form id="feedbackForm">
+            {% csrf_token %}
+
+            <!-- Personal Information -->
+            <div class="row g-3 mb-4">
+              <div class="col-md-6">
+                <label for="email" class="form-label">Your Email <span class="text-danger">*</span></label>
+                <input type="email" class="form-control" id="email" name="email"
+                  value="{{ initial_data.email|default:'' }}" {% if user.is_authenticated %}readonly{% endif %}
+                  required>
+              </div>
+
+              <div class="col-md-6">
+                <label for="phone" class="form-label">Your Phone</label>
+                <input type="tel" class="form-control" id="phone" name="phone"
+                  value="{{ initial_data.phone|default:'' }}" {% if user.is_authenticated %}readonly{% endif %}>
+              </div>
+            </div>
+
+            <!-- Role Selection -->
+            <div class="mb-4">
+              <label class="form-label">Your Role <span class="text-danger">*</span></label>
+              <div class="btn-group w-100 flex-wrap" role="group" aria-label="User Role">
+                <input type="radio" class="btn-check" name="role" id="role_patient" value="patient" required>
+                <label class="btn btn-outline-secondary flex-fill" for="role_patient">
+                  <i class="fas fa-user me-2"></i>Patient/User
+                </label>
+
+                <input type="radio" class="btn-check" name="role" id="role_doctor" value="doctor">
+                <label class="btn btn-outline-secondary flex-fill" for="role_doctor">
+                  <i class="fas fa-user-md me-2"></i>Doctor
+                </label>
+
+                <input type="radio" class="btn-check" name="role" id="role_hospital" value="hospital">
+                <label class="btn btn-outline-secondary flex-fill" for="role_hospital">
+                  <i class="fas fa-hospital me-2"></i>Hospital/Clinic
+                </label>
+
+                <input type="radio" class="btn-check" name="role" id="role_other" value="other">
+                <label class="btn btn-outline-secondary flex-fill" for="role_other">
+                  <i class="fas fa-users me-2"></i>Other
+                </label>
+              </div>
+            </div>
+
+            <!-- Age and Address -->
+            <div class="row g-3 mb-4">
+              <div class="col-md-6">
+                <label for="age" class="form-label">Your Age</label>
+                <input type="number" class="form-control" id="age" name="age" min="1" max="120" required>
+              </div>
+
+              <div class="col-md-6">
+                <label for="address" class="form-label">Your Address</label>
+                <input type="text" class="form-control" id="address" name="address">
+              </div>
+            </div>
+
+            <!-- Body Parts Selection -->
+            <div class="mb-4">
+              <label for="selected_body_parts" class="form-label">Select Body Parts Concerned</label>
+              <select class="form-select" id="selected_body_parts" name="selected_body_parts" multiple>
+                {% for body_part in body_parts %}
+                <option value="{{ body_part.id }}">{{ body_part.name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <!-- Medical Experience Questions -->
+            <div class="row g-3 mb-4">
+              <div class="col-md-6">
+                <label for="symptoms_understanding" class="form-label">Symptoms Understanding <span
+                    class="text-danger">*</span></label>
+                <select class="form-select" id="symptoms_understanding" name="symptoms_understanding" required>
+                  <option value="">Select an option</option>
+                  <option value="absolutely">Absolutely - Very clear</option>
+                  <option value="little_confusion">Little Confusion - Somewhat clear</option>
+                  <option value="no">No - Not clear</option>
+                </select>
+              </div>
+
+              <div class="col-md-6">
+                <label for="illness_suggestion" class="form-label">Illness Suggestion Accuracy <span
+                    class="text-danger">*</span></label>
+                <select class="form-select" id="illness_suggestion" name="illness_suggestion" required>
+                  <option value="">Select an option</option>
+                  <option value="right">Right - Mostly Accurate</option>
+                  <option value="almost_right">Almost Right - Partially accurate</option>
+                  <option value="incorrect">Incorrect - Not accurate</option>
+                </select>
+              </div>
+
+              <div class="col-md-6">
+                <label for="helpful_doctor_suggestion" class="form-label">Doctor Suggestions <span
+                    class="text-danger">*</span></label>
+                <select class="form-select" id="helpful_doctor_suggestion" name="helpful_doctor_suggestion" required>
+                  <option value="">Select an option</option>
+                  <option value="yes">Yes - Very helpful</option>
+                  <option value="no">No - Not helpful</option>
+                  <option value="not_required">Not Required - Didn't need</option>
+                </select>
+              </div>
+
+              <div class="col-md-6">
+                <label for="want_appointment_feature" class="form-label">Appointment Booking Feature</label>
+                <select class="form-select" id="want_appointment_feature" name="want_appointment_feature">
+                  <option value="">Select an option</option>
+                  <option value="yes">Yes - Would use it</option>
+                  <option value="no">No - Not interested</option>
+                  <option value="not_required">Not Required - Don't need it</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Improvement Suggestions -->
+            <div class="mb-4">
+              <label for="improvement_suggestion" class="form-label">How can we improve our services ?</label>
+              <textarea class="form-control" id="improvement_suggestion" name="improvement_suggestion"
+                rows="4"></textarea>
+            </div>
+
+            <!-- Rating Section -->
+            <div class="mb-4">
+              <label class="form-label d-block text-center">Overall Rating <span class="text-danger">*</span></label>
+              <div class="text-center">
+                <div class="rating-stars mb-3">
+                  <input type="radio" id="star1" name="rate_us" value="1" class="d-none" required>
+                  <label for="star1" class="star-label">
+                    <i class="far fa-star fa-2x"></i>
+                  </label>
+
+                  <input type="radio" id="star2" name="rate_us" value="2" class="d-none" required>
+                  <label for="star2" class="star-label">
+                    <i class="far fa-star fa-2x"></i>
+                  </label>
+
+                  <input type="radio" id="star3" name="rate_us" value="3" class="d-none" required>
+                  <label for="star3" class="star-label">
+                    <i class="far fa-star fa-2x"></i>
+                  </label>
+
+                  <input type="radio" id="star4" name="rate_us" value="4" class="d-none" required>
+                  <label for="star4" class="star-label">
+                    <i class="far fa-star fa-2x"></i>
+                  </label>
+
+                  <input type="radio" id="star5" name="rate_us" value="5" class="d-none" required>
+                  <label for="star5" class="star-label">
+                    <i class="far fa-star fa-2x"></i>
+                  </label>
+                </div>
+                <div id="rating-text" class="text-muted">Click to rate your experience</div>
+              </div>
+            </div>
+
+            <div class="row g-3 align-items-stretch">
+              <!-- Submit Feedback Button -->
+              <div class="col-12 col-md-8">
+                <button type="submit" class="btn btn-primary w-100 py-3">
+                  <i class="fas fa-paper-plane me-2"></i>Submit Feedback
+                </button>
+              </div>
+
+              <!-- Contact Us Button -->
+              <div class="col-12 col-md-4">
+                <a href="{% url 'contact_us' %}" class="btn btn-outline-warning w-100 py-3 text-dark fw-semibold">
+                  Contact Us
+                </a>
+              </div>
+            </div>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Feedback Section End -->
+
+<!-- Acknowledgment Modal -->
+<div class="modal fade" id="ackModal" tabindex="-1" aria-labelledby="ackModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0 pb-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center py-4">
+                <div id="successIcon" class="d-none">
+                    <div class="rounded-circle bg-success d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <i class="fas fa-check text-white fs-3"></i>
+                    </div>
+                    <h4 class="fw-bold text-success mb-3">Thank You!</h4>
+                </div>
+                <div id="errorIcon" class="d-none">
+                    <div class="rounded-circle bg-danger d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <i class="fas fa-times text-white fs-3"></i>
+                    </div>
+                    <h4 class="fw-bold text-danger mb-3">Error!</h4>
+                </div>
+                <p id="ackMessage" class="mb-4 fs-5">Your feedback has been submitted successfully!</p>
+                <button type="button" class="btn btn-primary px-4 py-2" data-bs-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block scripts %}
+<!-- Select2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<!-- Select2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<style>
+  /* Select2 Styling */
+  .select2-container--default .select2-selection--multiple {
+    border: 1px solid #ced4da !important;
+    padding: 0.375rem 0.75rem !important;
+    min-height: calc(1.5em + 0.75rem + 2px);
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  .select2-selection__choice {
+    color: #495057 !important;
+    border: none !important;
+    padding: 0 0.5rem !important;
+    margin-top: 0.25rem !important;
+  }
+
+  .select2-container--default .select2-selection--multiple .select2-selection__choice__display {
+    margin-left: 11px !important;
+  }
+
+  .select2-container .select2-selection--multiple .select2-selection__rendered {
+    margin-bottom: 3px !important;
+  }
+
+  .select2-container--default .select2-selection--multiple .select2-selection__clear {
+    margin-bottom: 4px !important;
+  }
+
+  .select2-container--default .select2-selection--multiple {
+    align-items: center !important;
+  }
+
+  .select2-container--default .select2-search--inline .select2-search__field {
+    margin-top: 0 !important;
+    height: 24px !important;
+  }
+
+  .select2-selection__placeholder {
+    color: #6c757d !important;
+  }
+
+  .select2-container--open .select2-dropdown {
+    border-color: #ced4da !important;
+    margin-top: -1px;
+  }
+</style>
+
+<script>
+$(document).ready(function() {
+    // Initialize Select2 for body parts
+    $('#selected_body_parts').select2({
+        placeholder: "Select body parts",
+        allowClear: true,
+        width: '100%'
+    });
+
+    // Auto-select role for authenticated users
+    {% if user.is_authenticated %}
+        {% if user.user_type == 'patient' %}
+            $('#role_patient').prop('checked', true);
+        {% elif user.user_type == 'doctor' %}
+            $('#role_doctor').prop('checked', true);
+        {% elif user.user_type == 'hospital' %}
+            $('#role_hospital').prop('checked', true);
+        {% else %}
+            $('#role_other').prop('checked', true);
+        {% endif %}
+    {% endif %}
+
+    // Fixed Star Rating Functionality
+    $('.rating-stars input').on('change', function() {
+        const rating = parseInt($(this).val());
+        const ratingTexts = {
+            1: 'Poor - We apologize for the bad experience',
+            2: 'Fair - We need to improve',
+            3: 'Good - Satisfactory experience',
+            4: 'Very Good - Happy with the service',
+            5: 'Excellent - Outstanding experience'
+        };
+        $('#rating-text').text(ratingTexts[rating] || 'Click to rate your experience');
+        
+        // Reset all stars to empty
+        $('.star-label i').removeClass('fas text-warning').addClass('far');
+        
+        // Fill stars up to the selected rating (select specific label by for="starN")
+        for (let i = 1; i <= rating; i++) {
+            $('label[for="star' + i + '"]').find('i').removeClass('far').addClass('fas text-warning');
+        }
+    });
+
+    // Add hover effect for stars
+    $('.star-label').hover(
+        function() {
+            const starId = $(this).attr('for');
+            const rating = parseInt(starId.replace('star', ''));
+            
+            // Highlight stars on hover
+            $('.star-label i').removeClass('fas text-warning').addClass('far');
+            for (let i = 1; i <= rating; i++) {
+                $('label[for="star' + i + '"]').find('i').removeClass('far').addClass('fas text-warning');
+            }
+        },
+        function() {
+            // Restore actual selection when not hovering
+            const selectedRating = $('input[name="rate_us"]:checked').val();
+            if (selectedRating) {
+                const rating = parseInt(selectedRating);
+                $('.star-label i').removeClass('fas text-warning').addClass('far');
+                for (let i = 1; i <= rating; i++) {
+                    $('label[for="star' + i + '"]').find('i').removeClass('far').addClass('fas text-warning');
+                }
+            } else {
+                $('.star-label i').removeClass('fas text-warning').addClass('far');
+            }
+        }
+    );
+
+    // Form submission
+    $('#feedbackForm').on('submit', function(e) {
+        e.preventDefault();
+        
+        // Show loading state
+        const submitBtn = $(this).find('button[type="submit"]');
+        const originalText = submitBtn.html();
+        submitBtn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-2"></i> Submitting...');
+        
+        // Submit form via AJAX
+        $.ajax({
+            type: 'POST',
+            url: '{% url "submit_feedback" %}',
+            data: $(this).serialize(),
+            success: function(response) {
+                if (response.status === 'success') {
+                    $('#successIcon').removeClass('d-none');
+                    $('#errorIcon').addClass('d-none');
+                    $('#ackMessage').text(response.message);
+                    $('#feedbackForm')[0].reset();
+                    
+                    // Reset stars and Select2
+                    $('.star-label i').removeClass('fas text-warning').addClass('far');
+                    $('#rating-text').text('Click to rate your experience');
+                    $('#selected_body_parts').val(null).trigger('change');
+                    $('.btn-check').prop('checked', false);
+                } else {
+                    $('#successIcon').addClass('d-none');
+                    $('#errorIcon').removeClass('d-none');
+                    $('#ackMessage').text(response.message);
+                }
+                
+                // Show modal
+                const ackModal = new bootstrap.Modal(document.getElementById('ackModal'));
+                ackModal.show();
+            },
+            error: function(xhr, status, error) {
+                $('#successIcon').addClass('d-none');
+                $('#errorIcon').removeClass('d-none');
+                $('#ackMessage').text('An unexpected error occurred. Please try again.');
+                
+                // Show modal
+                const ackModal = new bootstrap.Modal(document.getElementById('ackModal'));
+                ackModal.show();
+            },
+            complete: function() {
+                // Reset button state
+                submitBtn.prop('disabled', false).html(originalText);
+            }
+        });
+    });
+});
+</script>
+
+{% endblock scripts %}

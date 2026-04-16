@@ -1,0 +1,320 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Get Subscription Plan - Patient{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <!-- Page Header -->
+                <div class="text-center mb-5">
+                    <h2 class="display-6 mb-2">Get Subscription Plan</h2>
+                    <p class="text-muted">Complete the steps below to request a subscription plan</p>
+                </div>
+
+                <!-- Subscription Plan Info Card -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <!-- <h5 class="mb-0"><i class="fas fa-crown me-2"></i>{{ plan.name }}</h5> -->
+                        <h5 class="mb-0 text-white">Subscription Plan Info</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4 text-center border-end">
+                                <h6 class="text-muted">Monthly Price</h6>
+                                <h3 class="text-primary">₹{{ plan.monthly_price }}</h3>
+                                <small class="text-muted">per month</small>
+                            </div>
+                            <div class="col-md-4 text-center border-end">
+                                <h6 class="text-muted">Half-Yearly Discount</h6>
+                                <h3 class="text-success">{{ plan.half_yearly_discount }}%</h3>
+                                <small class="text-muted">for 6+ months</small>
+                            </div>
+                            <div class="col-md-4 text-center">
+                                <h6 class="text-muted">Yearly Discount</h6>
+                                <h3 class="text-success">{{ plan.yearly_discount }}%</h3>
+                                <small class="text-muted">for 12+ months</small>
+                            </div>
+                        </div>
+                        {% if plan.description %}
+                        <div class="mt-3">
+                            <hr>
+                            <p class="mb-0">{{ plan.description }}</p>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Stepper Progress -->
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <!-- Progress Bar -->
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between mb-2">
+                                <div class="step-indicator" id="step-indicator-1">
+                                    <div class="step-number active">1</div>
+                                    <div class="step-label">Select Duration</div>
+                                </div>
+                                <div class="step-indicator" id="step-indicator-2">
+                                    <div class="step-number">2</div>
+                                    <div class="step-label">Do Payment</div>
+                                </div>
+                                <div class="step-indicator" id="step-indicator-3">
+                                    <div class="step-number">3</div>
+                                    <div class="step-label">Submit Payment Proof</div>
+                                </div>
+                            </div>
+                            <div class="progress" style="height: 4px;">
+                                <div class="progress-bar bg-primary" id="progress-bar" role="progressbar" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Step 1: Plan Duration Selection -->
+                        <div class="step-content" id="step-1">
+                            <!-- <h5 class="mb-4"><i class="fas fa-calendar-alt me-2"></i>Select Plan Duration</h5> -->
+                            <form id="durationForm">
+                                <div class="row mt-3">
+                                    <div class="col-md-4 mb-3">
+                                        <label for="numMonths" class="form-label">Number of Months <span class="text-danger">*</span></label>
+                                        <input type="number" class="form-control" id="numMonths" min="1" max="24" required>
+                                        <small class="text-muted">Minimum: 1 month, Maximum: 24 months</small>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="startDate" class="form-label">Start Date <span class="text-danger">*</span></label>
+                                        <input type="date" class="form-control" id="startDate" required>
+                                        <small class="text-muted">No past dates allowed</small>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label for="endDate" class="form-label">End Date</label>
+                                        <input type="date" class="form-control" id="endDate" disabled>
+                                        <small class="text-muted">Auto-calculated</small>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-end">
+                                    <button type="button" class="btn btn-primary" id="nextToStep2">
+                                        Next <i class="fas fa-arrow-right ms-2"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <!-- Step 2: Payment Summary -->
+                        <div class="step-content d-none" id="step-2">
+                            <!-- <h5 class="mb-4"><i class="fas fa-receipt me-2"></i>Payment Summary</h5> -->
+                            
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle me-2"></i>
+                                <strong>Duration:</strong> <span id="summary-duration"></span> |
+                                <strong>Period:</strong> <span id="summary-period"></span>
+                            </div>
+
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <div class="card bg-light mb-3">
+                                        <div class="card-body">
+                                            <h6>Amount Breakdown</h6>
+                                            <table class="table table-sm table-borderless mb-0">
+                                                <tr>
+                                                    <td>Base Amount:</td>
+                                                    <td class="text-end"><strong id="base-amount">₹0</strong></td>
+                                                </tr>
+                                                <tr class="text-success" id="discount-row" style="display: none;">
+                                                    <td>Discount (<span id="discount-percent">0</span>%):</td>
+                                                    <td class="text-end"><strong id="discount-amount">- ₹0</strong></td>
+                                                </tr>
+                                                <tr class="border-top">
+                                                    <td><strong>Final Amount:</strong></td>
+                                                    <td class="text-end"><h4 class="text-primary mb-0" id="final-amount">₹0</h4></td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    <div class="card bg-light">
+                                        <div class="card-body">
+                                            <h6>Payment Details</h6>
+                                            <p class="mb-1"><strong>Bank Name:</strong></p>
+                                            <p class="mb-2">{{ plan.receiver_banking_name|default:"To be provided" }}</p>
+                                            <small class="text-muted">Scan QR code or use bank details to make payment</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    {% if plan.receiver_qr %}
+                                    <div class="card">
+                                        <div class="card-body text-center">
+                                            <h6>Scan QR Code</h6>
+                                            <img src="{{ plan.receiver_qr.url }}" alt="Payment QR Code" class="img-fluid" style="max-width: 300px;">
+                                        </div>
+                                    </div>
+                                    {% else %}
+                                    <div class="alert alert-warning">
+                                        <i class="fas fa-exclamation-triangle me-2"></i>
+                                        QR Code not available. Please contact admin for payment details.
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-between mt-4">
+                                <button type="button" class="btn btn-warning text-white" id="backToStep1">
+                                    <i class="fas fa-arrow-left me-2"></i> Back
+                                </button>
+                                <button type="button" class="btn btn-primary" id="nextToStep3">
+                                    Next <i class="fas fa-arrow-right ms-2"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Step 3: Payment Submission Form -->
+                        <div class="step-content d-none" id="step-3">
+                            <!-- <h5 class="mb-4"><i class="fas fa-paper-plane me-2"></i>Submit Payment Proof</h5> -->
+                            
+                            <form id="paymentSubmissionForm" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="row mt-3">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="fullName" class="form-label">Patient Name <span class="text-danger">*</span></label>
+                                        <input type="text" class="form-control" id="fullName" value="{{ user_full_name }}" readonly>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="email" class="form-label">Email <span class="text-danger">*</span></label>
+                                        <input type="email" class="form-control" id="email" value="{{ user.email }}" readonly>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="paymentScreenshot" class="form-label">Payment Screenshot/Receipt <span class="text-danger">*</span></label>
+                                    <input type="file" class="form-control" id="paymentScreenshot" name="payment_screenshot" accept="image/*" required>
+                                    <small class="text-muted">Upload proof of payment (JPG, PNG, PDF)</small>
+                                </div>
+                                <div class="mb-3">
+                                    <div id="imagePreview" class="mt-2" style="display: none;">
+                                        <img id="previewImg" src="" alt="Preview" class="img-thumbnail" style="max-width: 300px;">
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="paymentMessage" class="form-label">Message (Optional)</label>
+                                    <textarea class="form-control" id="paymentMessage" name="payment_message" rows="3" placeholder="Any additional information..."></textarea>
+                                </div>
+
+                                <div class="alert alert-warning">
+                                    <i class="fas fa-exclamation-circle me-2"></i>
+                                    <strong>Note:</strong> Your payment will be verified by admin. Your subscription will be activated once verified.
+                                </div>
+
+                                <div class="d-flex justify-content-between">
+                                    <button type="button" class="btn btn-warning text-white" id="backToStep2">
+                                        <i class="fas fa-arrow-left me-2"></i> Back
+                                    </button>
+                                    <button type="submit" class="btn btn-success" id="submitBtn">
+                                        <i class="fas fa-check me-2"></i> Submit Request
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Success Modal -->
+<div class="modal fade" id="successModal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title"><i class="fas fa-check-circle me-2"></i>Request Submitted Successfully</h5>
+            </div>
+            <div class="modal-body text-center py-4">
+                <i class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
+                <h5 class="mt-3">Thank You!</h5>
+                <p class="mb-0">Your payment details and request will be verified by the admin. Your plan will be activated soon. Please wait.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="closeSuccessModal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Error Modal -->
+<div class="modal fade" id="errorModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title"><i class="fas fa-exclamation-circle me-2"></i>Error</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p id="errorMessage"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.step-indicator {
+    text-align: center;
+    flex: 1;
+}
+
+.step-number {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #e9ecef;
+    color: #6c757d;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-bottom: 8px;
+    transition: all 0.3s;
+}
+
+.step-number.active {
+    background: #0d6efd;
+    color: white;
+}
+
+.step-number.completed {
+    background: #198754;
+    color: white;
+}
+
+.step-label {
+    font-size: 0.875rem;
+    color: #6c757d;
+}
+
+.step-indicator .step-number.active ~ .step-label {
+    color: #0d6efd;
+    font-weight: 600;
+}
+</style>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/subscription-request.js' %}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const subscriptionRequest = new SubscriptionRequest({
+            planId: {{ plan.id }},
+            monthlyPrice: {{ plan.monthly_price }},
+            halfYearlyDiscount: {{ plan.half_yearly_discount }},
+            yearlyDiscount: {{ plan.yearly_discount }},
+            csrfToken: '{{ csrf_token }}',
+            submitUrl: '{% url "patient-subscription-request-submit" %}',
+            dashboardUrl: '/user/patient-dashboard/'
+        });
+        subscriptionRequest.init();
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,257 @@
+{% extends 'base.html' %}
+{% block title %}{{ specialist_name }}{% endblock title %}   
+{% load static %}
+
+{% block content %}
+<div class="container-fluid py-5 wow fadeIn" data-wow-delay="0.1s">
+    <div class="container">
+        <!-- Header -->
+        <div class="text-center mx-auto mb-5" style="max-width: 800px;">
+            <h1 class="display-5 mb-3">Find Your Specialist</h1>
+            <p class="mb-0">Browse and book appointments with qualified {{ specialist_name }}s</p>
+        </div>
+
+        <!-- Filter and Info Bar -->
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <div class="alert alert-info d-flex align-items-center" role="alert">
+                    <i class="fas fa-grip-lines-vertical me-3"></i>
+                    <p class="text-muted mb-0">
+                        Specialty: <strong>{{ specialist_name }}</strong>
+                        &nbsp; &nbsp; recommended for: <strong>{{ illness_name }}</strong>
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="text-md-end">
+                    <a href="{% url 'symptom-check-page' %}" class="btn btn-outline-primary">
+                        <i class="fas fa-arrow-left me-2"></i>Back to Symptoms Check
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loading-state" class="text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading doctors...</span>
+            </div>
+            <p class="mt-2">Loading available doctors...</p>
+        </div>
+
+        <!-- Doctors Grid -->
+        <div id="doctors-container" style="display: none;">
+            <div class="row" id="doctors-grid">
+                <!-- Doctor cards will be inserted here -->
+            </div>
+
+            <!-- Pagination -->
+            <nav aria-label="Doctor listing pagination" class="mt-5" id="pagination-container">
+                <!-- Pagination controls will be inserted here -->
+            </nav>
+
+            <!-- No Results State -->
+            <div id="no-results" style="display: none;" class="alert alert-warning text-center py-5">
+                <i class="fas fa-search me-2"></i>
+                <p>No doctors found with the selected specialization. Please try another search or contact our support team.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Doctor Detail Modal -->
+<div class="modal fade" id="doctorDetailModal" tabindex="-1" aria-labelledby="doctorDetailLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="doctorDetailLabel">Doctor Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="doctorDetailBody">
+                <!-- Doctor details will be inserted here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="bookAppointmentBtn">
+                    <i class="fas fa-calendar-check me-2"></i>Book Appointment
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Book Appointment Modal -->
+<div class="modal fade" id="bookAppointmentModal" tabindex="-1" aria-labelledby="bookAppointmentLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="bookAppointmentLabel">Book Appointment</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="bookAppointmentBody">
+                <!-- Doctor Info -->
+                <div id="appointmentDoctorInfo" class="mb-4">
+                    <div class="card bg-light">
+                        <div class="card-body">
+                            <h6 class="mb-2"><strong>Doctor:</strong> <span id="apptDoctorName"></span></h6>
+                            <p class="mb-1"><strong>Specialization:</strong> <span id="apptDoctorSpec"></span></p>
+                            <p class="mb-0"><strong>Consultation Fee:</strong> ₹<span id="apptDoctorFee"></span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Booking Form -->
+                <form id="appointmentBookingForm">
+                    <div class="mb-3">
+                        <label for="appointmentDate" class="form-label">Select Date <span class="text-danger">*</span></label>
+                        <input type="date" class="form-control" id="appointmentDate" required>
+                        <small class="text-muted">Select a date for your appointment</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="patientMessage" class="form-label">Describe Your Issue</label>
+                        <textarea class="form-control" id="patientMessage" rows="4" 
+                                  placeholder="Please describe your symptoms or reason for consultation (optional but recommended)"></textarea>
+                        <small class="text-muted">This helps the doctor prepare for your visit</small>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <small>Your appointment will be sent to the doctor for review. You will be notified once the doctor accepts or rejects your request.</small>
+                    </div>
+                </form>
+
+                <!-- Success/Error Messages -->
+                <div id="appointmentMessage" style="display: none;"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="confirmAppointmentBtn">
+                    <i class="fas fa-calendar-check me-2"></i>Confirm Booking
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block scripts %}
+<script src="{% static 'js/recommended-doctor-listing.js' %}"></script>
+<script>
+    // Initialize doctor listing
+    document.addEventListener('DOMContentLoaded', function() {
+        const specialistId = "{{ specialist_id }}";
+        const specialistName = "{{ specialist_name }}";
+        const illnessName = "{{ illness_name }}";
+        const currentPage = {{ page|default:1 }};
+        
+        const doctorListing = new DoctorListing({
+            specialistId: specialistId,
+            specialistName: specialistName,
+            illnessName: illnessName,
+            currentPage: currentPage
+        });
+        
+        doctorListing.init();
+    });
+</script>
+{% endblock scripts %}
+
+<style>
+    .doctor-card {
+        transition: all 0.3s ease;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .doctor-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .doctor-card .card-body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .doctor-info {
+        flex: 1;
+    }
+
+    .doctor-rating {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        background-color: #f8f9fa;
+        border-radius: 0.25rem;
+        font-size: 0.9rem;
+    }
+
+    .doctor-rating .stars {
+        color: #ffc107;
+    }
+
+    .doctor-fee {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: #28a745;
+        margin-bottom: 0;
+    }
+
+    .doctor-experience {
+        padding: 0.75rem;
+        background-color: #e7f3ff;
+        border-left: 4px solid #0d6efd;
+        margin: 1rem 0;
+        border-radius: 0.25rem;
+    }
+
+    .doctor-experience strong {
+        color: #0d6efd;
+    }
+
+    .btn-view-details,
+    .btn-book-appointment {
+        width: 100%;
+        margin-top: 0.5rem;
+    }
+
+    .btn-view-details {
+        margin-bottom: 0;
+    }
+
+    .pagination {
+        justify-content: center;
+    }
+
+    .pagination .page-link {
+        color: #0d6efd;
+        border-color: #dee2e6;
+    }
+
+    .pagination .page-link:hover {
+        background-color: #f8f9fa;
+        color: #0b5ed7;
+    }
+
+    .pagination .page-item.active .page-link {
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+    }
+
+    @media (max-width: 768px) {
+        .doctor-card {
+            margin-bottom: 1rem;
+        }
+
+        .btn-view-details,
+        .btn-book-appointment {
+            font-size: 0.85rem;
+            padding: 0.5rem;
+        }
+    }
+</style>

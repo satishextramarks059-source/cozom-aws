@@ -1,0 +1,289 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Our Team – COZOM{% endblock title %}
+
+{% block content %}
+
+<!-- ===== HERO START ===== -->
+<div class="container-fluid bg-light hero-header pb-5 mb-5">
+    <div class="container py-5">
+        <div class="row g-4 align-items-center">
+            <div class="col-lg-8 wow fadeIn" data-wow-delay="0.1s">
+                <nav aria-label="breadcrumb" class="mb-3">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'home' %}" class="text-primary">Home</a></li>
+                        <li class="breadcrumb-item active text-secondary" aria-current="page">Our Team</li>
+                    </ol>
+                </nav>
+                <h1 class="display-4 mb-3">
+                    Our <span class="text-primary">Leadership Team</span>
+                </h1>
+                <p class="lead text-secondary mb-4">
+                    Meet the passionate people behind COZOM who are working tirelessly to make healthcare accessible to everyone through AI and compassion.
+                </p>
+                <div class="row g-3">
+                    <div class="col-sm-4">
+                        <div class="d-flex align-items-center">
+                            <div class="btn-square bg-primary rounded me-2 flex-shrink-0" style="width:40px;height:40px;">
+                                <i class="fa fa-users text-white"></i>
+                            </div>
+                            <span class="text-secondary small">Dedicated Team</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="d-flex align-items-center">
+                            <div class="btn-square bg-primary rounded me-2 flex-shrink-0" style="width:40px;height:40px;">
+                                <i class="fa fa-heartbeat text-white"></i>
+                            </div>
+                            <span class="text-secondary small">Healthcare Focus</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="d-flex align-items-center">
+                            <div class="btn-square bg-primary rounded me-2 flex-shrink-0" style="width:40px;height:40px;">
+                                <i class="fa fa-star text-white"></i>
+                            </div>
+                            <span class="text-secondary small">Innovation Driven</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 wow fadeIn" data-wow-delay="0.3s">
+                <div class="row g-3">
+                    <div class="col-6">
+                        <div class="bg-primary rounded p-3 text-white text-center">
+                            <i class="fa fa-rocket fa-2x mb-2 d-block"></i>
+                            <small class="fw-semibold">Healthcare Innovation</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="bg-white rounded p-3 text-center shadow-sm">
+                            <i class="fa fa-shield-alt fa-2x text-primary mb-2 d-block"></i>
+                            <small class="fw-semibold text-secondary">Trusted Platform</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ===== HERO END ===== -->
+
+<!-- ===== TEAM MEMBERS SECTION START ===== -->
+<div class="container py-5">
+    <div class="text-center mx-auto mb-5 wow fadeIn" data-wow-delay="0.1s" style="max-width: 800px;">
+        <h1 class="display-5 mb-4">Meet Our <span class="text-primary">Leadership Team</span></h1>
+        <p class="lead text-muted">The passionate minds behind COZOM – driving healthcare innovation with AI and compassion.</p>
+    </div>
+
+    <div class="row g-4 justify-content-center">
+        <!-- Satish Maurya - Founder & CEO -->
+        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+            <div class="card h-100 border-0 shadow-sm rounded-4">
+                <div class="card-body p-4">
+                    <div class="text-center mb-3">
+                        <img src="{% static 'img/SATISH MAURYA (2).jpg' %}" 
+                             alt="Satish Maurya" 
+                             class="rounded-circle img-fluid" 
+                             style="width: 140px; height: 140px; object-fit: cover; border: 3px solid #0D9488;"
+                             onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=Satish+Maurya&background=0D9488&color=fff&size=140&bold=true'">
+                    </div>
+                    <div class="text-center">
+                        <h3 class="mb-1">Satish Maurya</h3>
+                        <p class="text-primary mb-2 fw-semibold">Founder & CEO</p>
+                        <p class="text-muted small mb-3">
+                            <i class="fas fa-envelope me-1"></i> 
+                            <a href="mailto:satish@cozom.in" class="text-decoration-none">satish@cozom.in</a>
+                        </p>
+                        <hr>
+                        <div class="text-start">
+                            <h6 class="text-primary mb-2">About</h6>
+                            <p class="text-muted small mb-3">Passionate entrepreneur and health-tech innovator, leading COZOM to transform healthcare accessibility through artificial intelligence. He is the visionary behind COZOM — an AI-powered platform that connects users from symptoms to the right doctor in a simple, multilingual, and intelligent way.</p>
+                            
+                            <h6 class="text-primary mb-2">Background</h6>
+                            <p class="text-muted small mb-3">With a strong foundation in Computer Science and IT, Satish combines technical understanding with real-world problem-solving. He identified a major gap in early disease detection and doctor accessibility in India, inspiring him to build a scalable solution that empowers users to make informed health decisions anytime, anywhere.</p>
+                            
+                            <h6 class="text-primary mb-2">Vision</h6>
+                            <p class="text-muted small mb-0">To make quality healthcare accessible to every Indian, regardless of their location or economic status, through intelligent technology and compassionate service.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gyanmati Maurya - Co-Founder -->
+        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
+            <div class="card h-100 border-0 shadow-sm rounded-4">
+                <div class="card-body p-4">
+                    <div class="text-center mb-3">
+                        <img src="{% static 'img/GYANMATI MAURYA.jpg' %}" 
+                             alt="Gyanmati Maurya" 
+                             class="rounded-circle img-fluid" 
+                             style="width: 140px; height: 140px; object-fit: cover; border: 3px solid #0D9488;"
+                             onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=Gyanmati+Maurya&background=0D9488&color=fff&size=140&bold=true'">
+                    </div>
+                    <div class="text-center">
+                        <h3 class="mb-1">Gyanmati Maurya</h3>
+                        <p class="text-primary mb-2 fw-semibold">Co-Founder</p>
+                        <p class="text-muted small mb-3">
+                            <i class="fas fa-envelope me-1"></i> 
+                            <a href="mailto:gyanmati@cozom.in" class="text-decoration-none">gyanmati@cozom.in</a>
+                        </p>
+                        <hr>
+                        <div class="text-start">
+                            <h6 class="text-primary mb-2">About</h6>
+                            <p class="text-muted small mb-3">Dedicated entrepreneur and Co-Founder, playing a key role in shaping the company's vision and operations. She brings a strong understanding of business management, finance, and organizational strategy to the COZOM platform.</p>
+                            
+                            <h6 class="text-primary mb-2">Background</h6>
+                            <p class="text-muted small mb-3">Holds a Master of Commerce (M.Com) degree, providing a solid foundation in financial planning, business operations, and strategic decision-making. Actively involved in overseeing operations, supporting strategic planning, and ensuring efficient execution of business initiatives.</p>
+                            
+                            <h6 class="text-primary mb-2">Core Responsibilities</h6>
+                            <p class="text-muted small mb-0">Strategic planning, business operations, financial management, team coordination, and ensuring the company's mission is executed effectively across all departments.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rinku Maurya - Head of Finance -->
+        <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
+            <div class="card h-100 border-0 shadow-sm rounded-4">
+                <div class="card-body p-4">
+                    <div class="text-center mb-3">
+                        <img src="{% static 'img/RINKU MAURYA.jpg' %}" 
+                             alt="Rinku Maurya" 
+                             class="rounded-circle img-fluid" 
+                             style="width: 140px; height: 140px; object-fit: cover; border: 3px solid #0D9488;"
+                             onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=Rinku+Maurya&background=0D9488&color=fff&size=140&bold=true'">
+                    </div>
+                    <div class="text-center">
+                        <h3 class="mb-1">Rinku Maurya</h3>
+                        <p class="text-primary mb-2 fw-semibold">Head of Finance & Accountant</p>
+                        <p class="text-muted small mb-3">
+                            <i class="fas fa-envelope me-1"></i> 
+                            <a href="mailto:rinku@cozom.in" class="text-decoration-none">rinku@cozom.in</a>
+                        </p>
+                        <hr>
+                        <div class="text-start">
+                            <h6 class="text-primary mb-2">About</h6>
+                            <p class="text-muted small mb-3">Responsible for managing the company's financial planning, accounting operations, and overall financial strategy. His role is crucial in ensuring financial stability, transparency, and sustainable growth for the organization.</p>
+                            
+                            <h6 class="text-primary mb-2">Background</h6>
+                            <p class="text-muted small mb-3">Holds a Bachelor of Commerce (B.Com Honors) degree, providing a strong foundation in accounting principles, financial management, and business operations. He brings expertise in budgeting, financial reporting, and compliance.</p>
+                            
+                            <h6 class="text-primary mb-2">Core Responsibilities</h6>
+                            <p class="text-muted small mb-0">Financial planning, budgeting, accounting operations, tax compliance, financial reporting, payroll management, and ensuring all financial processes align with business goals and regulatory requirements.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Company Stats Section -->
+    <div class="row g-4 mt-5 pt-3">
+        <div class="col-md-3 col-6 text-center">
+            <div class="bg-light rounded p-4">
+                <h2 class="text-primary mb-2">2025</h2>
+                <p class="text-muted small mb-0">Year Founded</p>
+            </div>
+        </div>
+        <div class="col-md-3 col-6 text-center">
+            <div class="bg-light rounded p-4">
+                <h2 class="text-primary mb-2">50+</h2>
+                <p class="text-muted small mb-0">Doctors Onboarded</p>
+            </div>
+        </div>
+        <div class="col-md-3 col-6 text-center">
+            <div class="bg-light rounded p-4">
+                <h2 class="text-primary mb-2">500+</h2>
+                <p class="text-muted small mb-0">Patients Served</p>
+            </div>
+        </div>
+        <div class="col-md-3 col-6 text-center">
+            <div class="bg-light rounded p-4">
+                <h2 class="text-primary mb-2">24/7</h2>
+                <p class="text-muted small mb-0">Support Available</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Get in Touch Button -->
+    <div class="text-center mt-5 pt-3 wow fadeIn" data-wow-delay="0.3s">
+        <a href="{% url 'contact_us' %}" class="btn btn-primary rounded-pill px-5 py-3">
+            <i class="fa fa-envelope me-2"></i>Get in Touch
+        </a>
+    </div>
+</div>
+<!-- ===== TEAM MEMBERS SECTION END ===== -->
+
+<!-- ===== MISSION & VISION START ===== -->
+<div class="container-fluid bg-light py-5">
+    <div class="container py-3">
+        <div class="row g-5 align-items-center">
+            <div class="col-lg-6 wow fadeIn" data-wow-delay="0.1s">
+                <h1 class="mb-4">Our <span class="text-uppercase text-primary bg-light px-2">Mission &amp; Vision</span></h1>
+                <p class="mb-3 text-secondary">
+                    <strong>Mission:</strong> To make quality healthcare accessible to everyone by bridging the gap between patients, doctors, and hospitals through intelligent technology.
+                </p>
+                <p class="mb-4 text-secondary">
+                    <strong>Vision:</strong> A world where every individual, regardless of location, can quickly identify health issues, consult the right specialist, and receive timely care.
+                </p>
+                <div class="row g-3 mb-4">
+                    <div class="col-sm-6">
+                        <h6 class="mb-2"><i class="fa fa-check-circle text-primary me-2"></i>AI-powered Symptom Checker</h6>
+                        <h6 class="mb-0"><i class="fa fa-check-circle text-primary me-2"></i>Verified Medical Professionals</h6>
+                    </div>
+                    <div class="col-sm-6">
+                        <h6 class="mb-2"><i class="fa fa-check-circle text-primary me-2"></i>Secure &amp; Private Records</h6>
+                        <h6 class="mb-0"><i class="fa fa-check-circle text-primary me-2"></i>Role-based Dashboards</h6>
+                    </div>
+                </div>
+                <a class="btn btn-primary px-4" href="{% url 'symptom-check-page' %}">
+                    <i class="fa fa-stethoscope me-2"></i>Try Symptom Checker
+                </a>
+            </div>
+            <div class="col-lg-6 wow fadeIn" data-wow-delay="0.3s">
+                <div class="row g-3">
+                    <div class="col-6">
+                        <img class="img-fluid rounded shadow-sm w-100" src="{% static 'img/vision.jpg' %}" alt="COZOM mission" style="height: 250px; object-fit: cover;">
+                    </div>
+                    <div class="col-6">
+                        <img class="img-fluid rounded shadow-sm w-100" src="{% static 'img/journey.jpg' %}" alt="COZOM vision" style="height: 250px; object-fit: cover;">
+                        <div class="bg-primary p-3 rounded mt-2 text-center">
+                            <h6 class="text-white mb-0">Trusted Healthcare Since 2025</h6>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ===== MISSION & VISION END ===== -->
+
+<!-- ===== CTA START ===== -->
+<div class="container-fluid bg-primary py-5">
+    <div class="container py-3 text-center">
+        <div class="wow fadeIn" data-wow-delay="0.1s">
+            <h2 class="text-white mb-3">Ready to Take Control of Your Health?</h2>
+            <p class="text-white-50 mb-4">Join thousands of patients, doctors, and hospitals already using COZOM for smarter healthcare.</p>
+            <div class="d-flex flex-wrap justify-content-center gap-3">
+                {% if not user.is_authenticated %}
+                <a href="#" class="btn btn-light px-4 py-3" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                    <i class="fa fa-user-plus me-2"></i>Sign Up Free
+                </a>
+                {% endif %}
+                <a href="{% url 'symptom-check-page' %}" class="btn btn-outline-light px-4 py-3">
+                    <i class="fa fa-stethoscope me-2"></i>Check Your Symptoms
+                </a>
+                <a href="{% url 'contact_us' %}" class="btn btn-outline-light px-4 py-3">
+                    <i class="fa fa-envelope me-2"></i>Contact Us
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ===== CTA END ===== -->
+
+{% endblock content %}

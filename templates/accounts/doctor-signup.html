@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+    <meta charset="utf-8">
+    <title>COZOM - Doctor Registration</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon -->
+    <link href="{% static 'img/favicon.ico' %}" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Space+Grotesk&display=swap" rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="{% static 'lib/animate/animate.min.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+</head>
+
+<body>
+    <!-- Spinner Start -->
+    <div id="spinner"
+        class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-grow text-primary" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+    <!-- Spinner End -->
+
+    <!-- Doctor Registration Template -->
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-10">
+                <div class="registration-container">
+                    <div class="row g-0">
+                        <!-- Left Media Section -->
+                        <div class="col-md-4">
+                            <div class="media-section bg-light">
+                                <h2 class="my-3 text-success fst-italic fw-light ">COZOM _</h2>
+                                <h2>Register as Doctor</h2>
+                                <p class="text-justify mb-3">
+                                    Join our platform to reach patients, manage appointments and build your profile.
+                                </p>
+                                <ul class="list-unstyled">
+                                    <li><i class="fas fa-check-circle text-success me-2"></i> Expand patient reach</li>
+                                    <li><i class="fas fa-check-circle text-success me-2"></i> Manage appointments</li>
+                                    <li><i class="fas fa-check-circle text-success me-2"></i> Grow reputation</li>
+                                </ul>
+                                <i class="fas fa-user-md health-icon"></i>
+                            </div>
+                        </div>
+
+                        <!-- Right Form Section -->
+                        <div class="col-md-8">
+                            <div class="form-section">
+                                <div class="form-header">
+                                    <h3 class="form-title">Doctor Registration</h3>
+                                    <p class="form-subtitle">Please fill in your professional details</p>
+                                </div>
+
+                                <form id="doctorRegistrationForm" autocomplete="off">
+                                    <!-- Name -->
+                                    <div class="mb-3">
+                                        <label for="doctorName" class="form-label">Full Name <span
+                                                class="text-danger">*</span></label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                            <input type="text" class="form-control" id="doctorName"
+                                                placeholder="Dr. John Doe">
+                                        </div>
+                                        <div class="error-message" id="doctorNameError">Please enter your name</div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="email" class="form-label">Email Address <span
+                                                    class="text-danger">*</span></label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="far fa-envelope"></i></span>
+                                                <input type="email" class="form-control" id="email"
+                                                    placeholder="Enter your email">
+                                            </div>
+                                            <div class="error-message" id="emailError">Please enter a valid email
+                                                address</div>
+                                        </div>
+
+                                        <div class="col-md-6 mb-3">
+                                            <label for="contactNumber" class="form-label">Contact Number <span
+                                                    class="text-danger">*</span></label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                                <input type="text" class="form-control" id="contactNumber"
+                                                    placeholder="10-digit phone number">
+                                            </div>
+                                            <div class="error-message" id="contactNumberError">Please enter a valid
+                                                10-digit phone number</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="education" class="form-label">Education <span
+                                                    class="text-danger">*</span></label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i
+                                                        class="fas fa-graduation-cap"></i></span>
+                                                <input type="text" class="form-control" id="education"
+                                                    placeholder="MBBS, MD etc.">
+                                            </div>
+                                            <div class="error-message" id="educationError">Please enter your education
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6 mb-3">
+                                            <label for="experience" class="form-label">Experience (years) <span
+                                                    class="text-danger">*</span></label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="fas fa-briefcase"></i></span>
+                                                <input type="number" class="form-control" id="experience" min="0"
+                                                    max="100" placeholder="e.g. 5">
+                                            </div>
+                                            <div class="error-message" id="experienceError">Please enter valid
+                                                experience</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="specializations" class="form-label">Specializations <span
+                                                class="text-danger">*</span></label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-briefcase-medical"></i></span>
+                                            <select id="specializations" class="form-select" multiple>
+                                                {% for spec in specializations %}
+                                                <option value="{{ spec.id }}">{{ spec.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="error-message" id="specializationsError">Please choose at least one
+                                            specialization</div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="licenseNumber" class="form-label">License Number <span
+                                                    class="text-danger">*</span></label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="fas fa-id-card"></i></span>
+                                                <input type="text" class="form-control" id="licenseNumber"
+                                                    placeholder="License / registration">
+                                            </div>
+                                            <div class="error-message" id="licenseError">Please enter license number
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6 mb-3">
+                                            <label for="consultationFee" class="form-label">Consultation Fee
+                                                <span class="text-danger">*</span></label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="fas fa-rupee-sign"></i></span>
+                                                <input required type="number" class="form-control" id="consultationFee" min="0"
+                                                    step="0.01" placeholder="e.g. 500">
+                                            </div>
+                                            <div class="error-message" id="consultationFeeError">Please enter a valid
+                                                fee</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Location fields - mandatory -->
+                                    <div class="row">
+                                        <div class="col-md-4 mb-3">
+                                            <label for="country" class="form-label">Country <span
+                                                    class="text-danger">*</span></label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="fas fa-flag"></i></span>
+                                                <input type="text" class="form-control" id="country"
+                                                    placeholder="e.g. India">
+                                            </div>
+                                            <div class="error-message" id="countryError">Please enter country</div>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label for="state" class="form-label">State <span
+                                                    class="text-danger">*</span></label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="fas fa-map"></i></span>
+                                                <input type="text" class="form-control" id="state" placeholder="State">
+                                            </div>
+                                            <div class="error-message" id="stateError">Please enter state</div>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label for="city" class="form-label">City <span
+                                                    class="text-danger">*</span></label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="fas fa-city"></i></span>
+                                                <input type="text" class="form-control" id="city" placeholder="City">
+                                            </div>
+                                            <div class="error-message" id="cityError">Please enter city</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="address" class="form-label">Address <span
+                                                class="text-danger">*</span></label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></span>
+                                            <textarea class="form-control" id="address" rows="2"
+                                                placeholder="C-55, Main Road, East Delhi"></textarea>
+                                        </div>
+                                        <div class="error-message" id="addressError">Please enter address</div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="pincode" class="form-label">Pincode <span
+                                                    class="text-danger">*</span></label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i
+                                                        class="fas fa-location-arrow"></i></span>
+                                                <input type="text" class="form-control" id="pincode" maxlength="10"
+                                                    placeholder="Pincode">
+                                            </div>
+                                            <div class="error-message" id="pincodeError">Please enter pincode</div>
+                                        </div>
+
+                                        <div class="col-md-6 mb-3">
+                                            <label for="languages" class="form-label">Languages <span class="text-danger">*</span></label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="fas fa-language"></i></span>
+                                                <input required type="text" class="form-control" id="languages"
+                                                    placeholder="e.g. English, Hindi">
+                                            </div>
+                                            <div class="error-message" id="languagesError">Please enter languages</div>
+                                        </div>
+                                    </div>
+
+
+
+                                    <!-- Password -->
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="password" class="form-label">Password <span
+                                                    class="text-danger">*</span></label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="fas fa-key"></i></span>
+                                                <input type="password" class="form-control" id="password"
+                                                    placeholder="Strong password">
+                                            </div>
+                                            <div class="error-message" id="passwordError">Password must be strong</div>
+                                        </div>
+
+                                        <div class="col-md-6 mb-3">
+                                            <label for="confirmPassword" class="form-label">Confirm Password <span
+                                                    class="text-danger">*</span></label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="fas fa-key"></i></span>
+                                                <input type="password" class="form-control" id="confirmPassword"
+                                                    placeholder="Confirm password">
+                                            </div>
+                                            <div class="error-message" id="confirmPasswordError">Passwords do not match
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-check mb-3">
+                                        <input class="form-check-input" type="checkbox" id="showPasswordToggle">
+                                        <label class="form-check-label small" for="showPasswordToggle">Show
+                                            password</label>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="awards" class="form-label">Awards / Certifications
+                                            (Optional)</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-award"></i></span>
+                                            <textarea class="form-control" id="awards" rows="2"
+                                                placeholder="Awards, certifications"></textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="bio" class="form-label">Bio (Optional)</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text"><i class="fas fa-info-circle"></i></span>
+                                            <textarea class="form-control" id="bio" rows="3"
+                                                placeholder="Short professional bio"></textarea>
+                                        </div>
+                                    </div>
+
+                                    <!-- OTP RADIO -->
+                                    <div class="d-flex justify-content-between align-items-center mb-4">
+                                        <div>
+                                            <label class="form-label">Get OTP On <span
+                                                    class="text-danger">*</span></label>
+                                            <div class="d-flex gap-4">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="otpMethod"
+                                                        id="otpEmail" value="email" checked>
+                                                    <label class="form-check-label" for="otpEmail">Email</label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" name="otpMethod"
+                                                        id="otpPhone" value="phone">
+                                                    <label class="form-check-label" for="otpPhone">Phone</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <a href="{% url 'login' %}" class="text-primary">Have account ?</a>
+                                        </div>
+                                    </div>
+                                    <!-- /OTP RADIO -->
+
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <a href="/" type="button" class="btn btn-danger btn-md">
+                                            <i class="bi bi-arrow-left me-1"></i> Back
+                                        </a>
+                                        <button type="button" class="btn btn-primary btn-md" id="submitDoctorBtn">
+                                            Send OTP <i class="fas fa-arrow-right"></i>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- OTP MODAL -->
+                <div class="modal fade" id="otpModal" tabindex="-1" aria-labelledby="otpModalLabel" aria-hidden="true"
+                    data-bs-backdrop="static" data-bs-keyboard="false">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="otpModalLabel">Verify Your Account</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p>We've sent a 6-digit verification code to your <span
+                                        id="otpDestination">email</span>. Please enter it below:</p>
+                                <div class="mb-3">
+                                    <label for="otpInput" class="form-label">Verification Code</label>
+                                    <input type="text" class="form-control otp-input" id="otpInput" maxlength="6"
+                                        placeholder="------">
+                                    <div class="error-message mt-2" id="otpError">Please enter a valid 6-digit code
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mt-4">
+                                    <div><i class="far fa-clock"></i> <span class="timer" id="timer">05:00</span>
+                                        Remaining</div>
+                                    <a href="#" class="resend-otp" id="resendOtp" style="display: none;">Resend OTP</a>
+                                </div>
+                            </div>
+                            <div class="modal-footer d-flex justify-content-between align-items-center">
+                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-primary" id="verifyOtpBtn">Verify</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /OTP MODAL -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 9999">
+        <div id="toastContainer"></div>
+    </div>
+    <!-- Back to Top -->
+    <a href="#!" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+
+
+    <!-- JavaScript Libraries -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'lib/wow/wow.min.js' %}"></script>
+    <script src="{% static 'lib/easing/easing.min.js' %}"></script>
+    <script src="{% static 'lib/waypoints/waypoints.min.js' %}"></script>
+    <script src="{% static 'lib/owlcarousel/owl.carousel.min.js' %}"></script>
+
+    <!-- Template Javascript -->
+    <script src="{% static 'js/main.js' %}"></script>
+
+    <!-- Include Select2 -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <style>
+        .select2-container--default .select2-selection--multiple {
+            border: 1px solid #ced4da !important;
+            border-radius: 0 .375rem .375rem 0 !important;
+            padding: .375rem .75rem !important;
+            min-height: calc(1.5em + .75rem + 2px);
+            display: flex;
+            align-items: center;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .select2-container {
+            flex: 1 1 auto;
+            width: 1% !important;
+        }
+
+        .select2-selection__choice {
+            color: #495057 !important;
+            border: none !important;
+            border-radius: .2rem !important;
+            padding: 0 .5rem !important;
+            margin-top: .25rem !important;
+        }
+
+        .select2-container--default .select2-selection--multiple .select2-selection__choice__display {
+            margin-left: 11px !important;
+        }
+
+        .select2-container .select2-selection--multiple .select2-selection__rendered {
+            margin-bottom: 3px !important;
+        }
+
+        .select2-container--default .select2-selection--multiple .select2-selection__clear {
+            margin-bottom: 4px !important;
+        }
+
+        .select2-container--default .select2-selection--multiple {
+            align-items: center !important;
+        }
+
+        .select2-container--default .select2-search--inline .select2-search__field {
+            margin-top: 0 !important;
+            height: 24px !important;
+        }
+
+        .select2-selection__placeholder {
+            color: #6c757d !important;
+        }
+
+        .select2-container--open .select2-dropdown {
+            border-radius: 0 0 .375rem .375rem !important;
+            border-color: #ced4da !important;
+            margin-top: -1px;
+        }
+    </style>
+
+    <script src="{% static 'js/doctor_registration.js' %}"></script>
+</body>
+
+</html>

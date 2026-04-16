@@ -1,0 +1,324 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Testimonials – COZOM{% endblock title %}
+
+{% block content %}
+
+<!-- ===== HERO START (Same as Landing Page) ===== -->
+<div class="container-fluid bg-light hero-header pb-5 mb-5">
+    <div class="container py-5">
+        <div class="row g-4 align-items-center">
+            <div class="col-lg-8 wow fadeIn" data-wow-delay="0.1s">
+                <nav aria-label="breadcrumb" class="mb-3">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'home' %}" class="text-primary">Home</a></li>
+                        <li class="breadcrumb-item active text-secondary" aria-current="page">Testimonials</li>
+                    </ol>
+                </nav>
+                <h1 class="display-4 mb-3">
+                    Patient <span class="text-primary">Testimonials</span>
+                </h1>
+                <p class="lead text-secondary mb-4">
+                    What our users say about COZOM. Real stories from patients, doctors, and hospitals who trust COZOM for their healthcare needs.
+                </p>
+                <div class="row g-3">
+                    <div class="col-sm-4">
+                        <div class="d-flex align-items-center">
+                            <div class="btn-square bg-primary rounded me-2 flex-shrink-0" style="width:40px;height:40px;">
+                                <i class="fa fa-smile text-white"></i>
+                            </div>
+                            <span class="text-secondary small">Happy Patients</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="d-flex align-items-center">
+                            <div class="btn-square bg-primary rounded me-2 flex-shrink-0" style="width:40px;height:40px;">
+                                <i class="fa fa-user-md text-white"></i>
+                            </div>
+                            <span class="text-secondary small">Trusted Doctors</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="d-flex align-items-center">
+                            <div class="btn-square bg-primary rounded me-2 flex-shrink-0" style="width:40px;height:40px;">
+                                <i class="fa fa-hospital text-white"></i>
+                            </div>
+                            <span class="text-secondary small">Partner Hospitals</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 wow fadeIn" data-wow-delay="0.3s">
+                <div class="row g-3">
+                    <div class="col-6">
+                        <div class="bg-primary rounded p-3 text-white text-center">
+                            <i class="fa fa-star fa-2x mb-2 d-block"></i>
+                            <small class="fw-semibold">4.8 Rating</small>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="bg-white rounded p-3 text-center shadow-sm">
+                            <i class="fa fa-heart fa-2x text-primary mb-2 d-block"></i>
+                            <small class="fw-semibold text-secondary">500+ Stories</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ===== HERO END ===== -->
+
+<!-- ===== FEATURED TESTIMONIAL START ===== -->
+<div class="container py-5">
+    <div class="row justify-content-center mb-5">
+        <div class="col-lg-10">
+            <div class="card border-0 shadow-lg rounded-4 bg-primary text-white text-center p-5 wow fadeInUp" data-wow-delay="0.1s">
+                <i class="fa fa-quote-left fa-3x mb-3 opacity-50"></i>
+                <p class="lead mb-4">"After registering our hospital on COZOM, the number of appointment requests increased significantly. The subscription plans are well-priced and the support is excellent."</p>
+                <div class="d-flex justify-content-center align-items-center">
+                    <div class="bg-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 60px; height: 60px;">
+                        <i class="fa fa-hospital fa-2x text-primary"></i>
+                    </div>
+                    <div class="text-start">
+                        <h5 class="text-white mb-0">City Care Hospital</h5>
+                        <small class="text-white-50">Bangalore</small>
+                    </div>
+                </div>
+                <div class="text-warning mt-3">
+                    <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Testimonials Grid -->
+    <div class="text-center mx-auto mb-5 wow fadeIn" data-wow-delay="0.1s" style="max-width: 800px;">
+        <h1 class="display-5 mb-4">What Our <span class="text-primary">Users Say</span></h1>
+        <p class="lead text-muted">Real stories from patients, doctors, and hospitals who trust COZOM.</p>
+    </div>
+
+    <div class="row g-4">
+        <!-- Testimonial 1 - Patient -->
+        <div class="col-md-6 col-lg-4 wow fadeInUp" data-wow-delay="0.2s">
+            <div class="card h-100 border-0 shadow-sm rounded-4">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="bg-light rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                            <i class="fa fa-user-circle fa-2x text-primary"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-0">Priya Singh</h6>
+                            <small class="text-muted">Patient, Mumbai</small>
+                        </div>
+                    </div>
+                    <div class="text-warning mb-3">
+                        <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i>
+                    </div>
+                    <p class="text-muted small mb-0">"The appointment booking system is so smooth! I found a great gynecologist nearby within minutes. The reminders via SMS are very helpful too."</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Testimonial 2 - Doctor -->
+        <div class="col-md-6 col-lg-4 wow fadeInUp" data-wow-delay="0.3s">
+            <div class="card h-100 border-0 shadow-sm rounded-4">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="bg-light rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                            <i class="fa fa-user-md fa-2x text-primary"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-0">Dr. Anjali Verma</h6>
+                            <small class="text-muted">Cardiologist, Pune</small>
+                        </div>
+                    </div>
+                    <div class="text-warning mb-3">
+                        <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i>
+                    </div>
+                    <p class="text-muted small mb-0">"COZOM has helped me reach more patients who need cardiac care. The platform is professional and easy to use. Highly recommended for doctors!"</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Testimonial 3 - Hospital -->
+        <div class="col-md-6 col-lg-4 wow fadeInUp" data-wow-delay="0.4s">
+            <div class="card h-100 border-0 shadow-sm rounded-4">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="bg-light rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                            <i class="fa fa-hospital fa-2x text-primary"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-0">City Care Hospital</h6>
+                            <small class="text-muted">Bangalore</small>
+                        </div>
+                    </div>
+                    <div class="text-warning mb-3">
+                        <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i>
+                    </div>
+                    <p class="text-muted small mb-0">"Patient appointments have increased by 40% since joining COZOM. The dashboard is intuitive and support team is very responsive."</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Testimonial 4 - Patient -->
+        <div class="col-md-6 col-lg-4 wow fadeInUp" data-wow-delay="0.5s">
+            <div class="card h-100 border-0 shadow-sm rounded-4">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="bg-light rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                            <i class="fa fa-user-circle fa-2x text-primary"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-0">Amit Patel</h6>
+                            <small class="text-muted">Patient, Ahmedabad</small>
+                        </div>
+                    </div>
+                    <div class="text-warning mb-3">
+                        <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-half-alt"></i>
+                    </div>
+                    <p class="text-muted small mb-0">"The symptom checker helped me identify my issue before visiting the doctor. Saved me time and got the right treatment quickly."</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Testimonial 5 - Doctor -->
+        <div class="col-md-6 col-lg-4 wow fadeInUp" data-wow-delay="0.6s">
+            <div class="card h-100 border-0 shadow-sm rounded-4">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="bg-light rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                            <i class="fa fa-user-md fa-2x text-primary"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-0">Dr. Rajesh Kumar</h6>
+                            <small class="text-muted">Orthopedic, Lucknow</small>
+                        </div>
+                    </div>
+                    <div class="text-warning mb-3">
+                        <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i>
+                    </div>
+                    <p class="text-muted small mb-0">"My clinic's visibility has improved dramatically. Patients appreciate the easy booking and reminder system. A must-have for modern practices."</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Testimonial 6 - Patient -->
+        <div class="col-md-6 col-lg-4 wow fadeInUp" data-wow-delay="0.7s">
+            <div class="card h-100 border-0 shadow-sm rounded-4">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="bg-light rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                            <i class="fa fa-user-circle fa-2x text-primary"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-0">Neha Gupta</h6>
+                            <small class="text-muted">Patient, Noida</small>
+                        </div>
+                    </div>
+                    <div class="text-warning mb-3">
+                        <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i>
+                    </div>
+                    <p class="text-muted small mb-0">"Finally, a healthcare platform that actually works! The ability to see doctor availability and book instantly is a game-changer for busy professionals."</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leave a Testimonial CTA -->
+    <div class="text-center mt-5 pt-4 wow fadeIn" data-wow-delay="0.3s">
+        <h4 class="mb-3">Have a story to share?</h4>
+        <p class="text-muted mb-4">We'd love to hear about your experience with COZOM.</p>
+        <a href="{% url 'feedback' %}" class="btn btn-primary rounded-pill px-5 py-3">
+            <i class="fa fa-pen me-2"></i>Share Your Feedback
+        </a>
+    </div>
+</div>
+<!-- ===== TESTIMONIALS SECTION END ===== -->
+
+<!-- ===== FAQ SECTION START (Same as Landing Page) ===== -->
+<div class="container-fluid bg-light py-5">
+    <div class="container py-3">
+        <div class="text-center mx-auto mb-5 wow fadeIn" data-wow-delay="0.1s" style="max-width: 800px;">
+            <h1 class="display-5 mb-4">Frequently Asked <span class="text-primary">Questions</span></h1>
+            <p class="lead text-muted">Have questions about how COZOM works? We've got you covered.</p>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="accordion" id="faqAccordion">
+                    <!-- FAQ 1 -->
+                    <div class="accordion-item border-0 mb-3 shadow-sm">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                                <i class="fa fa-question-circle text-primary me-2"></i> What is COZOM?
+                            </button>
+                        </h2>
+                        <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body text-muted">
+                                COZOM is an AI-assisted healthcare platform that helps patients identify symptoms, find the right doctors or hospitals, and book appointments — all from one dashboard.
+                            </div>
+                        </div>
+                    </div>
+                    <!-- FAQ 2 -->
+                    <div class="accordion-item border-0 mb-3 shadow-sm">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                                <i class="fa fa-question-circle text-primary me-2"></i> How does the Symptom Checker work?
+                            </button>
+                        </h2>
+                        <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body text-muted">
+                                You select your affected body parts and describe your symptoms. Our AI analyzes the inputs and suggests possible illnesses along with the recommended medical specialty to consult.
+                            </div>
+                        </div>
+                    </div>
+                    <!-- FAQ 3 -->
+                    <div class="accordion-item border-0 mb-3 shadow-sm">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                                <i class="fa fa-question-circle text-primary me-2"></i> Is my health data secure?
+                            </button>
+                        </h2>
+                        <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body text-muted">
+                                Yes. All user data is stored securely and is only accessible by you and the healthcare providers you interact with. We follow industry-standard data protection practices.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-4">
+                    <a href="{% url 'contact_us' %}" class="btn btn-outline-primary">More Questions? Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ===== FAQ SECTION END ===== -->
+
+<!-- ===== CTA START ===== -->
+<div class="container-fluid bg-primary py-5">
+    <div class="container py-3 text-center">
+        <div class="wow fadeIn" data-wow-delay="0.1s">
+            <h2 class="text-white mb-3">Ready to Take Control of Your Health?</h2>
+            <p class="text-white-50 mb-4">Join thousands of patients, doctors, and hospitals already using COZOM for smarter healthcare.</p>
+            <div class="d-flex flex-wrap justify-content-center gap-3">
+                {% if not user.is_authenticated %}
+                <a href="#" class="btn btn-light px-4 py-3" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                    <i class="fa fa-user-plus me-2"></i>Sign Up Free
+                </a>
+                {% endif %}
+                <a href="{% url 'symptom-check-page' %}" class="btn btn-outline-light px-4 py-3">
+                    <i class="fa fa-stethoscope me-2"></i>Check Your Symptoms
+                </a>
+                <a href="{% url 'contact_us' %}" class="btn btn-outline-light px-4 py-3">
+                    <i class="fa fa-envelope me-2"></i>Contact Us
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ===== CTA END ===== -->
+
+{% endblock content %}

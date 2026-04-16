@@ -1,0 +1,351 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Blog List{% endblock %}
+{% block content %}
+
+    <!-- ===== HERO START ===== -->
+    <div class="container-fluid bg-light hero-header pb-5 mb-5">
+        <div class="container py-5">
+            <div class="row g-4 align-items-center">
+                <div class="col-lg-8 wow fadeIn" data-wow-delay="0.1s">
+                    <nav aria-label="breadcrumb" class="mb-3">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{% url 'home' %}" class="text-primary">Home</a></li>
+                            <li class="breadcrumb-item active text-secondary" aria-current="page">Health Blog</li>
+                        </ol>
+                    </nav>
+                    <h1 class="display-4 mb-3">
+                        Health <span class="text-primary">Blog &amp; Resources</span>
+                    </h1>
+                    <p class="lead text-secondary mb-4">
+                        Your trusted source for reliable health and wellness insights. Read expert articles, medical advice, and lifestyle guidance written by verified healthcare professionals on the COZOM platform.
+                    </p>
+                    <div class="row g-3">
+                        <div class="col-sm-4">
+                            <div class="d-flex align-items-center">
+                                <div class="btn-square bg-primary rounded me-2 flex-shrink-0" style="width:40px;height:40px;">
+                                    <i class="fa fa-user-md text-white"></i>
+                                </div>
+                                <span class="text-secondary small">Written by doctors</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="d-flex align-items-center">
+                                <div class="btn-square bg-primary rounded me-2 flex-shrink-0" style="width:40px;height:40px;">
+                                    <i class="fa fa-search text-white"></i>
+                                </div>
+                                <span class="text-secondary small">Search &amp; filter by topic</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="d-flex align-items-center">
+                                <div class="btn-square bg-primary rounded me-2 flex-shrink-0" style="width:40px;height:40px;">
+                                    <i class="fa fa-heart text-white"></i>
+                                </div>
+                                <span class="text-secondary small">Like &amp; comment</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 wow fadeIn" data-wow-delay="0.3s">
+                    <div class="row g-3">
+                        <div class="col-6">
+                            <div class="bg-primary rounded p-3 text-white text-center">
+                                <i class="fa fa-book-medical fa-2x mb-2 d-block"></i>
+                                <small class="fw-semibold">Expert Articles</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="bg-white rounded p-3 text-center shadow-sm">
+                                <i class="fa fa-tags fa-2x text-primary mb-2 d-block"></i>
+                                <small class="fw-semibold text-secondary">Topic Tags</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="bg-white rounded p-3 text-center shadow-sm">
+                                <i class="fa fa-comments fa-2x text-primary mb-2 d-block"></i>
+                                <small class="fw-semibold text-secondary">Discussions</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="bg-primary rounded p-3 text-white text-center">
+                                <i class="fa fa-heartbeat fa-2x mb-2 d-block"></i>
+                                <small class="fw-semibold">Wellness Tips</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ===== HERO END ===== -->
+
+<div class="container py-5">
+    <!-- Header -->
+    <div class="row mb-5">
+        <div class="col-12 text-center">
+            <h1 class="display-5 mb-3">Blog : Study Zone</h1>
+            <p class="lead text-muted">Welcome to the Cozom Health Care Blog, your trusted source for reliable health
+                and wellness insights.
+                Discover expert tips, medical advice, and lifestyle guidance to support a healthier, more balanced life.
+                Stay informed and empowered — because at Cozom Health Care, your well-being comes first.
+            </p>
+        </div>
+    </div>
+
+   <!-- Search and Filter -->
+    <div class="row mb-4 g-2"> 
+        <div class="col-md-9">
+            <div class="card border-0">
+                <div class="card-body py-3">
+                    <form method="get" id="blog-filter-form" class="row g-3 align-items-center">
+                        <div class="col-md-5">
+                            <div class="input-group">
+                                <span class="input-group-text bg-white border-end-0">
+                                    <i class="fas fa-search text-primary"></i>
+                                </span>
+                                <input type="text" 
+                                    name="query" 
+                                    value="{{ request.GET.query }}"
+                                    class="form-control form-control-lg border-start-0" 
+                                    placeholder="Search blogs...">
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-3">
+                            <div class="d-flex align-items-center">
+                                <select name="sort" class="form-select form-select-lg" onchange="document.getElementById('blog-filter-form').submit()">
+                                    <option value="newest" {% if request.GET.sort == 'newest' or not request.GET.sort %}selected{% endif %}>Newest</option>
+                                    <option value="oldest" {% if request.GET.sort == 'oldest' %}selected{% endif %}>Oldest</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-search me-1"></i>Search
+                                </button>
+                                
+                                {% if request.GET.query or request.GET.sort %}
+                                <a href="{% url 'blog-list' %}" class="btn btn-outline-danger btn-lg">
+                                    <i class="fas fa-redo me-1"></i>Reset
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-3">
+            <div class="card border-0 bg-gradient-primary text-white">
+                <div class="card-body text-center py-3">
+                    <div class="d-flex align-items-center justify-content-center">
+                        <div class="text-center">
+                            <h4 class="mb-0 fw-bold">{{ blogs|length }}/{{ paginator.count }}</h4>
+                            <small>Blogs Showing</small>
+                        </div>
+                    </div>
+                    {% if request.GET.query %}
+                    <div class="mt-2">
+                        <small class="opacity-75">
+                            <i class="fas fa-filter me-1"></i>Search: "{{ request.GET.query }}"
+                        </small>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <!-- Main Blog Content - Left 8 Columns -->
+        <div class="col-lg-8">
+            <div class="row">
+                {% for blog in blogs %}
+                <div class="col-md-6 mb-4">
+                    <div class="card blog-card h-100">
+                        {% if blog.thumbnail %}
+                            <img src="{{ blog.thumbnail.url }}" class="card-img-top blog-thumbnail" alt="{{ blog.title }}" style="height: 200px; object-fit: cover;">
+                        {% else %}
+                            <div class="bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                                <i class="fas fa-image fa-3x text-muted"></i>
+                                <span class="text-muted ms-2">No Image</span>
+                            </div>
+                        {% endif %}
+                        <div class="card-body">
+                            <div class="mb-2">
+                                {% for tag in blog.get_tags_list|slice:":3" %}
+                                <span class="badge tag-badge small">{{ tag }}</span>
+                                {% endfor %}
+                            </div>
+                            
+                            <h6 class="card-title fw-bold mb-2">{{ blog.title|truncatewords:8 }}</h6>
+                            <div class="card-text text-muted mb-3 small">
+                                {{ blog.content_intro|striptags|truncatewords:20 }}
+                            </div>
+                            
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="text-muted small">
+                                    <i class="fas fa-heart text-danger me-1"></i> {{ blog.likes_count }}
+                                    <i class="fas fa-comment text-primary ms-2 me-1"></i> {{ blog.comments_count }}
+                                </div>
+                                <a href="{{ blog.get_absolute_url }}" class="btn btn-outline-primary btn-sm">
+                                    Read More
+                                </a>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-transparent py-2">
+                            <small class="text-muted">
+                                <i class="fas fa-calendar me-1"></i> {{ blog.created_at|date:"M j, Y" }}
+                            </small>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12 text-center py-5">
+                    <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                    <h4 class="text-muted">No blogs found</h4>
+                    <p class="text-muted">Try adjusting your search criteria</p>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Pagination -->
+            {% if is_paginated %}
+            <nav aria-label="Blog pagination" class="mt-5">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1{% if request.GET.query %}&query={{ request.GET.query }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}">
+                            <i class="fas fa-angle-double-left"></i>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.query %}&query={{ request.GET.query }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}">
+                            <i class="fas fa-angle-left"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% for num in page_obj.paginator.page_range %}
+                        {% if page_obj.number == num %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ num }}</span>
+                        </li>
+                        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ num }}{% if request.GET.query %}&query={{ request.GET.query }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}">{{ num }}</a>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.query %}&query={{ request.GET.query }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}">
+                            <i class="fas fa-angle-right"></i>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if request.GET.query %}&query={{ request.GET.query }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}">
+                            <i class="fas fa-angle-double-right"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+
+        <!-- Sidebar - Right 4 Columns -->
+        <div class="col-lg-4">
+            <!-- Popular Blogs Section -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h6 class="mb-0 text-white"><i class="fas fa-fire me-2"></i>Popular Blogs</h6>
+                </div>
+                <div class="card-body">
+                    {% for blog in popular_blogs %}
+                    <div class="d-flex mb-3 pb-3 border-bottom">
+                        {% if blog.thumbnail %}
+                            <img src="{{ blog.thumbnail.url }}" alt="{{ blog.title }}" 
+                                 class="flex-shrink-0 me-3 rounded" 
+                                 style="width: 60px; height: 60px; object-fit: cover;">
+                        {% else %}
+                            <div class="flex-shrink-0 me-3 rounded bg-light d-flex align-items-center justify-content-center" 
+                                 style="width: 60px; height: 60px;">
+                                <i class="fas fa-image text-muted fa-2x"></i>
+                            </div>
+                        {% endif %}
+                        <div class="flex-grow-1">
+                            <h6 class="mb-1 small fw-bold">{{ blog.title|truncatewords:5 }}</h6>
+                            <div class="text-muted small">
+                                <i class="fas fa-heart text-danger me-1"></i> {{ blog.likes_count }}
+                                <i class="fas fa-comment text-primary ms-2 me-1"></i> {{ blog.comments_count }}
+                            </div>
+                            <a href="{{ blog.get_absolute_url }}" class="btn btn-sm btn-outline-primary mt-1 small">Read</a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Categories/Tags Section -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header bg-success text-white">
+                    <h6 class="mb-0 text-white"><i class="fas fa-tags me-2"></i>Popular Tags</h6>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex flex-wrap gap-2">
+                        {% for tag in popular_tags %}
+                        <a href="?query={{ tag }}" class="badge bg-light text-dark text-decoration-none">
+                            {{ tag }}
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-info text-white">
+                    <h6 class="mb-0 text-white"><i class="fas fa-chart-bar me-2"></i>Blog Stats</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-6 mb-3">
+                            <div class="border rounded p-2">
+                                <h4 class="text-primary mb-1">{{ total_blogs }}</h4>
+                                <small class="text-muted">Total Blogs</small>
+                            </div>
+                        </div>
+                        <div class="col-6 mb-3">
+                            <div class="border rounded p-2">
+                                <h4 class="text-success mb-1">{{ total_comments }}</h4>
+                                <small class="text-muted">Comments</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="border rounded p-2">
+                                <h4 class="text-danger mb-1">{{ total_likes }}</h4>
+                                <small class="text-muted">Likes</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="border rounded p-2">
+                                <h4 class="text-warning mb-1">{{ active_writers }}</h4>
+                                <small class="text-muted">Writers</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+{% endblock %}

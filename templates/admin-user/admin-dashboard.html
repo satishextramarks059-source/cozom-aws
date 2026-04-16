@@ -1,0 +1,334 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Admin Dashboard{% endblock title %}
+
+{% block content %}
+<!-- Dashboard Header -->
+<div class="container py-4 mb-4 mt-4 border">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h2 class="display-6 fw-semibold text-primary mb-2">Admin Dashboard</h2>
+                <p class="text-muted mb-0">Welcome back! Here's your overview.</p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <div class="btn-group">
+                    <button class="btn btn-outline-primary me-2">
+                        <i class="fas fa-download me-2"></i>Export
+                    </button>
+                    <a href="{% url 'admin-subscriptions-list' %}" class="btn btn-primary">
+                        <i class="fas fa-plus me-2"></i>Add Subscription Plan
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Dashboard Stats Cards -->
+<div class="container-fluid py-4">
+    <div class="container">
+        <div class="row g-4">
+            <!-- Card 1 -->
+            <div class="col-xl-4 col-md-6">
+                <div class="card border-0 shadow-sm h-100 dashboard-card">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <h5 class="card-title text-primary mb-0">Register Patients/Users</h5>
+                            <div class="icon-circle bg-secondary bg-opacity-10">
+                                <i class="fas fa-procedures text-white fs-5"></i>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-end">
+                            <h2 class="display-6 fw-bold text-dark mb-0">{{patient_count}}</h2>
+                            <a href="{% url 'registered-patients-list' %}" class="text-decoration-none arrow-link">
+                                <i class="fas fa-arrow-right text-primary fs-5"></i>
+                            </a>
+                        </div>
+                        <p class="text-muted small mt-2">
+                            <span class="text-success">
+                                <i class="fas fa-arrow-up me-1"></i>12.5%
+                            </span>
+                            vs last month
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="col-xl-4 col-md-6">
+                <div class="card border-0 shadow-sm h-100 dashboard-card">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <h5 class="card-title text-primary mb-0">Register Doctor</h5>
+                            <div class="icon-circle bg-secondary bg-opacity-10">
+                                <i class="fas fa-user-md text-white fs-5"></i>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-end">
+                            <h2 class="display-6 fw-bold text-dark mb-0">{{doctor_count}}</h2>
+                            <a href="{% url 'registered-doctors-list' %}" class="text-decoration-none arrow-link">
+                                <i class="fas fa-arrow-right text-primary fs-5"></i>
+                            </a>
+                        </div>
+                        <p class="text-muted small mt-2">
+                            <span class="text-primary">
+                                <i class="fas fa-arrow-up me-1"></i>8.2%
+                            </span>
+                            vs last week
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="col-xl-4 col-md-6">
+                <div class="card border-0 shadow-sm h-100 dashboard-card">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <h5 class="card-title text-primary mb-0">Register Hospital/Clinic</h5>
+                            <div class="icon-circle bg-secondary bg-opacity-10">
+                                <i class="fas fa-hospital-alt text-white fs-5"></i>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-end">
+                            <h2 class="display-6 fw-bold text-dark mb-0">{{hospital_count}}</h2>
+                            <a href="{% url 'registered-hospitals-list' %}" class="text-decoration-none arrow-link">
+                                <i class="fas fa-arrow-right text-primary fs-5"></i>
+                            </a>
+                        </div>
+                        <p class="text-muted small mt-2">
+                            <span class="text-success">
+                                <i class="fas fa-arrow-up me-1"></i>5.3%
+                            </span>
+                            new this month
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="col-xl-4 col-md-6">
+                <div class="card border-0 shadow-sm h-100 dashboard-card">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <h5 class="card-title text-primary mb-0">Total Contact</h5>
+                            <div class="icon-circle bg-secondary bg-opacity-10">
+                                <i class="fas fa-comments text-white fs-5"></i>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-end">
+                            <h2 class="display-6 fw-bold text-dark mb-0">{{contact_count}}</h2>
+                            <a href="{% url 'contact-messages-list' %}" class="text-decoration-none arrow-link">
+                                <i class="fas fa-arrow-right text-primary fs-5"></i>
+                            </a>
+                        </div>
+                        <p class="text-muted small mt-2">
+                            <span class="text-danger">
+                                <i class="fas fa-arrow-down me-1"></i>15.7%
+                            </span>
+                            vs last month
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 5 -->
+            <div class="col-xl-4 col-md-6">
+                <div class="card border-0 shadow-sm h-100 dashboard-card">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <h5 class="card-title text-primary mb-0">Total Feedback</h5>
+                            <div class="icon-circle bg-secondary bg-opacity-10">
+                                <i class="fas fa-comment-dots text-white fs-5"></i>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-end">
+                            <h2 class="display-6 fw-bold text-dark mb-0">{{feedback_count}}</h2>
+                            <a href="{% url 'feedback-list' %}" class="text-decoration-none arrow-link">
+                                <i class="fas fa-arrow-right text-primary fs-5"></i>
+                            </a>
+                        </div>
+                        <p class="text-muted small mt-2">
+                            <span class="text-success">
+                                <i class="fas fa-arrow-down me-1"></i>22.2%
+                            </span>
+                            vs last week
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 6 -->
+            <div class="col-xl-4 col-md-6">
+                <div class="card border-0 shadow-sm h-100 dashboard-card">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <h5 class="card-title text-primary mb-0">Staff Members</h5>
+                            <div class="icon-circle bg-secondary bg-opacity-10">
+                                <i class="fas fa-user-nurse text-primary"></i>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-end">
+                            <h2 class="display-6 fw-bold text-dark mb-0">156</h2>
+                            <a href="#" class="text-decoration-none arrow-link">
+                                <i class="fas fa-arrow-right text-primary fs-5"></i>
+                            </a>
+                        </div>
+                        <p class="text-muted small mt-2">
+                            <span class="text-success">
+                                <i class="fas fa-arrow-up me-1"></i>3.3%
+                            </span>
+                            new hires
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 7 -->
+            <div class="col-xl-4 col-md-6">
+                <div class="card border-0 shadow-sm h-100 dashboard-card">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <h5 class="card-title text-primary mb-0">Revenue This Month</h5>
+                            <div class="icon-circle bg-secondary bg-opacity-10">
+                                <i class="fas fa-dollar-sign text-primary"></i>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-end">
+                            <h2 class="display-6 fw-bold text-dark mb-0">$48.5K</h2>
+                            <a href="#" class="text-decoration-none arrow-link">
+                                <i class="fas fa-arrow-right text-primary fs-5"></i>
+                            </a>
+                        </div>
+                        <p class="text-muted small mt-2">
+                            <span class="text-success">
+                                <i class="fas fa-arrow-up me-1"></i>18.4%
+                            </span>
+                            vs last month
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 8 -->
+            <div class="col-xl-4 col-md-6">
+                <div class="card border-0 shadow-sm h-100 dashboard-card">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <h5 class="card-title text-primary mb-0">Available Beds</h5>
+                            <div class="icon-circle bg-secondary bg-opacity-10">
+                                <i class="fas fa-bed text-primary"></i>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-end">
+                            <h2 class="display-6 fw-bold text-dark mb-0">28</h2>
+                            <a href="#" class="text-decoration-none arrow-link">
+                                <i class="fas fa-arrow-right text-primary fs-5"></i>
+                            </a>
+                        </div>
+                        <p class="text-muted small mt-2">
+                            <span class="text-danger">
+                                <i class="fas fa-arrow-down me-1"></i>12.5%
+                            </span>
+                            occupancy rate
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 9 -->
+            <div class="col-xl-4 col-md-6">
+                <div class="card border-0 shadow-sm h-100 dashboard-card">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <h5 class="card-title text-primary mb-0">Satisfaction Rate</h5>
+                            <div class="icon-circle bg-secondary bg-opacity-10">
+                                <i class="fas fa-star text-primary"></i>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-end">
+                            <h2 class="display-6 fw-bold text-dark mb-0">94.2%</h2>
+                            <a href="#" class="text-decoration-none arrow-link">
+                                <i class="fas fa-arrow-right text-primary fs-5"></i>
+                            </a>
+                        </div>
+                        <p class="text-muted small mt-2">
+                            <span class="text-success">
+                                <i class="fas fa-arrow-up me-1"></i>2.1%
+                            </span>
+                            vs last quarter
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions Section -->
+<div class="container-fluid py-4 mt-4">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        <h5 class="card-title mb-4">Quick Actions</h5>
+                        <div class="row g-3">
+                            <div class="col-lg-2 col-md-4 col-sm-6">
+                                <a href="#" class="btn btn-outline-primary w-100 py-3">
+                                    <i class="fas fa-plus-circle me-2"></i>New Patient
+                                </a>
+                            </div>
+                            <div class="col-lg-2 col-md-4 col-sm-6">
+                                <a href="#" class="btn btn-outline-success w-100 py-3">
+                                    <i class="fas fa-calendar-plus me-2"></i>Schedule
+                                </a>
+                            </div>
+                            <div class="col-lg-2 col-md-4 col-sm-6">
+                                <a href="#" class="btn btn-outline-info w-100 py-3">
+                                    <i class="fas fa-file-medical me-2"></i>Reports
+                                </a>
+                            </div>
+                            <div class="col-lg-2 col-md-4 col-sm-6">
+                                <a href="#" class="btn btn-outline-warning w-100 py-3">
+                                    <i class="fas fa-prescription me-2"></i>Prescriptions
+                                </a>
+                            </div>
+                            <div class="col-lg-2 col-md-4 col-sm-6">
+                                <a href="#" class="btn btn-outline-danger w-100 py-3">
+                                    <i class="fas fa-ambulance me-2"></i>Emergency
+                                </a>
+                            </div>
+                            <div class="col-lg-2 col-md-4 col-sm-6">
+                                <a href="#" class="btn btn-outline-secondary w-100 py-3">
+                                    <i class="fas fa-cog me-2"></i>Settings
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block scripts %}
+
+<script>
+    $(document).ready(function() {
+        // Add click animation to cards
+        $('.dashboard-card').on('click', function() {
+            const arrow = $(this).find('.arrow-link');
+            arrow.css('transform', 'translateX(8px)');
+            setTimeout(() => {
+                arrow.css('transform', 'translateX(3px)');
+            }, 200);
+        });
+
+        // Initialize tooltips
+        $('[data-bs-toggle="tooltip"]').tooltip();
+    });
+</script>
+{% endblock scripts %}

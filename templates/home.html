@@ -1,0 +1,580 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock title %}
+{% load static %}
+
+{% block content %}
+
+    <!-- ===== HERO START ===== -->
+    <div class="container-fluid pb-5 hero-header bg-light mb-5">
+        <div class="container py-5">
+            <div class="row g-5 align-items-center mb-5">
+                <div class="col-lg-6">
+                    <h1 class="display-1 mb-4 animated slideInRight">
+                        Your Health, Our <span class="text-primary">Priority</span>
+                    </h1>
+                    <p class="lead mb-4 animated slideInRight text-secondary">
+                        COZOM connects patients with the right doctors and hospitals. Check symptoms, book appointments, and manage your healthcare — all in one place.
+                    </p>
+                    <div class="d-flex flex-wrap gap-3 animated slideInRight">
+                        <a href="{% url 'symptom-check-page' %}" class="btn btn-primary px-4 py-3">
+                            <i class="fa fa-stethoscope me-2"></i>Check Symptoms
+                        </a>
+                        <a href="{% url 'registered-doctors-listing' %}" class="btn btn-outline-primary px-4 py-3">
+                            <i class="fa fa-calendar-check me-2"></i>Book Appointment
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="owl-carousel header-carousel animated fadeIn">
+                        <img class="img-fluid" src="{% static 'img/hero-slider-1.jpg' %}" alt="Healthcare platform">
+                        <img class="img-fluid" src="{% static 'img/hero-slider-2.jpg' %}" alt="Find a doctor">
+                        <img class="img-fluid" src="{% static 'img/hero-slider-3.jpg' %}" alt="Book appointment">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Stats Row -->
+            <div class="row g-4 animated fadeIn">
+                <div class="col-md-6 col-lg-3">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0 btn-square border border-2 border-primary me-3 bg-primary">
+                            <i class="fa fa-user-md text-white"></i>
+                        </div>
+                        <h5 class="lh-base mb-0">Verified Doctors</h5>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0 btn-square border border-2 border-primary me-3 bg-primary">
+                            <i class="fa fa-hospital text-white"></i>
+                        </div>
+                        <h5 class="lh-base mb-0">Registered Hospitals</h5>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0 btn-square border border-2 border-primary me-3 bg-primary">
+                            <i class="fa fa-procedures text-white"></i>
+                        </div>
+                        <h5 class="lh-base mb-0">Patients Served</h5>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0 btn-square border border-2 border-primary me-3 bg-primary">
+                            <i class="fa fa-headset text-white"></i>
+                        </div>
+                        <h5 class="lh-base mb-0">24/7 Support</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ===== HERO END ===== -->
+
+
+    <!-- ===== MISSION & VISION START ===== -->
+    <div class="container-fluid py-5">
+        <div class="container">
+            <div class="row g-5 align-items-center">
+                <!-- Images -->
+                <div class="col-lg-6">
+                    <div class="row g-3">
+                        <div class="col-6 wow fadeIn" data-wow-delay="0.1s">
+                            <img class="img-fluid rounded shadow-sm" src="{% static 'img/vision.jpg' %}" alt="COZOM mission">
+                        </div>
+                        <div class="col-6 wow fadeIn" data-wow-delay="0.3s">
+                            <img class="img-fluid rounded shadow-sm h-75" src="{% static 'img/journey.jpg' %}" alt="COZOM vision">
+                            <div class="bg-primary p-3 rounded mt-2 text-center">
+                                <h6 class="text-white mb-0">Trusted Healthcare Since 2024</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Text -->
+                <div class="col-lg-6 wow fadeIn" data-wow-delay="0.5s">
+                    <h1 class="mb-4">Our <span class="text-uppercase text-primary bg-light px-2">Mission &amp; Vision</span></h1>
+                    <p class="mb-3 text-secondary">
+                        <strong>Mission:</strong> To make quality healthcare accessible to everyone by bridging the gap between patients, doctors, and hospitals through intelligent technology.
+                    </p>
+                    <p class="mb-4 text-secondary">
+                        <strong>Vision:</strong> A world where every individual, regardless of location, can quickly identify health issues, consult the right specialist, and receive timely care.
+                    </p>
+                    <div class="row g-3 mb-4">
+                        <div class="col-sm-6">
+                            <h6 class="mb-2"><i class="fa fa-check-circle text-primary me-2"></i>AI-powered Symptom Checker</h6>
+                            <h6 class="mb-0"><i class="fa fa-check-circle text-primary me-2"></i>Verified Medical Professionals</h6>
+                        </div>
+                        <div class="col-sm-6">
+                            <h6 class="mb-2"><i class="fa fa-check-circle text-primary me-2"></i>Secure &amp; Private Records</h6>
+                            <h6 class="mb-0"><i class="fa fa-check-circle text-primary me-2"></i>Role-based Dashboards</h6>
+                        </div>
+                    </div>
+                    <a class="btn btn-primary px-4" href="{% url 'symptom-check-page' %}">
+                        <i class="fa fa-stethoscope me-2"></i>Try Symptom Checker
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ===== MISSION & VISION END ===== -->
+
+
+    <!-- ===== FEATURES START ===== -->
+    <div class="container-fluid py-5 bg-light">
+        <div class="container py-3">
+            <div class="text-center wow fadeIn mb-5" data-wow-delay="0.1s">
+                <h1>Key <span class="text-uppercase text-primary bg-light px-2">Features</span></h1>
+                <p class="text-secondary mt-2">Everything you need for smarter, faster healthcare decisions.</p>
+            </div>
+            <div class="row g-4">
+                <!-- Symptom Checker -->
+                <div class="col-md-6 col-lg-3 wow fadeIn" data-wow-delay="0.1s">
+                    <div class="bg-white rounded p-4 h-100 shadow-sm text-center">
+                        <div class="mb-3">
+                            <i class="fa fa-stethoscope fa-3x text-primary"></i>
+                        </div>
+                        <h5 class="mb-2">Symptom Checker</h5>
+                        <p class="text-secondary small mb-3">Describe your symptoms and our AI will suggest possible illnesses and the right specialist to consult.</p>
+                        <a href="{% url 'symptom-check-page' %}" class="btn btn-sm btn-outline-primary">Check Now</a>
+                    </div>
+                </div>
+                <!-- Appointment Booking -->
+                <div class="col-md-6 col-lg-3 wow fadeIn" data-wow-delay="0.2s">
+                    <div class="bg-white rounded p-4 h-100 shadow-sm text-center">
+                        <div class="mb-3">
+                            <i class="fa fa-calendar-check fa-3x text-primary"></i>
+                        </div>
+                        <h5 class="mb-2">Appointment Booking</h5>
+                        <p class="text-secondary small mb-3">Book appointments with verified doctors or hospitals directly from the platform in just a few clicks.</p>
+                        <a href="{% url 'registered-doctors-listing' %}" class="btn btn-sm btn-outline-primary">Book Now</a>
+                    </div>
+                </div>
+                <!-- Doctor Recommendations -->
+                <div class="col-md-6 col-lg-3 wow fadeIn" data-wow-delay="0.3s">
+                    <div class="bg-white rounded p-4 h-100 shadow-sm text-center">
+                        <div class="mb-3">
+                            <i class="fa fa-user-md fa-3x text-primary"></i>
+                        </div>
+                        <h5 class="mb-2">Doctor Recommendations</h5>
+                        <p class="text-secondary small mb-3">Get personalized doctor recommendations based on your symptoms, location, and specialty required.</p>
+                        <a href="{% url 'find-hospitals-listing' %}" class="btn btn-sm btn-outline-primary">Find Hospital</a>
+                    </div>
+                </div>
+                <!-- Health Blogs -->
+                <div class="col-md-6 col-lg-3 wow fadeIn" data-wow-delay="0.4s">
+                    <div class="bg-white rounded p-4 h-100 shadow-sm text-center">
+                        <div class="mb-3">
+                            <i class="fa fa-book-medical fa-3x text-primary"></i>
+                        </div>
+                        <h5 class="mb-2">Health Blogs</h5>
+                        <p class="text-secondary small mb-3">Read expert health articles written by medical professionals on our platform to stay informed.</p>
+                        <a href="{% url 'blog-list' %}" class="btn btn-sm btn-outline-primary">Read Blogs</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ===== FEATURES END ===== -->
+
+
+    <!-- ===== HOW IT WORKS START ===== -->
+    <div class="container-fluid py-5">
+        <div class="container py-3">
+            <div class="text-center wow fadeIn mb-5" data-wow-delay="0.1s">
+                <h1>How It <span class="text-uppercase text-primary bg-light px-2">Works</span></h1>
+                <p class="text-secondary mt-2">Get started with COZOM in three simple steps.</p>
+            </div>
+            <div class="row g-4 text-center">
+                <div class="col-md-4 wow fadeIn" data-wow-delay="0.1s">
+                    <div class="p-4">
+                        <div class="d-flex align-items-center justify-content-center rounded-circle bg-primary mx-auto mb-4" style="width:70px;height:70px;">
+                            <h3 class="text-white mb-0">1</h3>
+                        </div>
+                        <h5 class="mb-2">Sign Up &amp; Describe Symptoms</h5>
+                        <p class="text-secondary small">Create your account and use our AI-powered symptom checker to identify potential health issues.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 wow fadeIn" data-wow-delay="0.3s">
+                    <div class="p-4">
+                        <div class="d-flex align-items-center justify-content-center rounded-circle bg-primary mx-auto mb-4" style="width:70px;height:70px;">
+                            <h3 class="text-white mb-0">2</h3>
+                        </div>
+                        <h5 class="mb-2">Find &amp; Choose a Doctor</h5>
+                        <p class="text-secondary small">Browse verified doctors and hospitals filtered by specialty, location, and availability.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 wow fadeIn" data-wow-delay="0.5s">
+                    <div class="p-4">
+                        <div class="d-flex align-items-center justify-content-center rounded-circle bg-primary mx-auto mb-4" style="width:70px;height:70px;">
+                            <h3 class="text-white mb-0">3</h3>
+                        </div>
+                        <h5 class="mb-2">Book &amp; Track Appointment</h5>
+                        <p class="text-secondary small">Confirm your booking instantly and track appointment status from your personal dashboard.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ===== HOW IT WORKS END ===== -->
+
+
+    <!-- ===== DEDICATED TEAM START ===== -->
+    <div class="container-fluid bg-light py-5">
+        <div class="container py-3">
+            <div class="text-center wow fadeIn mb-5" data-wow-delay="0.1s">
+                <h1>Our <span class="text-uppercase text-primary bg-light px-2">Dedicated Team</span></h1>
+                <p class="text-secondary mt-2">The passionate people building COZOM for better healthcare access.</p>
+            </div>
+
+            {% if team_members %}
+            <div class="row g-4">
+                {% for member in team_members %}
+                <div class="col-md-6 col-lg-3 wow fadeIn" data-wow-delay="0.{{ forloop.counter }}s">
+                    <div class="team-item position-relative overflow-hidden rounded shadow-sm">
+                        {% if member.photo %}
+                            <img class="img-fluid w-100" src="{{ member.photo.url }}" alt="{{ member.name }}">
+                        {% else %}
+                            <div class="bg-primary d-flex align-items-center justify-content-center" style="height:240px;">
+                                <i class="fa fa-user-circle fa-5x text-white"></i>
+                            </div>
+                        {% endif %}
+                        <div class="team-overlay">
+                            <small class="mb-2">{{ member.get_role_display_label }}</small>
+                            <h4 class="lh-base text-white">{{ member.name }}</h4>
+                            {% if member.short_bio %}
+                            <p class="text-white small mb-2">{{ member.short_bio|truncatechars:80 }}</p>
+                            {% endif %}
+                            <div class="d-flex justify-content-start gap-1">
+                                {% if member.linkedin_url %}
+                                <a class="btn btn-outline-primary btn-sm-square border-2" href="{{ member.linkedin_url }}" target="_blank" rel="noopener" aria-label="LinkedIn">
+                                    <i class="fab fa-linkedin-in"></i>
+                                </a>
+                                {% endif %}
+                                {% if member.twitter_url %}
+                                <a class="btn btn-outline-primary btn-sm-square border-2" href="{{ member.twitter_url }}" target="_blank" rel="noopener" aria-label="Twitter">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                                {% endif %}
+                                {% if member.github_url %}
+                                <a class="btn btn-outline-primary btn-sm-square border-2" href="{{ member.github_url }}" target="_blank" rel="noopener" aria-label="GitHub">
+                                    <i class="fab fa-github"></i>
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <!-- Placeholder cards when no team members exist in DB -->
+            <div class="row g-4">
+                {% for i in "1234" %}
+                <div class="col-md-6 col-lg-3 wow fadeIn" data-wow-delay="0.{{ forloop.counter }}s">
+                    <div class="team-item position-relative overflow-hidden rounded shadow-sm">
+                        <div class="bg-primary d-flex align-items-center justify-content-center" style="height:240px;">
+                            <i class="fa fa-user-circle fa-5x text-white"></i>
+                        </div>
+                        <div class="team-overlay">
+                            <small class="mb-2">Healthcare Team</small>
+                            <h4 class="lh-base text-white">Team Member</h4>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <p class="text-center text-secondary mt-3 small">
+                <em>Team members can be managed from the <a href="{% url 'admin:accounts_teammember_changelist' %}">admin panel</a>.</em>
+            </p>
+            {% endif %}
+        </div>
+    </div>
+    <!-- ===== DEDICATED TEAM END ===== -->
+
+
+    <!-- ===== BLOG PREVIEW START ===== -->
+    <div class="container-fluid py-5">
+        <div class="container py-3">
+            <div class="d-flex justify-content-between align-items-center mb-5 flex-wrap gap-3">
+                <h1 class="mb-0 wow fadeIn" data-wow-delay="0.1s">
+                    Latest <span class="text-uppercase text-primary bg-light px-2">Health Blogs</span>
+                </h1>
+                <a href="{% url 'blog-list' %}" class="btn btn-outline-primary wow fadeIn" data-wow-delay="0.3s">
+                    View All Blogs <i class="fa fa-arrow-right ms-2"></i>
+                </a>
+            </div>
+
+            {% if latest_blogs %}
+            <div class="row g-4">
+                {% for blog in latest_blogs %}
+                <div class="col-md-6 col-lg-4 wow fadeIn" data-wow-delay="0.{{ forloop.counter }}s">
+                    <div class="card h-100 border-0 shadow-sm">
+                        {% if blog.thumbnail %}
+                        <img src="{{ blog.thumbnail.url }}" class="card-img-top" alt="{{ blog.title }}" style="height:200px;object-fit:cover;">
+                        {% else %}
+                        <div class="bg-primary d-flex align-items-center justify-content-center" style="height:200px;">
+                            <i class="fa fa-file-medical-alt fa-3x text-white"></i>
+                        </div>
+                        {% endif %}
+                        <div class="card-body d-flex flex-column">
+                            <div class="d-flex gap-2 mb-2 flex-wrap">
+                                {% for tag in blog.get_tags_list %}
+                                <span class="badge bg-primary text-white fw-normal">{{ tag }}</span>
+                                {% endfor %}
+                            </div>
+                            <h6 class="card-title fw-semibold mb-2">{{ blog.title }}</h6>
+                            <p class="text-secondary small mb-3 flex-grow-1">
+                                {{ blog.content_intro|striptags|truncatechars:110 }}
+                            </p>
+                            <div class="d-flex justify-content-between align-items-center mt-auto">
+                                <small class="text-muted">
+                                    <i class="fa fa-calendar-alt me-1"></i>{{ blog.created_at|date:"M d, Y" }}
+                                </small>
+                                <a href="{{ blog.get_absolute_url }}" class="btn btn-sm btn-primary">
+                                    Read More
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="text-center py-5">
+                <i class="fa fa-book-open fa-3x text-primary mb-3"></i>
+                <p class="text-secondary">No blog posts yet. Check back soon!</p>
+                <a href="{% url 'blog-list' %}" class="btn btn-primary">Browse Blogs</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    <!-- ===== BLOG PREVIEW END ===== -->
+
+
+    <!-- ===== TESTIMONIALS START ===== -->
+    <div class="container-fluid bg-light py-5">
+        <div class="container py-3">
+            <div class="text-center wow fadeIn mb-5" data-wow-delay="0.1s">
+                <h1>Patient <span class="text-uppercase text-primary bg-light px-2">Testimonials</span></h1>
+                <p class="text-secondary mt-2">What our users say about COZOM.</p>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-md-12 col-lg-9">
+                    <div class="owl-carousel testimonial-carousel wow fadeIn" data-wow-delay="0.2s">
+
+                        <div class="testimonial-item">
+                            <div class="row g-5 align-items-center">
+                                <div class="col-md-5">
+                                    <div class="testimonial-img">
+                                        <img class="img-fluid" src="{% static 'img/testimonial-1.jpg' %}" alt="Patient testimonial">
+                                    </div>
+                                </div>
+                                <div class="col-md-7">
+                                    <div class="testimonial-text pb-5 pb-md-0">
+                                        <div class="text-warning mb-2">
+                                            <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i>
+                                        </div>
+                                        <h5>Quick Diagnosis, Right Doctor</h5>
+                                        <p class="text-secondary">The symptom checker pointed me to the right specialist in minutes. I booked my appointment the same day and got the treatment I needed. Highly recommend COZOM!</p>
+                                        <h5 class="mb-0">Rahul Sharma</h5>
+                                        <small class="text-muted">Patient, Delhi</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="testimonial-item">
+                            <div class="row g-5 align-items-center">
+                                <div class="col-md-5">
+                                    <div class="testimonial-img">
+                                        <img class="img-fluid" src="{% static 'img/testimonial-2.jpg' %}" alt="Patient testimonial">
+                                    </div>
+                                </div>
+                                <div class="col-md-7">
+                                    <div class="testimonial-text pb-5 pb-md-0">
+                                        <div class="text-warning mb-2">
+                                            <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-half-alt"></i>
+                                        </div>
+                                        <h5>Great Platform for Doctors Too</h5>
+                                        <p class="text-secondary">Managing my appointments through COZOM has made my practice so much more organized. The dashboard is intuitive and the patient booking flow is seamless.</p>
+                                        <h5 class="mb-0">Dr. Priya Mehta</h5>
+                                        <small class="text-muted">Cardiologist, Mumbai</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="testimonial-item">
+                            <div class="row g-5 align-items-center">
+                                <div class="col-md-5">
+                                    <div class="testimonial-img">
+                                        <img class="img-fluid" src="{% static 'img/testimonial-3.jpg' %}" alt="Patient testimonial">
+                                    </div>
+                                </div>
+                                <div class="col-md-7">
+                                    <div class="testimonial-text pb-5 pb-md-0">
+                                        <div class="text-warning mb-2">
+                                            <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i>
+                                        </div>
+                                        <h5>Our Clinic's Patient Influx Doubled</h5>
+                                        <p class="text-secondary">After registering our hospital on COZOM, the number of appointment requests increased significantly. The subscription plans are well-priced and the support is excellent.</p>
+                                        <h5 class="mb-0">City Care Hospital</h5>
+                                        <small class="text-muted">Bangalore</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ===== TESTIMONIALS END ===== -->
+
+
+    <!-- ===== FAQ START ===== -->
+    <div class="container-fluid py-5" id="faq">
+        <div class="container py-3">
+            <div class="row g-5 align-items-start">
+                <div class="col-lg-5 wow fadeIn" data-wow-delay="0.1s">
+                    <h1 class="mb-4">Frequently Asked <span class="text-uppercase text-primary bg-light px-2">Questions</span></h1>
+                    <p class="text-secondary mb-4">Have questions about how COZOM works? We've got you covered. If you need more help, feel free to <a href="{% url 'contact_us' %}">contact us</a>.</p>
+                    <div class="d-flex align-items-center bg-light p-3 rounded">
+                        <div class="btn-square flex-shrink-0 bg-primary rounded me-3" style="width:60px;height:60px;">
+                            <i class="fa fa-phone fa-lg text-white"></i>
+                        </div>
+                        <div>
+                            <small class="text-muted d-block">Need more help?</small>
+                            <a href="{% url 'contact_us' %}" class="fw-semibold text-dark text-decoration-none">Contact Our Support Team</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-7 wow fadeIn" data-wow-delay="0.3s">
+                    <div class="accordion" id="cozomFaq">
+
+                        <div class="accordion-item border-0 mb-3 shadow-sm">
+                            <h2 class="accordion-header" id="faq1">
+                                <button class="accordion-button fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse1" aria-expanded="true" aria-controls="faqCollapse1">
+                                    <i class="fa fa-question-circle text-primary me-2"></i> What is COZOM?
+                                </button>
+                            </h2>
+                            <div id="faqCollapse1" class="accordion-collapse collapse show" aria-labelledby="faq1" data-bs-parent="#cozomFaq">
+                                <div class="accordion-body text-secondary">
+                                    COZOM is an AI-assisted healthcare platform that helps patients identify symptoms, find the right doctors or hospitals, and book appointments — all from one dashboard.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item border-0 mb-3 shadow-sm">
+                            <h2 class="accordion-header" id="faq2">
+                                <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse2" aria-expanded="false" aria-controls="faqCollapse2">
+                                    <i class="fa fa-question-circle text-primary me-2"></i> How does the Symptom Checker work?
+                                </button>
+                            </h2>
+                            <div id="faqCollapse2" class="accordion-collapse collapse" aria-labelledby="faq2" data-bs-parent="#cozomFaq">
+                                <div class="accordion-body text-secondary">
+                                    You select your affected body parts and describe your symptoms. Our AI analyzes the inputs and suggests possible illnesses along with the recommended medical specialty to consult.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item border-0 mb-3 shadow-sm">
+                            <h2 class="accordion-header" id="faq3">
+                                <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse3" aria-expanded="false" aria-controls="faqCollapse3">
+                                    <i class="fa fa-question-circle text-primary me-2"></i> Is my health data secure?
+                                </button>
+                            </h2>
+                            <div id="faqCollapse3" class="accordion-collapse collapse" aria-labelledby="faq3" data-bs-parent="#cozomFaq">
+                                <div class="accordion-body text-secondary">
+                                    Yes. All user data is stored securely and is only accessible by you and the healthcare providers you interact with. We follow industry-standard data protection practices.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item border-0 mb-3 shadow-sm">
+                            <h2 class="accordion-header" id="faq4">
+                                <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse4" aria-expanded="false" aria-controls="faqCollapse4">
+                                    <i class="fa fa-question-circle text-primary me-2"></i> How do I register as a Doctor or Hospital?
+                                </button>
+                            </h2>
+                            <div id="faqCollapse4" class="accordion-collapse collapse" aria-labelledby="faq4" data-bs-parent="#cozomFaq">
+                                <div class="accordion-body text-secondary">
+                                    Click on "Sign Up" in the navigation bar, choose your role (Doctor or Hospital/Clinic), and complete the registration process. After OTP verification and admin approval, your profile goes live.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item border-0 mb-3 shadow-sm">
+                            <h2 class="accordion-header" id="faq5">
+                                <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse5" aria-expanded="false" aria-controls="faqCollapse5">
+                                    <i class="fa fa-question-circle text-primary me-2"></i> Can I cancel or reschedule an appointment?
+                                </button>
+                            </h2>
+                            <div id="faqCollapse5" class="accordion-collapse collapse" aria-labelledby="faq5" data-bs-parent="#cozomFaq">
+                                <div class="accordion-body text-secondary">
+                                    Patients can cancel a pending appointment directly from their dashboard. Rescheduling requires canceling and rebooking a new slot. The doctor will be notified automatically.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item border-0 mb-3 shadow-sm">
+                            <h2 class="accordion-header" id="faq6">
+                                <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse6" aria-expanded="false" aria-controls="faqCollapse6">
+                                    <i class="fa fa-question-circle text-primary me-2"></i> Are subscription plans required?
+                                </button>
+                            </h2>
+                            <div id="faqCollapse6" class="accordion-collapse collapse" aria-labelledby="faq6" data-bs-parent="#cozomFaq">
+                                <div class="accordion-body text-secondary">
+                                    Subscription plans are available for doctors and hospitals to unlock advanced features like priority listing and appointment management. Patients can use the basic features for free.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item border-0 mb-3 shadow-sm">
+                            <h2 class="accordion-header" id="faq7">
+                                <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse7" aria-expanded="false" aria-controls="faqCollapse7">
+                                    <i class="fa fa-question-circle text-primary me-2"></i> Is COZOM available on mobile?
+                                </button>
+                            </h2>
+                            <div id="faqCollapse7" class="accordion-collapse collapse" aria-labelledby="faq7" data-bs-parent="#cozomFaq">
+                                <div class="accordion-body text-secondary">
+                                    Yes, COZOM is fully responsive and works seamlessly on smartphones, tablets, and desktops — no separate app required.
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ===== FAQ END ===== -->
+
+
+    <!-- ===== CTA START ===== -->
+    <div class="container-fluid bg-primary py-5">
+        <div class="container py-3 text-center">
+            <div class="wow fadeIn" data-wow-delay="0.1s">
+                <h2 class="text-white mb-3">Ready to Take Control of Your Health?</h2>
+                <p class="text-white-50 mb-4">Join thousands of patients, doctors, and hospitals already using COZOM for smarter healthcare.</p>
+                <div class="d-flex flex-wrap justify-content-center gap-3">
+                    {% if not user.is_authenticated %}
+                    <a href="#" class="btn btn-light px-4 py-3" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                        <i class="fa fa-user-plus me-2"></i>Sign Up Free
+                    </a>
+                    {% endif %}
+                    <a href="{% url 'symptom-check-page' %}" class="btn btn-outline-light px-4 py-3">
+                        <i class="fa fa-stethoscope me-2"></i>Check Your Symptoms
+                    </a>
+                    <a href="{% url 'contact_us' %}" class="btn btn-outline-light px-4 py-3">
+                        <i class="fa fa-envelope me-2"></i>Contact Us
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ===== CTA END ===== -->
+
+{% endblock content %}

@@ -1,0 +1,442 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Patient Dashboard{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-5">
+    <div class="container">
+        <!-- Header Section -->
+        <div class="row mb-5 align-items-center">
+            <div class="col-md-8">
+                <h1 class="display-6 mb-0">
+                    Welcome, <strong class="text-primary">{{ patient.full_name|default:user.username }}</strong>
+                </h1>
+            </div>
+            <div class="col-md-4 text-end">
+                <!-- Status Badges (reuse same pattern) -->
+                <div class="d-flex gap-2 justify-content-end flex-wrap">
+                    <span class="badge bg-{% if user.is_active %}success{% else %}warning{% endif %} py-2 px-3">
+                        <i class="fas fa-{% if user.is_active %}check-circle{% else %}clock{% endif %} me-1"></i>
+                        Account: {% if user.is_active %}Active{% else %}Inactive{% endif %}
+                    </span>
+                    <span class="badge bg-{% if user.is_verified %}success{% else %}warning{% endif %} py-2 px-3">
+                        <i class="fas fa-{% if user.is_verified %}shield-alt{% else %}hourglass-half{% endif %} me-1"></i>
+                        {% if user.is_verified %}Verified{% else %}Pending Verification{% endif %}
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        {% if not user.is_verified %}
+            <div class="alert alert-warning alert-dismissible fade show mb-4" role="alert">
+                <i class="fas fa-exclamation-circle me-2"></i>
+                <strong>Profile Not Verified:</strong> Your profile must be verified to access dashboard features.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endif %}
+        
+        {% if show_no_plan_alert %}
+            <div class="alert alert-info alert-dismissible fade show mb-4" role="alert">
+                <i class="fas fa-info-circle me-2"></i>
+                <strong>No Active Subscription Plan:</strong> 
+                {% if subscription_status == 'rejected' %}
+                    Your subscription request was rejected. You can apply for a new plan.
+                {% elif subscription_status == 'expired' %}
+                    Your subscription has expired. Please renew to continue accessing all features.
+                {% else %}
+                    Get a subscription plan to unlock premium features.
+                {% endif %}
+                <a href="{% url 'patient-subscription-request-page' %}" class="alert-link ms-2">Get Plan Now</a>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endif %}
+
+        <!-- Dashboard Cards Section -->
+        <div class="row g-4 mb-5">
+            <!-- Card 1 – Subscription -->
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100 shadow-sm border-1 doctor-dashboard-card {% if not user.is_verified %}disabled-card{% endif %}">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title mb-2">
+                            <i class="fas fa-receipt text-success me-2"></i>Subscription
+                        </h5>
+                        {% if not user.is_verified %}
+                            <div class="alert alert-warning small mb-3">
+                                <i class="fas fa-lock me-1"></i>Profile verification required
+                            </div>
+                        {% endif %}
+                        {% if subscription %}
+                            <!-- Status Label -->
+                            <div class="mb-3 mt-2">
+                                {% if subscription_status == 'pending_verification' %}
+                                    <h4 class="fw-bold mb-0 text-warning">Pending Verification</h4>
+                                {% elif subscription_status == 'rejected' %}
+                                    <h4 class="fw-bold mb-0 text-danger">Rejected</h4>
+                                {% elif subscription_status == 'expired' %}
+                                    <h4 class="fw-bold mb-0 text-danger">Expired</h4>
+                                {% elif subscription_status == 'future' %}
+                                    <h4 class="fw-bold mb-0 text-info">Starting Soon</h4>
+                                {% else %}
+                                    <h4 class="fw-bold mb-0 text-success">Active</h4>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Status Messages -->
+                            {% if subscription_status == 'pending_verification' %}
+                                <div class="alert alert-info py-2 px-3 mb-3">
+                                    <i class="fas fa-hourglass-half me-2"></i>
+                                    <strong>Your payment is being verified</strong>
+                                    <p class="mb-0 small mt-1">Please wait for admin approval</p>
+                                </div>
+                            {% elif subscription_status == 'rejected' %}
+                                <div class="alert alert-danger py-2 px-3 mb-3">
+                                    <i class="fas fa-times-circle me-2"></i>
+                                    <strong>Subscription request was rejected</strong>
+                                </div>
+                            {% elif subscription_status == 'expiring_soon' %}
+                                <div class="alert alert-warning py-2 px-3 mb-3 d-flex align-items-center">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>
+                                    <strong>Will expire in {{ days_until_expiry }} day{{ days_until_expiry|pluralize }}</strong>
+                                </div>
+                            {% elif subscription_status == 'expired' %}
+                                <div class="alert alert-danger py-2 px-3 mb-3 d-flex align-items-center">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    <strong>Expired {{ days_until_expiry }} day{{ days_until_expiry|pluralize }} ago</strong>
+                                </div>
+                            {% elif subscription_status == 'expires_today' %}
+                                <div class="alert alert-danger py-2 px-3 mb-3 d-flex align-items-center">
+                                    <i class="fas fa-exclamation-circle me-2"></i>
+                                    <strong>Expires today</strong>
+                                </div>
+                            {% elif subscription_status == 'future' %}
+                                <div class="alert alert-info py-2 px-3 mb-3">
+                                    <i class="fas fa-calendar-check me-2"></i>
+                                    <strong>Will activate on {{ subscription.start_date|date:"M d, Y" }}</strong>
+                                </div>
+                            {% endif %}
+                            
+                            <!-- Date Information Grid -->
+                            <div class="subscription-card-grid mb-3">
+                                <div class="subscription-card-row">
+                                    <div class="sub-card-col sub-card-label">
+                                        <strong>Start Date</strong>
+                                    </div>
+                                    <div class="sub-card-col sub-card-value">
+                                        <span>{{ subscription.start_date|date:"M d, Y" }}</span>
+                                    </div>
+                                </div>
+                                <div class="subscription-card-row">
+                                    <div class="sub-card-col sub-card-label">
+                                        <strong>End Date</strong>
+                                    </div>
+                                    <div class="sub-card-col sub-card-value">
+                                        <span>{{ subscription.end_date|date:"M d, Y" }}</span>
+                                    </div>
+                                </div>
+                                <div class="subscription-card-row">
+                                    <div class="sub-card-col sub-card-label">
+                                        <strong>Plan</strong>
+                                    </div>
+                                    <div class="sub-card-col sub-card-value">
+                                        <span>{{ subscription.subscription_plan.name }}</span>
+                                    </div>
+                                </div>
+                                {% if subscription_status == 'pending_verification' %}
+                                <div class="subscription-card-row">
+                                    <div class="sub-card-col sub-card-label">
+                                        <strong>Status</strong>
+                                    </div>
+                                    <div class="sub-card-col sub-card-value">
+                                        <span class="badge bg-warning">{{ subscription.status|title }}</span>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+
+                            <!-- CTA Button -->
+                            {% if can_buy_plan %}
+                                <a href="{% url 'patient-subscription-request-page' %}" class="btn btn-primary w-100 mt-auto py-2">
+                                    <i class="fas fa-crown me-1"></i>Get Subscription Plan
+                                </a>
+                            {% elif subscription_status == 'pending_verification' %}
+                                <button type="button" class="btn btn-warning w-100 mt-auto py-2" disabled>
+                                    <i class="fas fa-hourglass-half me-1"></i>Pending Verification
+                                </button>
+                            {% elif subscription_status == 'future' or subscription_status == 'active' or subscription_status == 'expiring_soon' or subscription_status == 'expires_today' %}
+                                <button type="button" class="btn btn-success w-100 mt-auto py-2" disabled>
+                                    <i class="fas fa-check-circle me-1"></i>Subscription Active
+                                </button>
+                            {% endif %}
+                        
+                        {% else %}
+                            <!-- No Subscription -->
+                            <div class="text-center py-4">
+                                <div class="mb-3">
+                                    <i class="fas fa-inbox text-secondary" style="font-size: 2rem;"></i>
+                                </div>
+                                <p class="text-muted mb-3">No subscription found</p>
+                                <a href="{% url 'patient-subscription-request-page' %}" class="btn btn-primary btn-sm w-100">
+                                    <i class="fas fa-crown me-1"></i>Get Subscription Plan
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2 – Placeholder -->
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100 shadow-sm border-1 doctor-dashboard-card {% if not user.is_verified %}disabled-card{% endif %}">
+                    <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                        <h5 class="card-title mb-3">
+                            <i class="fas fa-file-medical-alt text-secondary me-2"></i>Placeholder Card 2
+                        </h5>
+                        <p class="text-muted text-center">This area is reserved for future features.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3 – Placeholder -->
+            <div class="col-lg-4 col-md-6">
+                <div class="card h-100 shadow-sm border-1 doctor-dashboard-card {% if not user.is_verified %}disabled-card{% endif %}">
+                    <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                        <h5 class="card-title mb-3">
+                            <i class="fas fa-user-clock text-secondary me-2"></i>Placeholder Card 3
+                        </h5>
+                        <p class="text-muted text-center">Coming soon!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Appointments Section -->
+        {% if user.is_verified %}
+        <div class="row g-4 mt-3">
+            <div class="col-12">
+                <div class="card shadow-sm border-1">
+                    <div class="card-header bg-light border-bottom">
+                        <h5 class="mb-0">
+                            <i class="fas fa-calendar-alt text-primary me-2"></i>
+                            My Appointments
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        {% if appointments %}
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Doctor/Hospital</th>
+                                            <th>Specialization</th>
+                                            <th>Date</th>
+                                            <th>Time</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="appointmentsTableBody">
+                                        {% for appointment in appointments %}
+                                        <tr data-appointment-id="{{ appointment.id }}">
+                                            <td>
+                                                {% if appointment.doctor %}
+                                                    <strong>Dr. {{ appointment.doctor.doctor_name }}</strong><br>
+                                                    <small class="text-muted">{{ appointment.doctor.user.phone_number }}</small>
+                                                {% elif appointment.hospital %}
+                                                    <strong>{{ appointment.hospital.name }}</strong><br>
+                                                    <small class="text-muted">{{ appointment.hospital.user.phone_number }}</small>
+                                                {% else %}
+                                                    <span class="text-muted">N/A</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                {% if appointment.doctor %}
+                                                    {% for spec in appointment.doctor.specializations.all %}
+                                                        <span class="badge bg-primary">{{ spec.name }}</span>
+                                                    {% endfor %}
+                                                {% elif appointment.hospital %}
+                                                    <span class="badge bg-secondary">General</span>
+                                                {% else %}
+                                                    <span class="text-muted">N/A</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>{{ appointment.appointment_date|date:"M d, Y" }}</td>
+                                            <td>
+                                                {% if appointment.doctor_provided_time %}
+                                                    {{ appointment.doctor_provided_time|time:"h:i A" }}
+                                                {% else %}
+                                                    <span class="text-muted">-</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                {% if appointment.status == 'PENDING' %}
+                                                    <span class="badge bg-warning text-dark">Pending</span>
+                                                {% elif appointment.status == 'ACCEPTED' %}
+                                                    <span class="badge bg-success">Accepted</span>
+                                                {% elif appointment.status == 'REJECTED' %}
+                                                    <span class="badge bg-danger">Rejected</span>
+                                                {% elif appointment.status == 'CANCELED' %}
+                                                    <span class="badge bg-secondary">Canceled</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                {% if appointment.status == 'PENDING' %}
+                                                    <button class="btn btn-sm btn-danger cancel-appointment-btn"
+                                                            data-appointment-id="{{ appointment.id }}"
+                                                            data-doctor-name="{% if appointment.doctor %}Dr. {{ appointment.doctor.doctor_name }}{% else %}{{ appointment.hospital.name }}{% endif %}">
+                                                        <i class="fas fa-times me-1"></i>Cancel
+                                                    </button>
+                                                {% elif appointment.status == 'ACCEPTED' %}
+                                                    <a href="{% url 'download-appointment-pdf' appointment.id %}" class="btn btn-sm btn-success">
+                                                        <i class="fas fa-file-pdf me-1"></i>Download
+                                                    </a>
+                                                {% elif appointment.status == 'REJECTED' %}
+                                                    <button class="btn btn-sm btn-outline-info view-reason-btn"
+                                                            data-reason="{{ appointment.rejection_reason }}">
+                                                        <i class="fas fa-info-circle me-1"></i>View Reason
+                                                    </button>
+                                                {% else %}
+                                                    <span class="text-muted">-</span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <!-- Pagination Controls -->
+                            {% if appointments.has_other_pages %}
+                            <nav aria-label="Appointments pagination" class="mt-4">
+                                <ul class="pagination pagination-sm justify-content-center mb-0">
+                                    {% if appointments.has_previous %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="?page=1" aria-label="First">
+                                                <span aria-hidden="true">&laquo;&laquo;</span>
+                                            </a>
+                                        </li>
+                                        <li class="page-item">
+                                            <a class="page-link" href="?page={{ appointments.previous_page_number }}" aria-label="Previous">
+                                                <span aria-hidden="true">&laquo;</span>
+                                            </a>
+                                        </li>
+                                    {% else %}
+                                        <li class="page-item disabled">
+                                            <span class="page-link">&laquo;&laquo;</span>
+                                        </li>
+                                        <li class="page-item disabled">
+                                            <span class="page-link">&laquo;</span>
+                                        </li>
+                                    {% endif %}
+                                    
+                                    {% for num in appointments.paginator.page_range %}
+                                        {% if appointments.number == num %}
+                                            <li class="page-item active" aria-current="page">
+                                                <span class="page-link">{{ num }}</span>
+                                            </li>
+                                        {% elif num > appointments.number|add:'-3' and num < appointments.number|add:'3' %}
+                                            <li class="page-item">
+                                                <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                                            </li>
+                                        {% endif %}
+                                    {% endfor %}
+                                    
+                                    {% if appointments.has_next %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="?page={{ appointments.next_page_number }}" aria-label="Next">
+                                                <span aria-hidden="true">&raquo;</span>
+                                            </a>
+                                        </li>
+                                        <li class="page-item">
+                                            <a class="page-link" href="?page={{ appointments.paginator.num_pages }}" aria-label="Last">
+                                                <span aria-hidden="true">&raquo;&raquo;</span>
+                                            </a>
+                                        </li>
+                                    {% else %}
+                                        <li class="page-item disabled">
+                                            <span class="page-link">&raquo;</span>
+                                        </li>
+                                        <li class="page-item disabled">
+                                            <span class="page-link">&raquo;&raquo;</span>
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                            </nav>
+                            {% endif %}
+                        {% else %}
+                            <div class="text-center py-4">
+                                <i class="fas fa-calendar-times text-muted" style="font-size: 3rem;"></i>
+                                <p class="text-muted mt-3">No appointments yet</p>
+                                <div class="d-flex gap-2 justify-content-center">
+                                    <a href="{% url 'registered-doctors-listing' %}" class="btn btn-primary">
+                                        <i class="fas fa-user-md me-2"></i>Find Doctors
+                                    </a>
+                                    <a href="{% url 'find-hospitals-listing' %}" class="btn btn-outline-primary">
+                                        <i class="fas fa-hospital me-2"></i>Find Hospitals
+                                    </a>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Cancel Appointment Modal -->
+<div class="modal fade" id="cancelAppointmentModal" tabindex="-1" aria-labelledby="cancelAppointmentLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cancelAppointmentLabel">Cancel Appointment</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Doctor/Hospital: <strong id="cancelDoctorName"></strong></p>
+                <div class="mb-3">
+                    <label for="cancellationReason" class="form-label">Cancellation Reason <span class="text-danger">*</span></label>
+                    <textarea class="form-control" id="cancellationReason" rows="3" required
+                              placeholder="Please provide a reason for cancellation (minimum 10 characters)"></textarea>
+                    <small class="text-muted">This will be recorded with your appointment</small>
+                </div>
+                <div id="cancelMessage" style="display: none;"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" id="confirmCancelBtn">
+                    <i class="fas fa-times me-1"></i>Confirm Cancellation
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- View Rejection Reason Modal -->
+<div class="modal fade" id="viewReasonModal" tabindex="-1" aria-labelledby="viewReasonLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="viewReasonLabel">Rejection Reason</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-danger">
+                    <i class="fas fa-info-circle me-2"></i>
+                    <strong>Doctor's Reason:</strong>
+                    <p class="mb-0 mt-2" id="rejectionReasonText"></p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- No custom JS required for patient dashboard currently -->
+<script src="{% static 'js/patient-dashboard.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+    <meta charset="utf-8">
+    <title>COZOM-{% block title %}{% endblock title %}</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon -->
+    <link href="{% static 'img/favicon.ico' %}" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Space+Grotesk&display=swap" rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="{% static 'lib/animate/animate.min.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Spinner Start -->
+    <div id="spinner"
+        class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-grow text-primary" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+    <!-- Spinner End -->
+
+
+    <!-- Navbar Start -->
+    <div class="container-fluid sticky-top">
+        <div class="container">
+            <nav class="navbar navbar-expand-lg navbar-light border-bottom border-2 border-white">
+                <a href="/" class="navbar-brand">
+                    <h1>COZOM</h1>
+                </a>
+                <button type="button" class="navbar-toggler ms-auto me-0" data-bs-toggle="collapse"
+                    data-bs-target="#navbarCollapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <div class="navbar-nav ms-auto">
+                        <a href="/" class="nav-item nav-link active">Home</a>
+                        <a href="{% url 'symptom-check-page' %}" class="nav-item nav-link">Check Symptoms</a>
+                        
+                        <div class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Book Appointment</a>
+                            <div class="dropdown-menu bg-light mt-2 border shadow-sm">
+                                <a href="{% url 'registered-doctors-listing' %}" class="dropdown-item">Find Doctor</a>
+                                <a href="{% url 'find-hospitals-listing' %}" class="dropdown-item">Find Hospital</a>
+                            </div>
+                        </div>
+                        
+                        <a href="{% url 'services' %}" class="nav-item nav-link">Services</a>
+                        
+                        <div class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">More</a>
+                            <div class="dropdown-menu bg-light mt-2 border shadow-sm">
+                                <a href="{% url 'contact_us' %}" class="dropdown-item">Contact</a>
+                                <a href="{% url 'feedback' %}" class="dropdown-item">Feedback</a>
+                                <a href="{% url 'our_team' %}" class="dropdown-item">Our Team</a>
+                                <a href="{% url 'testimonials' %}" class="dropdown-item">Testimonial</a>
+                                <a href="{% url 'blog-list' %}" class="dropdown-item">Blogs</a>
+                            </div>
+                        </div>
+                        
+                        <!-- Sign link triggers modal -->
+                        {% if not user.is_authenticated %}
+
+                            <a href="{% url 'login' %}" class="nav-item nav-link">
+                                Login
+                            </a>
+
+                            <a href="#" class="nav-item nav-link" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                SignUp
+                            </a>
+
+                        {% else %}
+
+                            <div class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                                    <img src="{% static 'img/profile-icon.png' %}" alt="mdo" width="32" height="32" class="rounded-circle">
+                                </a>
+                                <div class="dropdown-menu mt-2 border shadow-sm">
+                                    <div class="dropdown-item border-bottom profile-name-no-hover pb-2">
+                                        <div>Hi, {{ user.username }}</div>
+                                        <div style="font-size: 0.85em; color: #666;">
+                                            {{ user.email }}
+                                        </div>
+                                    </div>
+
+                                    {% if user.is_superuser %}
+                                        <a href="{% url 'admin:index' %}" class="dropdown-item">Admin Panel</a>
+                                        <a href="{% url 'admin-dashboard' %}" class="dropdown-item">Dashboard</a>
+                                    {% elif user.user_type == 'doctor' %}
+                                        <a href="{% url 'doctor-dashboard' %}" class="dropdown-item">
+                                            Dashboard
+                                        </a>
+                                    {% elif user.user_type == 'hospital' %}
+                                        <a href="{% url 'hospital-dashboard' %}" class="dropdown-item">
+                                            Dashboard
+                                        </a>
+                                    {% elif user.user_type == 'patient' %}
+                                        <a href="{% url 'patient-dashboard' %}" class="dropdown-item">
+                                            Dashboard
+                                        </a>
+                                    {% endif %}
+                                    <a href="#" class="dropdown-item">Appointment</a>
+                                    <a href="{% url 'logout' %}" class="dropdown-item">Logout <i class="fas fa-sign-out-alt"></i></a>
+                                </div>
+                            </div>
+                            
+                        {% endif %}
+
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+    <!-- Navbar End -->
+
+
+    {% block content %}
+    
+    {% endblock content%}
+
+    <!-- Newsletter Start -->
+    <div class="container-fluid bg-primary newsletter p-0">
+        <div class="container p-0">
+            <div class="row g-0 align-items-center">
+                <div class="col-md-5 ps-lg-0 text-start wow fadeIn" data-wow-delay="0.2s">
+                    <img class="img-fluid w-100" src="{% static 'img/news-2_1_750x500.jpg' %}" alt="">
+                </div>
+                <div class="col-md-7 py-5 newsletter-text wow fadeIn" data-wow-delay="0.5s">
+                    <div class="p-5">
+                        <h2 class="mb-5">Subscribe the <span
+                                class="text-uppercase text-primary bg-white px-2">Newsletter/Updates</span></h2>
+                        <div class="position-relative w-100 mb-2">
+                            <input class="form-control border-0 w-100 ps-4 pe-5" type="text"
+                                placeholder="Enter Your Email" style="height: 60px;">
+                            <button type="button" class="btn shadow-none position-absolute top-0 end-0 mt-2 me-2"><i
+                                    class="fa fa-paper-plane text-primary fs-4"></i></button>
+                        </div>
+                        <p class="mb-0">Diam sed sed dolor stet amet eirmod</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Newsletter End -->
+
+    <!-- Footer Start -->
+    <div class="container-fluid bg-dark text-white-50 footer pt-5">
+        <div class="container py-5">
+            <div class="row g-5">
+
+                <!-- Branding -->
+                <div class="col-md-6 col-lg-3 wow fadeIn" data-wow-delay="0.1s">
+                    <a href="{% url 'home' %}" class="d-inline-block mb-3">
+                        <h1 class="text-white">COZOM</h1>
+                    </a>
+                    <p class="mb-4">COZOM is a smart healthcare platform connecting patients with verified doctors and hospitals. Check symptoms, book appointments, and take control of your health — all in one place.</p>
+                    <div class="d-flex pt-2">
+                        <a class="btn btn-outline-primary btn-square border-2 me-2" href="#!" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a class="btn btn-outline-primary btn-square border-2 me-2" href="#!" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a class="btn btn-outline-primary btn-square border-2 me-2" href="#!" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                        <a class="btn btn-outline-primary btn-square border-2 me-2" href="#!" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a class="btn btn-outline-primary btn-square border-2 me-2" href="#!" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+
+                <!-- Get In Touch -->
+                <div class="col-md-6 col-lg-3 wow fadeIn" data-wow-delay="0.3s">
+                    <h5 class="text-white mb-4">Get In Touch</h5>
+                    <p><i class="fa fa-map-marker-alt me-3"></i>123 Health Avenue, Medical District, India</p>
+                    <p><i class="fa fa-phone-alt me-3"></i>+91 98765 43210</p>
+                    <p><i class="fa fa-envelope me-3"></i>support@cozom.health</p>
+                    <p><i class="fa fa-clock me-3"></i>Mon – Sat: 9:00 AM – 6:00 PM</p>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="col-md-6 col-lg-3 wow fadeIn" data-wow-delay="0.5s">
+                    <h5 class="text-white mb-4">Quick Links</h5>
+                    <a class="btn btn-link" href="{% url 'home' %}">Home</a>
+                    <a class="btn btn-link" href="{% url 'services' %}">Services</a>
+                    <a class="btn btn-link" href="{% url 'blog-list' %}">Health Blog</a>
+                    <a class="btn btn-link" href="{% url 'contact_us' %}">Contact Us</a>
+                    <a class="btn btn-link" href="{% url 'feedback' %}">Feedback</a>
+                </div>
+
+                <!-- Our Services -->
+                <div class="col-md-6 col-lg-3 wow fadeIn" data-wow-delay="0.7s">
+                    <h5 class="text-white mb-4">Our Services</h5>
+                    <a class="btn btn-link" href="{% url 'symptom-check-page' %}">Symptom Checker</a>
+                    <a class="btn btn-link" href="{% url 'registered-doctors-listing' %}">Find a Doctor</a>
+                    <a class="btn btn-link" href="{% url 'find-hospitals-listing' %}">Find a Hospital</a>
+                    <a class="btn btn-link" href="{% url 'services' %}#how-it-works">How It Works</a>
+                    <a class="btn btn-link" href="{% url 'services' %}#professionals">For Professionals</a>
+                </div>
+
+            </div>
+        </div>
+        <div class="container wow fadeIn" data-wow-delay="0.1s">
+            <div class="copyright">
+                <div class="row">
+                    <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                        &copy; <a class="border-bottom" href="{% url 'home' %}">COZOM Healthcare</a>, All Rights Reserved.
+                        Designed By <a class="border-bottom" href="#">Deepak Maurya</a>
+                    </div>
+                    <div class="col-md-6 text-center text-md-end">
+                        <div class="footer-menu">
+                            <a href="{% url 'home' %}">Home</a>
+                            <a href="#">Privacy Policy</a>
+                            <a href="#">Term & Condition</a>
+                            <a href="{% url 'home' %}#faq">FAQs</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Footer End -->
+
+
+    <!-- Back to Top -->
+    <a href="#!" class="btn btn-lg btn-primary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg"> <!-- wider modal -->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Choose Your Sign-up Option</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row text-center">
+                        <!-- Card 1 -->
+                        <div class="col-md-4">
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <i class="fas fa-hospital-alt" style="font-size: 3rem;"></i>
+                                    </div>
+                                    <h5 class="card-title">Hospital/Clinic</h5>
+                                    <a href="{% url 'hospital-signup' %}" class="btn btn-primary mt-2">Sign Up</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card 2 -->
+                        <div class="col-md-4">
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <i class="fas fa-user-md" style="font-size: 3rem;"></i>
+                                    </div>
+                                    <h5 class="card-title">Doctor</h5>
+                                    <a href="{% url 'doctor-signup' %}" class="btn btn-primary mt-2">Sign Up</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card 3 -->
+                        <div class="col-md-4">
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <i class="fas fa-procedures" style="font-size: 3rem;"></i>
+                                    </div>
+                                    <h5 class="card-title">Patient</h5>
+                                    <a href="{% url 'patient-signup' %}" class="btn btn-primary mt-2">Sign Up</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'lib/wow/wow.min.js' %}"></script>
+    <script src="{% static 'lib/easing/easing.min.js' %}"></script>
+    <script src="{% static 'lib/waypoints/waypoints.min.js' %}"></script>
+    <script src="{% static 'lib/owlcarousel/owl.carousel.min.js' %}"></script>
+
+    <!-- Template Javascript -->
+    <script src="{% static 'js/main.js' %}"></script>
+    {% block scripts %}
+    {% endblock scripts %}
+</body>
+
+</html>

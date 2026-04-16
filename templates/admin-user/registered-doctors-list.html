@@ -1,0 +1,373 @@
+{% extends 'base.html' %}
+{% block title %}Registered Doctors - Admin{% endblock title %}
+{% load static %}
+{% block content %}
+
+<div class="container-fluid py-4">
+    <div class="container">
+        <!-- Search & Filters Card -->
+        <div class="card border-0 mb-4">
+            <div class="card-body">
+                <form method="get" action="{% url 'registered-doctors-list' %}" id="searchForm">
+                    <div class="row g-3 align-items-end">
+                        <div class="col-md-4">
+                            <div class="input-group">
+                                <input type="text" name="search" id="search" class="form-control"
+                                       placeholder="Search by name, email, phone, specialization..."
+                                       value="{{ search_query }}">
+                                {% if search_query %}
+                                <button type="button" class="btn btn-outline-danger" id="clearSearch"><i class="fas fa-times"></i></button>
+                                {% else %}
+                                <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <select class="form-select" name="is_deleted" id="is_deleted">
+                                <option value="">Any Deletion</option>
+                                <option value="0" {% if filter_deleted == '0' %}selected{% endif %}>Non Deleted</option>
+                                <option value="1" {% if filter_deleted == '1' %}selected{% endif %}>Deleted</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-3">
+                            <select class="form-select" name="is_verified" id="is_verified">
+                                <option value="">Any Verification</option>
+                                <option value="1" {% if filter_verified == '1' %}selected{% endif %}>Verified</option>
+                                <option value="0" {% if filter_verified == '0' %}selected{% endif %}>Non Verified</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <select class="form-select" name="is_subscription" id="is_subscription">
+                                <option value="">Any Subscription</option>
+                                <option value="1" {% if filter_subscription == '1' %}selected{% endif %}>Subscribed</option>
+                                <option value="0" {% if filter_subscription == '0' %}selected{% endif %}>Non Subscribed</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-12 mt-2 d-flex justify-content-between">
+                            <div>
+                                <a href="{% url 'registered-doctors-list' %}" class="btn btn-outline-danger">
+                                    <i class="fas fa-sync-alt me-2"></i>Reset
+                                </a>
+                            </div>
+                            <div>
+                                <a href="{% url 'admin-dashboard' %}" class="btn btn-outline-primary">
+                                    <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Doctors Table -->
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="ps-4">Sr. No.</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Specializations</th>
+                                <th>Status</th>
+                                <th class="text-center pe-4">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in doctors %}
+                            <tr>
+                                <td class="ps-4">{{ forloop.counter0|add:doctors.start_index }}</td>
+                                <td>
+                                    <div>
+                                        <h6 class="mb-0">{{ user.doctor_profile.doctor_name }}</h6>
+                                        <small class="text-muted">{{ user.date_joined|date:"M d, Y" }}</small>
+                                    </div>
+                                </td>
+                                <td>{{ user.email }}</td>
+                                <td>{{ user.phone_number|default:"-" }}</td>
+                                <td>
+                                    {% if user.doctor_profile and user.doctor_profile.specializations.all %}
+                                        {% for spec in user.doctor_profile.specializations.all|slice:":3" %}
+                                            <span class="badge bg-secondary me-1">{{ spec.name }}</span>
+                                        {% endfor %}
+                                        {% if user.doctor_profile.specializations.count > 3 %}
+                                            <small class="text-muted">+{{ user.doctor_profile.specializations.count|add:"-3" }}</small>
+                                        {% endif %}
+                                    {% else %}
+                                        <small class="text-muted">-</small>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <!-- Show multiple badges -->
+                                    {% if user.is_deleted %}
+                                        <span class="badge bg-danger">Deleted</span>
+                                    {% endif %}
+                                    {% if user.is_active and not user.is_deleted %}
+                                        <span class="badge bg-success">Active</span>
+                                    {% elif not user.is_active and not user.is_deleted %}
+                                        <span class="badge bg-warning text-dark">Inactive</span>
+                                    {% endif %}
+                                    {% if user.is_verified %}
+                                        <span class="badge bg-info text-dark">Verified</span>
+                                    {% else %}
+                                        <span class="badge bg-light text-dark border">Not Verified</span>
+                                    {% endif %}
+                                    {% if user.subscription_active %}
+                                        <span class="badge bg-primary">Subscribed</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary">Not Subscribed</span>
+                                    {% endif %}
+                                </td>
+                                <td class="text-center pe-4">
+                                    <div class="dropdown">
+                                        <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="fas fa-ellipsis-v"></i>
+                                        </button>
+                                        <ul class="dropdown-menu dropdown-menu-end">
+                                            <li>
+                                                <a href="#" class="dropdown-item view-doctor"
+                                                    data-bs-toggle="modal" data-bs-target="#doctorModal"
+                                                    data-id="{{ user.id }}"
+                                                    data-name="{{ user.doctor_profile.doctor_name|default:user.username|escape }}"
+                                                    data-email="{{ user.email|escape }}"
+                                                    data-phone="{{ user.phone_number|default:'-'|escape }}"
+                                                    data-specializations="{% for s in user.doctor_profile.specializations.all %}{{ s.name }}{% if not forloop.last %}, {% endif %}{% endfor %}"
+                                                    data-active="{{ user.is_active|yesno:'1,0' }}"
+                                                    data-verified="{{ user.is_verified|yesno:'1,0' }}"
+                                                    data-subscribed="{{ user.subscription_active|yesno:'1,0' }}"
+                                                    data-joined="{{ user.date_joined|date:'M d, Y H:i' }}"
+                                                    data-education="{% if user.doctor_profile and user.doctor_profile.education %}{{ user.doctor_profile.education|escapejs }}{% else %}-{% endif %}"
+                                                    data-experience="{% if user.doctor_profile %}{{ user.doctor_profile.experience }}{% else %}0{% endif %}"
+                                                    data-license="{% if user.doctor_profile and user.doctor_profile.license_number %}{{ user.doctor_profile.license_number|escapejs }}{% else %}-{% endif %}"
+                                                    data-fee="{% if user.doctor_profile %}{{ user.doctor_profile.consultation_fee }}{% else %}0{% endif %}"
+                                                    data-bio="{% if user.doctor_profile and user.doctor_profile.bio %}{{ user.doctor_profile.bio|escapejs }}{% else %}-{% endif %}"
+                                                    data-country="{% if user.doctor_profile and user.doctor_profile.country %}{{ user.doctor_profile.country|escapejs }}{% else %}-{% endif %}"
+                                                    data-state="{% if user.doctor_profile and user.doctor_profile.state %}{{ user.doctor_profile.state|escapejs }}{% else %}-{% endif %}"
+                                                    data-city="{% if user.doctor_profile and user.doctor_profile.city %}{{ user.doctor_profile.city|escapejs }}{% else %}-{% endif %}"
+                                                    data-address="{% if user.doctor_profile and user.doctor_profile.address %}{{ user.doctor_profile.address|escapejs }}{% else %}-{% endif %}"
+                                                    data-pincode="{% if user.doctor_profile and user.doctor_profile.pincode %}{{ user.doctor_profile.pincode|escapejs }}{% else %}-{% endif %}"
+                                                    data-languages="{% if user.doctor_profile and user.doctor_profile.languages_spoken %}{{ user.doctor_profile.languages_spoken|escapejs }}{% else %}-{% endif %}"
+                                                    data-awards="{% if user.doctor_profile and user.doctor_profile.awards_certifications %}{{ user.doctor_profile.awards_certifications|escapejs }}{% else %}-{% endif %}"
+                                                    data-available="{% if user.doctor_profile and user.doctor_profile.is_available %}1{% else %}0{% endif %}"
+                                                    data-rating_avg="{% if user.doctor_profile %}{{ user.doctor_profile.rating_avg }}{% else %}0{% endif %}"
+                                                    data-num_reviews="{% if user.doctor_profile %}{{ user.doctor_profile.num_reviews }}{% else %}0{% endif %}"
+                                                    data-sub_start="{% if user.subscription_start %}{{ user.subscription_start|date:'M d, Y' }}{% else %}-{% endif %}"
+                                                    data-sub_end="{% if user.subscription_end %}{{ user.subscription_end|date:'M d, Y' }}{% else %}-{% endif %}"
+                                                    data-created_at="{% if user.doctor_profile %}{{ user.doctor_profile.created_at|date:'M d, Y H:i' }}{% else %}-{% endif %}"
+                                                    data-updated_at="{% if user.doctor_profile %}{{ user.doctor_profile.updated_at|date:'M d, Y H:i' }}{% else %}-{% endif %}"
+                                                    >
+                                                    <i class="fas fa-eye me-2"></i>Views
+                                                </a>
+                                            </li>
+
+                                            <li>
+                                                {% if not user.is_deleted %}
+                                                <a href="#" class="dropdown-item action-delete text-danger" data-id="{{ user.id }}" data-action="delete">
+                                                    <i class="fas fa-trash me-2"></i>Delete
+                                                </a>
+                                                {% else %}
+                                                <a href="#" class="dropdown-item action-delete" data-id="{{ user.id }}" data-action="recover">
+                                                    <i class="fas fa-undo me-2"></i>Recover
+                                                </a>
+                                                {% endif %}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="7" class="text-center py-5">
+                                    <div class="text-muted">
+                                        <i class="fas fa-user-md fa-3x mb-3"></i>
+                                        <h5>No doctors found</h5>
+                                        <p>{% if search_query or filter_deleted or filter_verified or filter_subscription %}Try adjusting your search or filters{% else %}No doctors have been registered yet{% endif %}</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        {% if doctors.has_other_pages %}
+        <div class="d-flex justify-content-between align-items-center mt-4 px-3">
+            <div class="text-primary">
+                Showing {{ doctors.start_index }} to {{ doctors.end_index }} of {{ paginator.count }} records
+            </div>
+
+            <nav aria-label="Page navigation">
+                <ul class="pagination mb-0">
+                    {% if doctors.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ doctors.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if filter_deleted != '' %}&is_deleted={{ filter_deleted }}{% endif %}{% if filter_verified != '' %}&is_verified={{ filter_verified }}{% endif %}{% if filter_subscription != '' %}&is_subscription={{ filter_subscription }}{% endif %}" aria-label="Previous">
+                            <i class="fas fa-chevron-left"></i>
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled"><span class="page-link"><i class="fas fa-chevron-left"></i></span></li>
+                    {% endif %}
+
+                    {% for num in paginator.page_range %}
+                        {% if num == doctors.number %}
+                        <li class="page-item active mx-2"><span class="page-link rounded-0">{{ num }}</span></li>
+                        {% elif num > doctors.number|add:'-3' and num < doctors.number|add:'3' %}
+                        <li class="page-item mx-2"><a class="page-link rounded-0" href="?page={{ num }}{% if search_query %}&search={{ search_query }}{% endif %}{% if filter_deleted != '' %}&is_deleted={{ filter_deleted }}{% endif %}{% if filter_verified != '' %}&is_verified={{ filter_verified }}{% endif %}{% if filter_subscription != '' %}&is_subscription={{ filter_subscription }}{% endif %}">{{ num }}</a></li>
+                        {% elif num == 1 or num == paginator.num_pages %}
+                        <li class="page-item mx-2"><a class="page-link rounded-0" href="?page={{ num }}{% if search_query %}&search={{ search_query }}{% endif %}{% if filter_deleted != '' %}&is_deleted={{ filter_deleted }}{% endif %}{% if filter_verified != '' %}&is_verified={{ filter_verified }}{% endif %}{% if filter_subscription != '' %}&is_subscription={{ filter_subscription }}{% endif %}">{{ num }}</a></li>
+                        {% elif num == doctors.number|add:'-3' or num == doctors.number|add:'3' %}
+                        <li class="page-item disabled mx-2"><span class="page-link rounded-0">...</span></li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if doctors.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ doctors.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if filter_deleted != '' %}&is_deleted={{ filter_deleted }}{% endif %}{% if filter_verified != '' %}&is_verified={{ filter_verified }}{% endif %}{% if filter_subscription != '' %}&is_subscription={{ filter_subscription }}{% endif %}" aria-label="Next">
+                            <i class="fas fa-chevron-right"></i>
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="page-item disabled"><span class="page-link"><i class="fas fa-chevron-right"></i></span></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Doctor Modal (View details) -->
+<div class="modal fade" id="doctorModal" tabindex="-1" aria-labelledby="doctorModalLabel" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Doctor Details</h5>
+                <button type="button" class="btn-close text-danger" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row mb-3">
+                    <div class="col-md-6"><strong>Name:</strong> <span id="modal-name"></span></div>
+                    <div class="col-md-6"><strong>Email:</strong> <span id="modal-email"></span></div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6"><strong>Phone:</strong> <span id="modal-phone"></span></div>
+                    <div class="col-md-6"><strong>Joined:</strong> <span id="modal-joined"></span></div>
+                </div>
+                <div class="row mb-3">
+                     <div class="col-6"><strong>Specializations:</strong> <span id="modal-specs" class="mt-1"></span></div>
+                    <div class="col-6"><strong>Flags:</strong> <span id="modal-flags" class="mt-1"></span></div>
+                </div>
+
+                <hr />
+
+                <div class="row mb-2">
+                    <div class="col-md-9"><strong>Education:</strong> <span id="modal-education" class="mt-1"></span></div>
+                    <div class="col-md-3"><strong>Experience (yrs):</strong> <span id="modal-experience"></span></div>
+                </div>
+                <hr />
+                <div class="row mb-2">
+                    <div class="col-md-4"><strong>License No.:</strong> <span id="modal-license"></span></div>
+                    <div class="col-md-4"><strong>Consultation Fee:</strong> <span id="modal-fee"></span></div>
+                    <div class="col-md-4"><strong>Available:</strong> <span id="modal-available"></span></div>
+                </div>
+                <hr />
+                <div class="row mb-2">
+                    <div class="col-12"><strong>Bio:</strong> <span id="modal-bio" class="mt-1"></span></div>
+                </div>
+                <hr />
+                <div class="row mb-2">
+                    <div class="col-md-4"><strong>Country:</strong> <span id="modal-country"></span></div>
+                    <div class="col-md-4"><strong>State / City:</strong> <span id="modal-state"></span> / <span id="modal-city"></span></div>
+                    <div class="col-md-4"><strong>Pincode:</strong> <span id="modal-pincode"></span></div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-12"><strong>Address:</strong> <span id="modal-address" class="mt-1"></span></div>
+                </div>
+                <hr />
+                <div class="row mb-2">
+                    <div class="col-md-4"><strong>Awards:</strong> <span id="modal-awards"></span></div>
+                </div>
+                <hr />
+                <div class="row mb-2">
+                    <div class="col-md-4"><strong>Languages:</strong> <span id="modal-languages"></span></div>
+                    <div class="col-md-4"><strong>Avg. Rating:</strong> <span id="modal-rating"></span></div>
+                    <div class="col-md-4"><strong>Total Reviews:</strong> <span id="modal-reviews"></span></div>
+                </div>
+                <hr />
+                <div class="row mb-2">
+                    <div class="col-md-6"><strong>Subscription:</strong> <span id="modal-subscribed"></span></div>
+                    <div class="col-md-6"><strong>Subscription Period:</strong> <span id="modal-sub-period"></span></div>
+                </div>
+                <hr />
+                <div class="row mb-2">
+                    <div class="col-md-6"><strong>Profile Created:</strong> <span id="modal-created"></span></div>
+                    <div class="col-md-6"><strong>Last Updated:</strong> <span id="modal-updated"></span></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Confirmation Modal (Delete / Recover) -->
+<div class="modal fade" id="confirmActionModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmActionTitle">Confirm Action</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center">
+                <i class="fas fa-exclamation-circle fa-3x text-warning mb-3"></i>
+                <p id="confirmActionMessage">Are you sure?</p>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" id="confirmActionBtn" class="btn btn-danger">Yes, Proceed</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Toast -->
+<div class="position-fixed top-0 end-0 p-3" style="z-index: 1100;">
+    <div id="statusToast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body" id="toastMessage"></div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+
+{% block scripts %}
+<style>
+.table td { vertical-align: middle; }
+.page-link { border: none; margin: 0 2px; border-radius: 0 !important; }
+.page-item.active .page-link { background-color: #0D6B68; border-color: #0D6B68; }
+.dropdown-menu { min-width: 180px; }
+@media (max-width:768px) { .table-responsive { font-size: .875rem; } .pagination .page-link { padding: .375rem .75rem; } }
+</style>
+
+<script>
+    // small config injected from Django template for use by external JS
+    window.registeredDoctorsConfig = {
+        csrfToken: '{{ csrf_token }}',
+        softDeleteUrlTemplate: "{% url 'soft-delete-or-recover-account' 0 %}"
+    };
+</script>
+<script src="{% static 'js/registered-doctor-list.js' %}"></script>
+{% endblock scripts %}

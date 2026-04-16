@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <style>
+        body {
+            background: #f4f6fb;
+            color: #333;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 24px;
+            box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+        }
+
+        .header {
+            text-align: center;
+            padding-bottom: 12px;
+        }
+
+        .brand {
+            color: #198754;
+            font-weight: 700;
+            font-size: 20px;
+            text-decoration: none;
+        }
+
+        .lead {
+            font-size: 16px;
+            margin: 18px 0 8px;
+        }
+
+        .otp {
+            display: inline-block;
+            font-size: 28px;
+            letter-spacing: 6px;
+            background: #f7fbff;
+            padding: 12px 18px;
+            border-radius: 8px;
+            border: 1px solid rgba(25, 135, 84, 0.12);
+            font-weight: 700;
+            color: #198754;
+        }
+
+        .muted {
+            color: #6c757d;
+            font-size: 13px;
+            margin-top: 14px;
+        }
+
+        .footer {
+            text-align: center;
+            color: #94a3b8;
+            font-size: 12px;
+            margin-top: 22px;
+        }
+
+        @media (max-width:420px) {
+            .otp {
+                font-size: 22px;
+                padding: 10px 14px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <a class="brand">COZOM</a>
+        </div>
+        <p class="lead">Hello {{ username }},</p>
+        <p>Your one-time verification code is shown below. Enter this code to verify your account.</p>
+        <p style="text-align:center;"><span class="otp">{{ otp_code }}</span></p>
+        <p class="muted">This code will expire in 5 minutes. If you did not request this, please ignore this email.</p>
+        <p>Thanks,<br />COZOM Team</p>
+        <div class="footer">COZOM — Delivering better healthcare experiences</div>
+    </div>
+</body>
+
+</html>

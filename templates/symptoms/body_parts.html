@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Body Part – Symptom Checker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f0f4f8;
+            color: #1e2a3e;
+            padding: 2rem 1.5rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #1a7f6b, #2c9c84);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .header p {
+            color: #5a6e7c;
+            font-size: 1.1rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Grid */
+        .body-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.8rem;
+        }
+
+        /* Card */
+        .card {
+            background: white;
+            border-radius: 1.5rem;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2edf2;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 30px -12px rgba(0, 80, 70, 0.2);
+            border-color: #cbdde6;
+        }
+
+        .card-header {
+            padding: 1.5rem 1.5rem 0.75rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border-bottom: 2px solid #eef3f7;
+        }
+
+        .card-header i {
+            font-size: 2.2rem;
+            color: #1a7f6b;
+        }
+
+        .card-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #1e3b3a;
+        }
+
+        .card-body {
+            padding: 1rem 1.5rem 1.2rem 1.5rem;
+        }
+
+        .subparts {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #2c8e74;
+            margin-bottom: 0.75rem;
+            letter-spacing: -0.2px;
+        }
+
+        .subparts span {
+            background: #e6f4f0;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            display: inline-block;
+            margin: 0.2rem 0.2rem 0 0;
+            font-size: 0.75rem;
+        }
+
+        .description {
+            font-size: 0.9rem;
+            color: #3d5a6c;
+            line-height: 1.4;
+            margin-top: 0.5rem;
+        }
+
+        .btn-select {
+            display: block;
+            margin: 1rem 1.5rem 1.5rem 1.5rem;
+            background: #f0f7f5;
+            text-align: center;
+            padding: 0.7rem;
+            border-radius: 2rem;
+            font-weight: 500;
+            font-size: 0.85rem;
+            color: #1a7f6b;
+            text-decoration: none;
+            transition: all 0.2s;
+            border: 1px solid #d0e4df;
+        }
+
+        .btn-select:hover {
+            background: #1a7f6b;
+            color: white;
+            border-color: #1a7f6b;
+        }
+
+        @media (max-width: 640px) {
+            .body-grid {
+                grid-template-columns: 1fr;
+            }
+            .header h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1><i class="fas fa-stethoscope"></i> Body parts & symptoms</h1>
+        <p>Select the area to explore related symptoms</p>
+    </div>
+
+    <div class="body-grid" id="bodyPartsGrid"></div>
+</div>
+
+<script>
+    const bodyPartsData = [
+        {
+            name: "Head",
+            icon: "fas fa-brain",
+            subparts: ["Scalp", "Forehead", "Temples", "Face", "Jaw", "Eyes", "Sinuses"],
+            description: "Head-related symptoms including headache, dizziness, facial pain, sinus pressure, mental fog."
+        },
+        {
+            name: "Abdomen",
+            icon: "fas fa-stethoscope",
+            subparts: ["Upper", "Lower", "Right", "Left", "Central", "Flank", "Umbilical"],
+            description: "Abdominal symptoms like pain, bloating, cramps, nausea, indigestion, organ-specific issues."
+        },
+        {
+            name: "Arms",
+            icon: "fas fa-hand-peace",
+            subparts: ["Shoulder", "Elbow", "Forearm", "Wrist", "Hand", "Fingers", "Upper arm"],
+            description: "Arm symptoms including joint pain, muscle weakness, numbness, swelling, mobility issues."
+        },
+        {
+            name: "Back",
+            icon: "fas fa-spine",
+            subparts: ["Upper back", "Middle back", "Lower back", "Sacrum", "Tailbone", "Spine", "Paraspinal muscles"],
+            description: "Back symptoms such as muscle strain, disc problems, sciatica, posture-related pain."
+        },
+        {
+            name: "Breast",
+            icon: "fas fa-female",
+            subparts: ["Nipple", "Areola", "Breast tissue", "Milk ducts", "Upper/lower breast", "Axillary tail"],
+            description: "Breast symptoms like lumps, pain, discharge, tenderness, cyclical changes."
+        },
+        {
+            name: "Chest",
+            icon: "fas fa-heartbeat",
+            subparts: ["Heart area", "Lungs", "Ribs", "Sternum", "Costal cartilage", "Intercostal muscles"],
+            description: "Chest symptoms including tightness, palpitations, breathing difficulty, rib pain, acid reflux."
+        },
+        {
+            name: "Ears",
+            icon: "fas fa-ear-deaf",
+            subparts: ["Outer ear", "Ear canal", "Eardrum", "Middle ear", "Inner ear", "Auditory nerve"],
+            description: "Ear symptoms like hearing loss, tinnitus, vertigo, earache, discharge, itch."
+        },
+        {
+            name: "Nose",
+            icon: "fas fa-nose",
+            subparts: ["External nose", "Nostrils", "Nasal septum", "Turbinates", "Nasal cavity", "Sinuses", "Olfactory nerve"],
+            description: "Nose symptoms including congestion, runny nose, loss of smell, sinus pressure, nosebleeds."
+        }
+    ];
+
+    const grid = document.getElementById('bodyPartsGrid');
+    bodyPartsData.forEach(part => {
+        const card = document.createElement('div');
+        card.className = 'card';
+
+        // Create subparts HTML
+        const subpartsHtml = part.subparts.map(sp => `<span>${sp}</span>`).join('');
+
+        card.innerHTML = `
+            <div class="card-header">
+                <i class="${part.icon}"></i>
+                <h2>${part.name}</h2>
+            </div>
+            <div class="card-body">
+                <div class="subparts">${subpartsHtml}</div>
+                <div class="description">${part.description}</div>
+            </div>
+            <a href="/symptoms/?body_part=${encodeURIComponent(part.name)}" class="btn-select">Select &rarr;</a>
+        `;
+        grid.appendChild(card);
+    });
+</script>
+</body>
+</html>

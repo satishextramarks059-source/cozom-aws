@@ -1,0 +1,325 @@
+{% extends 'base.html' %}
+{% block title %}Contact Us{% endblock title %}
+{% load static %}
+
+{% block content %}
+
+    <!-- ===== HERO START ===== -->
+    <div class="container-fluid bg-light hero-header pb-5 mb-5">
+        <div class="container py-5">
+            <div class="row g-4 align-items-center">
+                <div class="col-lg-8 wow fadeIn" data-wow-delay="0.1s">
+                    <nav aria-label="breadcrumb" class="mb-3">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{% url 'home' %}" class="text-primary">Home</a></li>
+                            <li class="breadcrumb-item active text-secondary" aria-current="page">Contact Us</li>
+                        </ol>
+                    </nav>
+                    <h1 class="display-4 mb-3">
+                        Get In <span class="text-primary">Touch</span>
+                    </h1>
+                    <p class="lead text-secondary mb-4">
+                        Have a question about our healthcare services, need help with your account, or want to share feedback? Our support team is ready to assist you. Reach out and we'll respond promptly.
+                    </p>
+                    <div class="row g-3">
+                        <div class="col-sm-4">
+                            <div class="d-flex align-items-center">
+                                <div class="btn-square bg-primary rounded me-2 flex-shrink-0" style="width:40px;height:40px;">
+                                    <i class="fa fa-headset text-white"></i>
+                                </div>
+                                <span class="text-secondary small">Dedicated support team</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="d-flex align-items-center">
+                                <div class="btn-square bg-primary rounded me-2 flex-shrink-0" style="width:40px;height:40px;">
+                                    <i class="fa fa-clock text-white"></i>
+                                </div>
+                                <span class="text-secondary small">Quick response time</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="d-flex align-items-center">
+                                <div class="btn-square bg-primary rounded me-2 flex-shrink-0" style="width:40px;height:40px;">
+                                    <i class="fa fa-lock text-white"></i>
+                                </div>
+                                <span class="text-secondary small">Safe &amp; confidential</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 wow fadeIn" data-wow-delay="0.3s">
+                    <div class="d-flex align-items-center justify-content-center" style="min-height:220px;">
+                        <i class="fa fa-phone-alt text-white" style="font-size:7rem;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ===== HERO END ===== -->
+
+<!-- Contact Section Start -->
+<div class="container-fluid py-5">
+    <div class="container">
+        <div class="row g-5">
+
+            <!-- Contact Form - 8 columns -->
+            <div class="col-lg-8 wow fadeIn" data-wow-delay="0.1s">
+                <div class="rounded p-5">
+                    <h2 class="display-6 mb-4 text-center">Get In Touch With Us</h2>
+                    <p class="lead text-muted mb-4">Have questions about our healthcare services or need assistance?
+                        We’re here to listen and guide you every step of the way.
+                        Send us a message with your query or concern, and our team will respond as soon as possible.
+                    </p>
+
+                    <form id="contactForm">
+                        {% csrf_token %}
+                        <div class="row g-3">
+                    
+                            <div class="col-md-6">
+                                <label for="name" class="form-label">Your Name</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                    <input type="text" class="form-control" id="name" name="name" value="{{ initial_data.name|default:'' }}"
+                                        {% if user.is_authenticated %}readonly{% endif %} required>
+                                </div>
+                            </div>
+                    
+                            <div class="col-md-6">
+                                <label for="email" class="form-label">Your Email</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                    <input type="email" class="form-control" id="email" name="email"
+                                        value="{{ initial_data.email|default:'' }}" {% if user.is_authenticated %}readonly{% endif %}
+                                        required>
+                                </div>
+                            </div>
+                    
+                            <div class="col-md-6">
+                                <label for="phone" class="form-label">Your Phone</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                    <input type="tel" class="form-control" id="phone" name="phone"
+                                        value="{{ initial_data.phone|default:'' }}" {% if user.is_authenticated %}readonly{% endif %}>
+                                </div>
+                            </div>
+                    
+                            <div class="col-md-6">
+                                <label for="subject" class="form-label">Subject</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-tag"></i></span>
+                                    <input type="text" class="form-control" id="subject" name="subject" required>
+                                </div>
+                            </div>
+                    
+                            <div class="col-12">
+                                <label for="message" class="form-label">Message</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-comment-dots"></i></span>
+                                    <textarea class="form-control" id="message" name="message" style="height: 150px" required></textarea>
+                                </div>
+                            </div>
+                    
+                            <div class="row g-3">
+                                <!-- Send Message Button -->
+                                <div class="col-12 col-md-8">
+                                    <button class="btn btn-primary w-100 py-3" type="submit">
+                                        <i class="fas fa-paper-plane me-2"></i>Send Message
+                                    </button>
+                                </div>
+                    
+                                <!-- Feedback Link Button -->
+                                <div class="col-12 col-md-4">
+                                    <a href="{% url 'feedback' %}" class="btn btn-outline-warning w-100 py-3 text-dark">
+                                        Feedback
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Quick Contact - 4 columns -->
+            <div class="bg-light col-lg-4 wow fadeIn" data-wow-delay="0.5s">
+                <div class="rounded p-5">
+                    <h2 class="mb-4">Quick Contact</h2>
+
+                    {% if quick_contact %}
+                    <div class="d-flex align-items-start mb-4 mt-5">
+                        <div class="d-inline-flex align-items-center justify-content-center bg-white shadow rounded-circle"
+                            style="width: 55px; height: 55px;">
+                            <i class="fa fa-phone-alt text-primary"></i>
+                        </div>
+                        <div class="ps-3">
+                            <h5 class="mb-2">Call Us</h5>
+                            <p class="mb-1">
+                                <a href="tel:{{ quick_contact.phone_number_one }}"
+                                    class="text-dark text-decoration-none">
+                                    {{ quick_contact.phone_number_one }}
+                                </a>
+                            </p>
+                            {% if quick_contact.phone_number_two %}
+                            <p class="mb-0">
+                                <a href="tel:{{ quick_contact.phone_number_two }}"
+                                    class="text-dark text-decoration-none">
+                                    {{ quick_contact.phone_number_two }}
+                                </a>
+                            </p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-start mb-4">
+                        <div class="d-inline-flex align-items-center justify-content-center bg-white shadow rounded-circle"
+                            style="width: 55px; height: 55px;">
+                            <i class="fa fa-envelope text-primary"></i>
+                        </div>
+                        <div class="ps-3">
+                            <h5 class="mb-2">Email Us</h5>
+                            <p class="mb-1">
+                                <a href="mailto:{{ quick_contact.email_one }}" class="text-dark text-decoration-none">
+                                    {{ quick_contact.email_one }}
+                                </a>
+                            </p>
+                            {% if quick_contact.email_two %}
+                            <p class="mb-0">
+                                <a href="mailto:{{ quick_contact.email_two }}" class="text-dark text-decoration-none">
+                                    {{ quick_contact.email_two }}
+                                </a>
+                            </p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-start mb-4">
+                        <div class="d-inline-flex align-items-center justify-content-center bg-white shadow rounded-circle"
+                            style="width: 55px; height: 55px;">
+                            <i class="fa fa-map-marker-alt text-primary"></i>
+                        </div>
+                        <div class="ps-3">
+                            <h5 class="mb-2">Visit Us</h5>
+                            <p class="mb-0">{{ quick_contact.address|linebreaks }}</p>
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-start">
+                        <div class="d-inline-flex align-items-center justify-content-center bg-white shadow rounded-circle"
+                            style="width: 55px; height: 55px;">
+                            <i class="fa fa-clock text-primary"></i>
+                        </div>
+                        <div class="ps-3">
+                            <h5 class="mb-2">Working Hours</h5>
+                            <p class="mb-1">Monday - Friday: 9:00 AM - 6:00 PM</p>
+                            <p class="mb-0">Saturday: 9:00 AM - 2:00 PM</p>
+                        </div>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-warning" role="alert">
+                        Contact information not available at the moment.
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Contact Section End -->
+
+<!-- Map Start -->
+<div class="container-fluid wow fadeIn" data-wow-delay="0.1s">
+    <div class="row g-0">
+        <div class="col-12 p-0">
+            <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d317715.711936735!2d-0.3817854061482011!3d51.52873519604883!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47d8a00baf21de75%3A0x52963a5addd52a99!2sLondon%2C%20UK!5e0!3m2!1sen!2sus!4v1648472346418!5m2!1sen!2sus" 
+                width="100%" 
+                height="450" 
+                style="border:0;" 
+                allowfullscreen="" 
+                loading="lazy" 
+                referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        </div>
+    </div>
+</div>
+<!-- Map End -->
+
+<!-- Acknowledgment Modal -->
+<div class="modal fade" id="ackModal" tabindex="-1" aria-labelledby="ackModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0 pb-0">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center py-4">
+                <div id="successIcon" class="d-none">
+                    <div class="rounded-circle bg-success d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <i class="fas fa-check text-white fs-3"></i>
+                    </div>
+                    <h4 class="fw-bold text-success mb-3">Message Sent!</h4>
+                </div>
+                <div id="errorIcon" class="d-none">
+                    <div class="rounded-circle bg-danger d-inline-flex align-items-center justify-content-center mb-3" style="width: 80px; height: 80px;">
+                        <i class="fas fa-times text-white fs-3"></i>
+                    </div>
+                    <h4 class="fw-bold text-danger mb-3">Error!</h4>
+                </div>
+                <p id="ackMessage" class="mb-4 fs-5">Your message has been sent successfully!</p>
+                <button type="button" class="btn btn-primary px-4 py-2" data-bs-dismiss="modal">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function() {
+        // Form submission
+        $('#contactForm').on('submit', function(e) {
+            e.preventDefault();
+            
+            // Show loading state
+            const submitBtn = $(this).find('button[type="submit"]');
+            const originalText = submitBtn.html();
+            submitBtn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-2"></i> Sending...');
+            
+            // Submit form via AJAX
+            $.ajax({
+                type: 'POST',
+                url: '{% url "submit_contact" %}',
+                data: $(this).serialize(),
+                success: function(response) {
+                    if (response.status === 'success') {
+                        $('#successIcon').removeClass('d-none');
+                        $('#errorIcon').addClass('d-none');
+                        $('#ackMessage').text(response.message);
+                        $('#contactForm')[0].reset();
+                    } else {
+                        $('#successIcon').addClass('d-none');
+                        $('#errorIcon').removeClass('d-none');
+                        $('#ackMessage').text(response.message);
+                    }
+                    
+                    // Show modal
+                    const ackModal = new bootstrap.Modal(document.getElementById('ackModal'));
+                    ackModal.show();
+                },
+                error: function() {
+                    $('#successIcon').addClass('d-none');
+                    $('#errorIcon').removeClass('d-none');
+                    $('#ackMessage').text('An unexpected error occurred. Please try again.');
+                    
+                    // Show modal
+                    const ackModal = new bootstrap.Modal(document.getElementById('ackModal'));
+                    ackModal.show();
+                },
+                complete: function() {
+                    // Reset button state
+                    submitBtn.prop('disabled', false).html(originalText);
+                }
+            });
+        });
+    });
+</script>
+{% endblock scripts %}

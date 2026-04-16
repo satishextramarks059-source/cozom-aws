@@ -1,0 +1,371 @@
+{% extends 'base.html' %}
+{% block title %}Find Hospitals{% endblock title %}   
+{% load static %}
+
+{% block content %}
+
+    <!-- ===== HERO START ===== -->
+    <div class="container-fluid bg-light hero-header pb-5 mb-5">
+        <div class="container py-5">
+            <div class="row g-4 align-items-center">
+                <div class="col-lg-8 wow fadeIn" data-wow-delay="0.1s">
+                    <nav aria-label="breadcrumb" class="mb-3">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{% url 'home' %}" class="text-primary">Home</a></li>
+                            <li class="breadcrumb-item active text-secondary" aria-current="page">Find Hospitals</li>
+                        </ol>
+                    </nav>
+                    <h1 class="display-4 mb-3">
+                        Find a Trusted <span class="text-primary">Hospital</span>
+                    </h1>
+                    <p class="lead text-secondary mb-4">
+                        Locate the right hospital or clinic for your needs. Filter by city, facilities, and emergency services to find care close to you and book an appointment with confidence.
+                    </p>
+                    <div class="row g-3">
+                        <div class="col-sm-4">
+                            <div class="d-flex align-items-center">
+                                <div class="btn-square bg-primary rounded me-2 flex-shrink-0" style="width:40px;height:40px;">
+                                    <i class="fa fa-hospital text-white"></i>
+                                </div>
+                                <span class="text-secondary small">Registered hospitals</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="d-flex align-items-center">
+                                <div class="btn-square bg-primary rounded me-2 flex-shrink-0" style="width:40px;height:40px;">
+                                    <i class="fa fa-ambulance text-white"></i>
+                                </div>
+                                <span class="text-secondary small">Emergency services</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="d-flex align-items-center">
+                                <div class="btn-square bg-primary rounded me-2 flex-shrink-0" style="width:40px;height:40px;">
+                                    <i class="fa fa-map-marker-alt text-white"></i>
+                                </div>
+                                <span class="text-secondary small">Filter by location</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 wow fadeIn" data-wow-delay="0.3s">
+                    <div class="row g-3">
+                        <div class="col-6">
+                            <div class="bg-white rounded p-3 text-center shadow-sm">
+                                <i class="fa fa-hospital fa-2x text-primary mb-2 d-block"></i>
+                                <small class="fw-semibold text-secondary">Hospitals</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="bg-primary rounded p-3 text-white text-center">
+                                <i class="fa fa-ambulance fa-2x mb-2 d-block"></i>
+                                <small class="fw-semibold">Emergency Care</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="bg-primary rounded p-3 text-white text-center">
+                                <i class="fa fa-user-md fa-2x mb-2 d-block"></i>
+                                <small class="fw-semibold">Expert Staff</small>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="bg-white rounded p-3 text-center shadow-sm">
+                                <i class="fa fa-star fa-2x text-primary mb-2 d-block"></i>
+                                <small class="fw-semibold text-secondary">Rated &amp; Reviewed</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ===== HERO END ===== -->
+
+<div class="container-fluid py-0 wow fadeIn" data-wow-delay="0.1s">
+    <div class="container">
+        <!-- Header -->
+        <div class="text-center mx-auto mb-5" style="max-width: 800px;">
+            <h1 class="display-5 mb-3">Find Your Hospital</h1>
+            <p class="mb-0">Search and book appointments at our network of trusted hospitals</p>
+        </div>
+
+        <!-- Filter Section -->
+        <div class="card mb-5 shadow-sm">
+            <div class="card-header bg-light border-bottom">
+                <h5 class="mb-0"><i class="fas fa-cogs me-2"></i>Customized Filters</h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <!-- Hospital Filter (Searchable) -->
+                    <div class="col-md-3">
+                        <label for="hospital" class="form-label fw-bold">Hospital</label>
+                        <select class="form-select form-select-md" id="hospital">
+                            <option value="">-- Select Hospital --</option>
+                            {% for hosp in hospitals %}
+                                <option value="{{ hosp.id }}" {% if hosp.id|stringformat:"s" == hospital_id %}selected{% endif %}>
+                                    {{ hosp.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <small class="text-muted">Search hospital by name</small>
+                    </div>
+
+                    <!-- Country Filter (Optional) -->
+                    <div class="col-md-3">
+                        <label for="country" class="form-label fw-bold">Country</label>
+                        <select class="form-select form-select-md" id="country">
+                            <option value="">-- Select Country --</option>
+                        </select>
+                        <small class="text-muted">Optional filter</small>
+                    </div>
+
+                    <!-- State Filter (Optional) -->
+                    <div class="col-md-3">
+                        <label for="state" class="form-label fw-bold">State</label>
+                        <select class="form-select form-select-md" id="state">
+                            <option value="">-- Select State --</option>
+                        </select>
+                        <small class="text-muted">Optional filter</small>
+                    </div>
+
+                    <!-- City Filter (Optional) -->
+                    <div class="col-md-3">
+                        <label for="city" class="form-label fw-bold">City</label>
+                        <select class="form-select form-select-md" id="city">
+                            <option value="">-- Select City --</option>
+                        </select>
+                        <small class="text-muted">Optional filter</small>
+                    </div>
+                </div>
+
+                <!-- Filter Buttons -->
+                <div class="row mt-4">
+                    <div class="col-12">
+                        <button type="button" class="btn btn-primary" id="search-btn">
+                            <i class="fas fa-search me-2"></i>Search Hospitals
+                        </button>
+                        <button type="button" class="btn btn-outline-danger" id="reset-filters-btn">
+                            <i class="fas fa-redo me-2"></i>Reset Filters
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Active Filters Display -->
+        <div id="active-filters" style="display: none;" class="mb-4">
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle me-2"></i>
+                <strong>Active Filters:</strong>
+                <span id="filters-display"></span>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loading-state" class="text-center py-5" style="display: none;">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading hospitals...</span>
+            </div>
+            <p class="mt-2">Loading hospitals...</p>
+        </div>
+
+        <!-- Hospitals Grid -->
+        <div id="hospitals-container" style="display: none;">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <p class="text-muted mb-0">
+                        Found <strong id="hospitals-count">0</strong> hospital(s)
+                    </p>
+                </div>
+            </div>
+
+            <div class="row" id="hospitals-grid">
+                <!-- Hospital cards will be inserted here -->
+            </div>
+
+            <!-- Pagination -->
+            <nav aria-label="Hospital listing pagination" class="mt-5" id="pagination-container">
+                <!-- Pagination controls will be inserted here -->
+            </nav>
+
+            <!-- No Results State -->
+            <div id="no-results" style="display: none;" class="alert alert-warning text-center py-5">
+                <i class="fas fa-search me-2"></i>
+                <p>No hospitals found with your selected filters. Please try different criteria or contact our support team.</p>
+            </div>
+        </div>
+
+        <!-- Initial State -->
+        <div id="initial-state" class="alert alert-secondary text-center py-5">
+            <i class="fas fa-arrow-up me-2"></i>
+            <p>Select filters above to search for hospitals</p>
+        </div>
+    </div>
+</div>
+
+<!-- Hospital Detail Modal -->
+<div class="modal fade" id="hospitalDetailModal" tabindex="-1" aria-labelledby="hospitalDetailLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="hospitalDetailLabel">Hospital Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="hospitalDetailBody">
+                <!-- Hospital details will be inserted here -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="bookAppointmentBtn">
+                    <i class="fas fa-calendar-check me-2"></i>Book Appointment
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Book Appointment Modal -->
+<div class="modal fade" id="bookAppointmentModal" tabindex="-1" aria-labelledby="bookAppointmentLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="bookAppointmentLabel">Book Appointment</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="bookAppointmentBody">
+                <!-- Hospital Information Section (Read-only) -->
+                <div id="appointmentHospitalInfo" class="mb-4">
+                    <div class="card bg-light">
+                        <div class="card-body">
+                            <h5 class="mb-3"><i class="fas fa-hospital me-2"></i><span id="apptHospitalName"></span></h5>
+                            <div class="mb-2">
+                                <div class="d-inline-flex align-items-center">
+                                    <span class="text-warning me-2" id="apptHospitalStars"></span>
+                                    <span class="fw-bold" id="apptHospitalRating"></span>
+                                    <small class="text-muted ms-1" id="apptHospitalReviews"></small>
+                                </div>
+                            </div>
+                            <p class="mb-0 text-muted"><i class="fas fa-map-marker-alt me-2"></i><span id="apptHospitalAddress"></span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Booking Form -->
+                <form id="appointmentBookingForm">
+                    <div class="mb-3">
+                        <label for="appointmentDate" class="form-label">Select Date <span class="text-danger">*</span></label>
+                        <input type="date" class="form-control" id="appointmentDate" required>
+                        <small class="text-muted">Select a date for your appointment</small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="patientMessage" class="form-label">Describe Your Issue</label>
+                        <textarea class="form-control" id="patientMessage" rows="4" 
+                                  placeholder="Please describe your symptoms or reason for consultation (optional but recommended)"></textarea>
+                        <small class="text-muted">This helps the doctor prepare for your visit</small>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <small>Your appointment will be sent to the doctor for review. You will be notified once the doctor accepts or rejects your request.</small>
+                    </div>
+                </form>
+
+                <!-- Success/Error Messages -->
+                <div id="appointmentMessage" style="display: none;"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="confirmAppointmentBtn">
+                    <i class="fas fa-calendar-check me-2"></i>Confirm Booking
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block scripts %}
+<script src="{% static 'js/find-hospitals.js' %}"></script>
+<script>
+    // Initialize hospitals listing
+    document.addEventListener('DOMContentLoaded', function() {
+        const findHospitals = new FindHospitals({
+            currentPage: {{ page|default:1 }},
+            initialHospitalId: "{{ hospital_id|default:'' }}",
+            initialCountry: "{{ country|default:'' }}",
+            initialState: "{{ state|default:'' }}",
+            initialCity: "{{ city|default:'' }}"
+        });
+        
+        findHospitals.init();
+    });
+</script>
+{% endblock scripts %}
+
+<style>
+    .hospital-card {
+        transition: all 0.3s ease;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .hospital-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .hospital-card .card-body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .hospital-info {
+        flex: 1;
+    }
+
+    .hospital-rating {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        background-color: #f8f9fa;
+        border-radius: 0.25rem;
+        font-size: 0.9rem;
+    }
+
+    .hospital-rating .stars {
+        color: #ffc107;
+    }
+
+    .emergency-badge {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: bold;
+        font-size: 0.85rem;
+        box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+    }
+
+    .hospital-action-buttons {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: auto;
+    }
+
+    .hospital-action-buttons .btn {
+        flex: 1;
+        font-size: 0.875rem;
+        padding: 0.5rem 0.75rem;
+    }
+
+    .card-header {
+        background-color: #f8f9fa;
+    }
+</style>

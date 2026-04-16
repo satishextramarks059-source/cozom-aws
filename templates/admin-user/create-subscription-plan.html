@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% block title %}{% if creating %}Create{% else %}Edit{% endif %} Subscription Plan{% endblock title %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid py-5">
+    <div class="container">
+        <div class="row g-5 justify-content-center">
+            <div class="col-lg-8 wow fadeIn" data-wow-delay="0.1s">
+                <div class="rounded p-5 shadow-sm">
+                    <h2 class="display-6 mb-4 text-center">{% if creating %}Create{% else %}Edit{% endif %} Subscription Plan</h2>
+
+                    <form id="subscriptionPlanForm" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {% if form.errors %}
+                        <div class="alert alert-danger">
+                            <ul class="mb-0">
+                                {% for field, errors in form.errors.items %}
+                                    {% for err in errors %}
+                                        <li>{{ err }}</li>
+                                    {% endfor %}
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
+                        <div class="row g-3">
+
+                            <div class="col-md-6">
+                                <label class="form-label">Plan Name</label>
+                                {{ form.name }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Role</label>
+                                {{ form.user_type }}
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Receiver Banking Name</label>
+                                {{ form.receiver_banking_name }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Monthly Price (Rs.)</label>
+                                {{ form.monthly_price }}
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">6–11 Months Discount (%)</label>
+                                {{ form.half_yearly_discount }}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">12+ Months Discount (%)</label>
+                                {{ form.yearly_discount }}
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label">Description</label>
+                                {{ form.description }}
+                            </div>
+
+                            <div class="col-12">
+                                <div class="form-check form-switch">
+                                    {{ form.is_active }}
+                                    <label class="form-check-label ms-2" for="id_is_active">Active</label>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label">Receiver QR (png, jpg, jpeg)</label>
+                                <div class="mb-2">{{ form.receiver_qr }}</div>
+                                <div id="qrPreviewContainer" class="mt-2">
+                                    {% if not creating and plan.receiver_qr %}
+                                        <img id="qrPreview" src="{{ plan.receiver_qr.url }}" alt="QR" style="max-height:150px;" />
+                                    {% else %}
+                                        <img id="qrPreview" src="#" alt="QR Preview" style="display:none; max-height:150px;" />
+                                    {% endif %}
+                                </div>
+                            </div>
+
+
+                            <div class="col-12 d-flex justify-content-end">
+                                <a href="{% url 'admin-subscriptions-list' %}" class="btn btn-outline-danger me-2"><i class="bi bi-arrow-left me-1"></i> Cancel</a>
+                                <button class="btn btn-primary" type="submit">{% if creating %}Create{% else %}Save{% endif %} <i class="fas fa-arrow-right"></i></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block scripts %}
+<script src="{% static 'js/create-subscription-plan.js' %}"></script>
+{% endblock scripts %}

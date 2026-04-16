@@ -1,0 +1,491 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Blog{% endblock %}
+{% block content %}
+<div class="container py-5">
+    <!-- Back Button -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <a href="{% url 'blog-list' %}" class="btn btn-outline-primary">
+                <i class="fas fa-arrow-left me-2"></i>Back to Blogs
+            </a>
+        </div>
+    </div>
+
+    <header class="blog-header py-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10 text-center">
+                    <!-- Tags -->
+                    <div class="d-flex justify-content-center flex-wrap mb-2">
+                        {% for tag in blog.get_tags_list %}
+                        <span class="badge badge-tag bg-primary me-2 mb-2">{{ tag }}</span>
+                        {% endfor %}
+                    </div>
+    
+                    <!-- Title -->
+                    <h1 class="display-5 mb-3">{{ blog.title }}</h1>
+    
+                    <!-- Meta Information -->
+                    <div class="d-flex justify-content-center align-items-center blog-meta text-muted mb-4">
+                        <div class="d-flex align-items-center me-4">
+                            <i class="far fa-calendar-alt me-2"></i>
+                            <span>{{ blog.created_at|date:"F j, Y" }}</span>
+                        </div>
+                        <div class="d-flex align-items-center me-4">
+                            <i class="fas fa-heart text-danger me-2"></i>
+                            <span>{{ blog.likes_count }} likes</span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <i class="fas fa-comment text-primary me-2"></i>
+                            <span>{{ blog.comments_count }} comments</span>
+                        </div>
+                    </div>
+    
+                    <!-- Horizontal Line -->
+                    <hr class="my-2">
+    
+                    <!-- Creator Information -->
+                    <div class="row justify-content-center align-items-center">
+                        <!-- Author Details -->
+                        <div class="col-md-8 text-center text-md-start">
+                            <div class="d-flex align-items-center justify-content-center justify-content-md-start">
+                                <div class="me-4">
+                                    <img src="{% static 'img/default-avatar.png' %}"
+                                        alt="{{ blog.creator.username }}"
+                                        class="rounded-circle" width="80" height="80" style="object-fit: cover;">
+                                </div>
+                                <div>
+                                    <h4 class="mb-1 fw-bold">{{ blog.creator.username }}
+                                    </h4>
+                                    <p class="text-muted mb-1">
+                                        <i class="fas fa-envelope me-2"></i>{{ blog.creator_email }}
+                                    </p>
+                                    {% if blog.creator_phone %}
+                                    <p class="text-muted mb-0">
+                                        <i class="fas fa-phone me-2"></i>{{ blog.creator_phone }}
+                                    </p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+    
+                        <!-- Social Media Links -->
+                        <div class="col-md-4 text-center text-md-end mt-3 mt-md-0">
+                            <div class="creator-social">
+                                {% if blog.facebook_url %}
+                                <a href="{{ blog.facebook_url }}" target="_blank" class="social-link bg-primary me-3">
+                                    <i class="fab fa-facebook-f fa-lg"></i>
+                                </a>
+                                {% endif %}
+                                {% if blog.twitter_url %}
+                                <a href="{{ blog.twitter_url }}" target="_blank" class="social-link bg-primary me-3">
+                                    <i class="fab fa-twitter fa-lg"></i>
+                                </a>
+                                {% endif %}
+                                {% if blog.linkedin_url %}
+                                <a href="{{ blog.linkedin_url }}" target="_blank" class="social-link bg-primary me-3">
+                                    <i class="fab fa-linkedin-in fa-lg"></i>
+                                </a>
+                                {% endif %}
+                                {% if blog.instagram_url %}
+                                <a href="{{ blog.instagram_url }}" target="_blank" class="social-link bg-primary">
+                                    <i class="fab fa-instagram fa-lg"></i>
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+
+    <!-- Blog Content -->
+    <div class="row justify-content-center mt-3">
+        <div class="col-lg-10">
+            <div class="blog-content">
+                <!-- Introduction -->
+                <div class="mb-3">
+                    {{ blog.content_intro|safe }}
+                </div>
+
+                <!-- Section 1 with Image 1 and Image 2 -->
+                <div class="row mb-3 align-items-center">
+                    {% if blog.image1 or blog.image2 %}
+                        {% if blog.image2 %}
+                        <div class="col-md-6 order-md-1">
+                            <img src="{{ blog.image2.url }}" alt="Section 2" class="img-fluid rounded-3 shadow">
+                        </div>
+                        {% endif %}
+                        {% if blog.image1 %}
+                        <div class="col-md-6">
+                            <img src="{{ blog.image1.url }}" alt="Section 1" class="img-fluid rounded-3 shadow">
+                        </div>
+                        {% endif %}
+                    {% else %}
+                        <div class="col-12 text-center text-muted">
+                            <p>No images available</p>
+                        </div>
+                    {% endif %}
+                </div>
+                {% if blog.content_section1 %}
+                <div class="mb-3">
+                    {{ blog.content_section1|safe }}
+                </div>
+                {% endif %}
+
+                
+                {% if blog.content_section2 %}
+                <div class="mb-3">
+                    {{ blog.content_section2|safe }}
+                </div>
+                {% endif %}
+
+                <!-- Conclusion with Image 3 -->
+                <div class="row mb-3 align-items-center">
+                    {% if blog.image3 %}
+                        <div class="col-md-12">
+                            <img src="{{ blog.image3.url }}" alt="Conclusion" class="img-fluid rounded-3 shadow">
+                        </div>
+                    {% else %}
+                        <div class="col-12 text-center text-muted">
+                            <p>No conclusion image available</p>
+                        </div>
+                    {% endif %}
+                </div>
+
+                {% if blog.content_conclusion %}
+                <div class="mb-2">
+                    {{ blog.content_conclusion|safe }}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+   
+    <!-- Like Button -->
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <button id="like-btn" class="btn like-btn {% if user_has_liked %}btn-danger{% else %}btn-outline-danger{% endif %}" 
+                    {% if not user.is_authenticated %}disabled{% endif %}>
+                <i class="fas fa-heart fa-2x"></i>
+                <br>
+                <span id="likes-count">{{ blog.likes_count }}</span> Likes
+            </button>
+        </div>
+    </div>
+
+    <!-- Comments Section -->
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="comment-section">
+                <h4 class="mb-4">
+                    <i class="fas fa-comments me-2"></i>Comments 
+                    <span class="badge bg-primary">{{ total_comments }}</span>
+                </h4>
+
+                <!-- Comment Form -->
+                {% if user.is_authenticated %}
+                    {% if not user_comment %}
+                    <div class="mb-4">
+                        <form id="comment-form">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label for="id_content" class="form-label">Add your comment:</label>
+                                {{ comment_form.content }}
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-paper-plane me-1"></i>Post Comment
+                            </button>
+                        </form>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-info mb-4">
+                        <i class="fas fa-info-circle me-2"></i>
+                        You have already commented on this blog.
+                    </div>
+                    {% endif %}
+                {% else %}
+                <div class="alert alert-warning mb-4">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    Please <a href="{% url 'login' %}">login</a> to comment or like this blog.
+                </div>
+                {% endif %}
+
+                <!-- Comments List -->
+                <div id="comments-container">
+                    {% for comment in comments %}
+                    <div class="comment-item mb-4 p-3 bg-white rounded" data-comment-id="{{ comment.id }}">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <strong><i class="far fa-user-circle text-warning"></i> {{ comment.user.username }}</strong>
+                            <small class="text-muted">{{ comment.created_at|date:"F j, Y" }}</small>
+                        </div>
+                        <p class="mb-2 comment-content">{{ comment.content }}</p>
+                        {% if comment.user == user %}
+                        <div class="comment-actions">
+                            <button class="btn btn-sm btn-outline-primary edit-comment">
+                                <i class="fas fa-edit me-1"></i>Edit
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger delete-comment" data-comment-id="{{ comment.id }}">
+                                <i class="fas fa-trash me-1"></i>Delete
+                            </button>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% empty %}
+                    <p class="text-muted text-center">No comments yet. Be the first to comment!</p>
+                    {% endfor %}
+                </div>
+
+                <!-- Load More Comments -->
+                {% if total_comments > 5 %}
+                <div class="text-center mt-4">
+                    <button id="load-more-comments" class="btn btn-outline-primary">
+                        <i class="fas fa-plus me-1"></i>Load More Comments
+                    </button>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Comment Modal -->
+<div class="modal fade" id="editCommentModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Comment</h5>
+                <button type="button" class="btn-close btn-danger" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <textarea id="edit-comment-content" class="form-control" rows="4"></textarea>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="save-comment-edit">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteCommentModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-light text-white">
+                <h5 class="modal-title">
+                    Delete Comment
+                </h5>
+                <button type="button" class="btn-close btn-close-danger" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center">
+                <i class="fas fa-exclamation-triangle fa-3x text-danger mb-3"></i>
+                <h5>Are you sure you want to delete this comment?</h5>
+                <p class="text-muted">This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">No</button>
+                <button type="button" class="btn btn-primary" id="confirm-delete-comment">Yes</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+$(document).ready(function() {
+    const blogSlug = '{{ blog.slug }}';
+    let currentCommentOffset = {{ comments|length }};
+    let editingCommentId = null;
+    let deletingCommentId = null;
+
+    // Like functionality
+    $('#like-btn').click(function() {
+        if (!$(this).prop('disabled')) {
+            $.ajax({
+                url: `{% url 'toggle_like' blog.slug %}`,
+                type: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                success: function(response) {
+                    if (response.success) {
+                        $('#likes-count').text(response.likes_count);
+                        const likeBtn = $('#like-btn');
+                        if (response.liked) {
+                            likeBtn.removeClass('btn-outline-danger').addClass('btn-danger');
+                        } else {
+                            likeBtn.removeClass('btn-danger').addClass('btn-outline-danger');
+                        }
+                    }
+                },
+                error: function() {
+                    alert('Error updating like. Please try again.');
+                }
+            });
+        }
+    });
+
+    // Add comment - RELOAD PAGE ON SUCCESS
+    $('#comment-form').submit(function(e) {
+        e.preventDefault();
+        
+        $.ajax({
+            url: `{% url 'add-comment' blog.slug %}`,
+            type: 'POST',
+            data: $(this).serialize(),
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            success: function(response) {
+                if (response.success) {
+                    // Reload the page instead of updating DOM
+                    location.reload();
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function(xhr) {
+                const response = xhr.responseJSON;
+                alert(response.message || 'Error adding comment. Please try again.');
+            }
+        });
+    });
+
+    // Edit comment
+    $(document).on('click', '.edit-comment', function() {
+        const commentItem = $(this).closest('.comment-item');
+        editingCommentId = commentItem.data('comment-id');
+        const content = commentItem.find('.comment-content').text();
+        
+        $('#edit-comment-content').val(content);
+        $('#editCommentModal').modal('show');
+    });
+
+    // Save edited comment
+    $('#save-comment-edit').click(function() {
+        const content = $('#edit-comment-content').val().trim();
+        
+        if (!content) {
+            alert('Comment cannot be empty.');
+            return;
+        }
+
+        $.ajax({
+            url: `/blog/comment/${editingCommentId}/edit/`,
+            type: 'POST',
+            data: {
+                'content': content,
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            success: function(response) {
+                if (response.success) {
+                    $(`.comment-item[data-comment-id="${editingCommentId}"] .comment-content`).text(response.content);
+                    $('#editCommentModal').modal('hide');
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function(xhr) {
+                const response = xhr.responseJSON;
+                alert(response.message || 'Error updating comment. Please try again.');
+            }
+        });
+    });
+
+    // Delete comment - SHOW CONFIRMATION MODAL
+    $(document).on('click', '.delete-comment', function() {
+        deletingCommentId = $(this).data('comment-id');
+        $('#deleteCommentModal').modal('show');
+    });
+
+    // Confirm delete comment
+    $('#confirm-delete-comment').click(function() {
+        if (!deletingCommentId) return;
+
+        $.ajax({
+            url: `/blog/comment/${deletingCommentId}/delete/`,
+            type: 'DELETE',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            success: function(response) {
+                if (response.success) {
+                    $(`.comment-item[data-comment-id="${deletingCommentId}"]`).remove();
+                    // Update comments count in header
+                    $('h4 .badge').text(parseInt($('h4 .badge').text()) - 1);
+                    $('#deleteCommentModal').modal('hide');
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function() {
+                alert('Error deleting comment. Please try again.');
+            }
+        });
+    });
+
+    // Load more comments
+    $('#load-more-comments').click(function() {
+        const $btn = $(this);
+        $btn.prop('disabled', true).html('<i class="fas fa-spinner fa-spin me-1"></i>Loading...');
+
+        $.ajax({
+            url: `{% url 'load-more-comments' blog.slug %}?offset=${currentCommentOffset}`,
+            type: 'GET',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            success: function(response) {
+                if (response.success) {
+                    response.comments.forEach(comment => {
+                        $('#comments-container').append(`
+                            <div class="comment-item mb-4 p-3 bg-white rounded" data-comment-id="${comment.id}">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <strong>${comment.user_name}</strong>
+                                    <small class="text-muted">${comment.created_at}</small>
+                                </div>
+                                <p class="mb-2 comment-content">${comment.content}</p>
+                                ${comment.can_edit ? `
+                                <div class="comment-actions">
+                                    <button class="btn btn-sm btn-outline-primary edit-comment">
+                                        <i class="fas fa-edit me-1"></i>Edit
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger delete-comment" data-comment-id="${comment.id}">
+                                        <i class="fas fa-trash me-1"></i>Delete
+                                    </button>
+                                </div>
+                                ` : ''}
+                            </div>
+                        `);
+                    });
+
+                    currentCommentOffset = response.new_offset;
+
+                    if (!response.has_more) {
+                        $btn.hide();
+                    } else {
+                        $btn.prop('disabled', false).html('<i class="fas fa-plus me-1"></i>Load More Comments');
+                    }
+                }
+            },
+            error: function() {
+                alert('Error loading comments. Please try again.');
+                $btn.prop('disabled', false).html('<i class="fas fa-plus me-1"></i>Load More Comments');
+            }
+        });
+    });
+});
+</script>
+{% endblock scripts %}
