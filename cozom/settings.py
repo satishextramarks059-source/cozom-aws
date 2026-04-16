@@ -58,11 +58,15 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'cozom.wsgi.application'
 
-# DATABASE
+# ---------- DATABASE (PostgreSQL) ----------
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'cozom_db',
+        'USER': 'postgres',
+        'PASSWORD': 'deepak@33',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
@@ -101,7 +105,7 @@ REST_FRAMEWORK = {
     ]
 }
 
-# EMAIL (NO ENV ERROR)
+# EMAIL (Gmail SMTP)
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
@@ -113,7 +117,7 @@ EMAIL_HOST_PASSWORD = "yzln zvfw eawl cprz"
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 SERVER_EMAIL = EMAIL_HOST_USER
 
-# SIMPLE LOGGING (SAFE)
+# LOGGING
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
